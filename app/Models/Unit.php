@@ -12,7 +12,7 @@ class Unit extends Model
     use SoftDeletes;
 	protected $dates = ['deleted_at'];
     protected $fillable = [
-        'name',
+        'unit_name',
         'owner_id',
         'premises_name',
         'longitude',

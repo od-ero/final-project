@@ -12,7 +12,7 @@ class Door extends Model
     use SoftDeletes;
 	protected $dates = ['deleted_at'];
     protected $fillable = [
-        'name',
+        'door_name',
         'unit_id',
     ];
 }

@@ -12,6 +12,6 @@ class Role extends Model
     use SoftDeletes;
 	protected $dates = ['deleted_at'];
     protected $fillable = [
-        'name',
+        'role_name',
     ];
 }

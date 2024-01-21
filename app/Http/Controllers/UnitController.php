@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
+
 use Sentinel;
 use DB;
 use App\Models\Unit;
+use App\Models\MyUnit;
 use App\Models\Door;
 
 class UnitController extends Controller
@@ -15,7 +19,14 @@ class UnitController extends Controller
      */
     public function index()
     {
-        //
+        
+        $my_units = MyUnit::leftjoin("units","my_units.unit_id","=","units.id")
+        ->leftjoin("roles","my_units.role_id","=","roles.id")
+        ->where('user_id',4)
+        ->get();
+       
+        return view('home' , ['myUnits' => $my_units
+            ]);
     }
     public function create(Request $request)
     {   
@@ -67,15 +78,32 @@ class UnitController extends Controller
     /**
      * Display the specified resource.
      */
+
+     public function selectedUnit(string  $unit_id)
+     {
+        $unit_id=base64_decode($unit_id);
+      // dd($unit_id);
+       $unit= unit::find($unit_id);
+         $my_unit = Door::leftjoin("door_statuses","door_statuses.door_id","=","doors.id")
+         
+          ->where('doors.unit_id',$unit_id)
+         ->get();
+         //dd( $my_unit);
+         return view('myUnit' , ['myUnits' => $my_unit,
+         'unit'=> $unit
+            ]);
+
+     }
+ 
     public function show(string $id)
     {
-        //
+        $id=base64_decode($id);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id)// open/close
     {
         //
     }

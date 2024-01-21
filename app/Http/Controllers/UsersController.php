@@ -17,9 +17,12 @@ class UsersController extends Controller
   ]);
 
   }
-  public function login()
-  {
-      try {
+  public function login(Request $request){
+    if ($request->isMethod('get')) {
+      // dd($request->isMethod('get'));
+      return view('login');
+  } 
+  else{
           if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
               $user = Auth::user();
               $success['token'] = $user->createToken('appToken')->accessToken;
@@ -35,20 +38,18 @@ class UsersController extends Controller
                   'message' => 'Invalid Email or Password',
               ], 401);
           }
-      } catch (\Exception $e) {
-          // Log the exception for debugging purposes
-          \Log::error('Login Exception: ' . $e->getMessage());
-  
-          // Return a response with detailed error information
-          return response()->json([
-              'success' => false,
-              'message' => 'Internal Server Error',
-              'error' => $e->getMessage(),
-          ], 500);
+     
       }
-  }
+      }
+  
     public function register(Request $request)
     {
+      if ($request->isMethod('get')) {
+        // dd($request->isMethod('get'));
+        return view('register');
+    } 
+    else{
+     dd( $request->all());
         $validator = Validator::make($request->all(), [
             'fname' => 'required',
             'lname' => 'required',
@@ -57,20 +58,22 @@ class UsersController extends Controller
             'password' => 'required',
         ]);
         if ($validator->fails()) {
-          return response()->json([
-            'success' => false,
-            'message' => $validator->errors(),
-          ], 401);
+          return view('register');
+         // return response()->json([
+           // 'success' => false,
+           // 'message' => $validator->errors(),
+        //  ], 401);
         }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $success['token'] = $user->createToken('appToken')->accessToken;
-        return response()->json([
-          'success' => true,
-          'token' => $success,
-          'user' => $user
-      ]);
+        return view('login');
+        //return response()->json([
+          //'success' => true,
+          //'message' => 'registration successfull'
+     // ]);
+      }
     }
     public function logout(Request $res)
     {
