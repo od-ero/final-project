@@ -1,4 +1,4 @@
-@csrf
+<?php echo csrf_field(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,12 +119,12 @@ a {
 </div>
 
 </div>
-<form name="register-form" id="register-form" onsubmit="return validateForm()"  method="post" action="{{url('/units/create')}}">
+<form name="register-form" id="register-form" onsubmit="return validateForm()"  method="post" action="<?php echo e(url('/units/create')); ?>">
   <div class="container">
     <h1>Add A Unit</h1>
     <p>Please fill in this form to Add A Unit.</p>
     <hr>
-    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+    <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>" />
       
     <label for="lname"><b>Premises Name</b></label>
     <input type="text" placeholder="Enter Premises Name" name="premises_name" id="premises_name" required>
@@ -191,7 +191,7 @@ $.ajax({
 
 type : 'get',
 
-url : '{{URL::to('search')}}',
+url : '<?php echo e(URL::to('search')); ?>',
 
 data:{'search':$value},
 
@@ -211,7 +211,7 @@ $('tbody').html(data);
 
 <script type="text/javascript">
 
-$.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+$.ajaxSetup({ headers: { 'csrftoken' : '<?php echo e(csrf_token()); ?>' } });
 
 </script>
 <!--function toggleValidation() {
@@ -251,8 +251,9 @@ $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 }
  </script>
  <script type="text/javascript">
-$.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+$.ajaxSetup({ headers: { 'csrftoken' : '<?php echo e(csrf_token()); ?>' } });
 </script>-->
  
 </html>
 
+<?php /**PATH C:\xampp\htdocs\LaravelAPI\resources\views/add_my_unit.blade.php ENDPATH**/ ?>

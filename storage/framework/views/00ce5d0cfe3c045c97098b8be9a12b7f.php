@@ -80,7 +80,12 @@
 
 <p>Welcome to <?php echo e($unit['premises_name'] . ', ' . $unit['unit_name']); ?> </p>
 
-<div> <button  class="button button1"> Give Access</button>  <button  class="button button1"> Activate Button Access</button> <button  class="button button1"> View</button></div>
+<div><button class="button button1">
+    <a href="/units/create" style="text-decoration: none; color: inherit;">
+       Add Unit
+    </a>
+</button>
+ <button  class="button button1"> <a href="/units/create"> /units/create</a> Give Access</button>  <button  class="button button1"> Activate Button Access</button> <button  class="button button1"> View</button></div>
 
 <table id="units">
     <tr>

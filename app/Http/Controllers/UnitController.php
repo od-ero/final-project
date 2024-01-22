@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Sentinel;
 use DB;
 use App\Models\Unit;
+use App\Models\User;
 use App\Models\MyUnit;
 use App\Models\Door;
 
@@ -29,40 +30,54 @@ class UnitController extends Controller
             ]);
     }
     public function create(Request $request)
-    {   
+    {   if ($request->isMethod('get')) {
+        $users= User::all();
+        return view('add_my_unit' , [
+        'users'=>  $users
+           ]);
+       
+    } 
+    else{
         $unit_details = $request->all();
-        DB::beginTransaction();
-        try{
+       
+       // dd($unit_details);
+       // DB::beginTransaction();
+        //try{
         $units =Unit::create([
-            'name' => $unit_details['name'],
+            'unit_name' => $unit_details['unit_name'],
             'owner_id' =>   $unit_details['owner_id'],
             'premises_name' => $unit_details['premises_name'],
             'longitude'    =>  $unit_details['longitude'],
             'latitude'  =>$unit_details['latitude'],
             'doors' => $unit_details['doors']
         ]);
-        $door_names= $unit_details['door_name'];
-        foreach ($door_names as  $door_name)  {
-        $units =Door::create([
-            'name' => $door_name,
-            'unit_id' =>   $units['id'],
-           
-        ]);
-    }
-    DB::commit();
+        
+        for ($i = 0; $i < $unit_details['doors']; $i++) {
+            $door_name_variable = 'door_name_' . $i;
+            $door_names = $unit_details[$door_name_variable];
+        //dd($unit_details);
+            $units =Door::create([
+                'door_name' => $door_names,
+                'unit_id' =>   5,
+               
+            ]);
+        }
+    
+  //  DB::commit();
         return response()->json([
             'status'=>'success',
             'message'=>'unit regestration succesful'
         ]);  
 
-        }
-     catch (\Exception $e) {
+     //   }
+    /* catch (\Exception $e) {
         DB::rollback();
         return response()->json([
             'status' => 'error',
             'message' => 'unit regestration failed. Contact adminstrator'
         ]);
-    } 
+    } */
+}
        
     }
 
@@ -105,7 +120,7 @@ class UnitController extends Controller
      */
     public function update(Request $request, string $id)// open/close
     {
-        //
+        $id=base64_decode($id);  //
     }
 
     /**

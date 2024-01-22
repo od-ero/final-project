@@ -17,6 +17,53 @@ class UsersController extends Controller
   ]);
 
   }
+  
+  public function index()
+  {
+  return view('search.search');
+  }
+ 
+    public function search(Request $request)
+    {
+      $search = $request->input('search');
+    if($request->ajax())
+    {
+    $output="";
+    $details = User::query()
+    ->where('email', 'LIKE', "%{$search}%")
+    ->orWhere('phone', 'LIKE', "%{$search}%")
+    ->get();
+    if($details)
+    {
+    foreach ($details as $key => $product) {
+    $output.='<tr>'.
+    '<td>'.$product->id.'</td>'.
+    '<td>'.$product->lname.'</td>'.
+    '<td>'.$product->email.'</td>'.
+    '<td>'.$product->price.'</td>'.
+    '</tr>';
+    }
+    return Response($output);
+       }
+       }
+    }
+    
+     
+  
+  
+  public function search1(Request $request){
+    // Get the search value from the request
+    $search = $request->input('search');
+
+    // Search in the title and body columns from the posts table
+    $posts = User::query()
+        ->where('email', 'LIKE', "%{$search}%")
+        ->orWhere('phone', 'LIKE', "%{$search}%")
+        ->get();
+
+    // Return the search view with the resluts compacted
+    return view('search.search', compact('posts'));
+}
   public function login(Request $request){
     if ($request->isMethod('get')) {
       // dd($request->isMethod('get'));
@@ -49,7 +96,7 @@ class UsersController extends Controller
         return view('register');
     } 
     else{
-     dd( $request->all());
+    // dd( $request->all());
         $validator = Validator::make($request->all(), [
             'fname' => 'required',
             'lname' => 'required',

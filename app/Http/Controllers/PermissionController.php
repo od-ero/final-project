@@ -41,7 +41,7 @@ class PermissionController extends Controller
         $permissions =Permission::create([
             'permission_group_id' => $permission_group['id'],
             'door_id' => $permission['door_id'],
-            'door_id' => $permission['door_id'],
+           
             'give_permission' => $permission['give_permission'],
             'open' => $permission['open'],
             'close' => $permission['close'],

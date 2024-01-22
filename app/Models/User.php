@@ -19,6 +19,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    use SoftDeletes;
+	protected $dates = ['deleted_at'];
     protected $fillable = [
         'fname',
         'lname',
