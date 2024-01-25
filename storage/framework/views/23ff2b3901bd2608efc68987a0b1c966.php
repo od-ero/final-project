@@ -4,13 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="author" content="Evans Odero">
     <meta name="generator" content="Hugo 0.87.0">
-    <title>Fixed top navbar example · Bootstrap v5.1</title>
-
-    <!-- Bootstrap core CSS -->
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <title>Unikey-<?php echo $__env->yieldContent('subtitle'); ?> </title>
+    
+   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- 
+      Bootstrap core CSS -->
     <link href="<?php echo url('assets/bootstrap/css/bootstrap.min.css'); ?>" rel="stylesheet">
-
+    
+    <link href="<?php echo url('assets/css/all.css'); ?>" rel="stylesheet" type="text/css">
+    
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -39,7 +44,12 @@
         <?php echo $__env->yieldContent('content'); ?>
     </main>
 
+    <?php echo $__env->make('layouts.partials.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <script src="<?php echo url('assets/bootstrap/js/bootstrap.bundle.min.js'); ?>"></script>
-      
+    <?php $__env->startSection('scripts'); ?>
+       <?php echo $__env->make('layouts.partials.scripts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+   <?php echo $__env->yieldSection(); ?>
+  
   </body>
-</html><?php /**PATH C:\xampp\htdocs\LaravelAPI\resources\views/layouts/app-master.blade.php ENDPATH**/ ?>
+</html>
+<?php /**PATH C:\xampp\htdocs\LaravelAPI\resources\views/layouts/app-master.blade.php ENDPATH**/ ?>

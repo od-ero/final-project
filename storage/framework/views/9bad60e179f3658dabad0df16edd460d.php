@@ -1,41 +1,21 @@
+<?php $__env->startSection('subtitle'); ?>
+   Dashboard
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('contentheader_title'); ?>
+  Dashboard
+<?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
+
+
     <div class="bg-light p-5 rounded">
         <?php if(auth()->guard()->check()): ?>
-        <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    
 
-    <style>
-#units {
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
+    
 
-#units td, #units th {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
+<legend>Dashboard</legend>
 
-#units tr:nth-child(even){background-color: #f2f2f2;}
-
-#units tr:hover {background-color: #ddd;}
-
-#units th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #04AA6D;
-  color: white;
-}
-</style>
-</head>
-
-<body>
-<h1>Dashboard</h1>
 <p>My Units</p>
 <table id="units">
     <tr>
@@ -78,7 +58,7 @@
 
         <?php if(auth()->guard()->guest()): ?>
         <h1>Unikey</h1>
-        <p class="lead">Your viewing the home page. Please login to view the restricted data.</p>
+        <p class="lead">Your Premise at your pocket.</p>
         <?php endif; ?>
     </div>
 <?php $__env->stopSection(); ?>

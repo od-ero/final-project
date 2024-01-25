@@ -96,7 +96,7 @@ a {
   </div>
 
   <div class="container signin">
-    <p>Already have an account? <a href="/login">Sign in</a>.</p>
+    <br><p>Already have an account? <a href="/login">Sign in</a>.</p>
   </div>
 </form>  
 </body>

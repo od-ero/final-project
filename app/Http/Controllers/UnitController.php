@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 
 use Sentinel;
@@ -12,6 +13,7 @@ use App\Models\Unit;
 use App\Models\User;
 use App\Models\MyUnit;
 use App\Models\Door;
+use App\Models\DoorStatus;
 
 class UnitController extends Controller
 {
@@ -23,7 +25,7 @@ class UnitController extends Controller
         
         $my_units = MyUnit::leftjoin("units","my_units.unit_id","=","units.id")
         ->leftjoin("roles","my_units.role_id","=","roles.id")
-        ->where('user_id',4)
+        ->where('user_id',Auth::id())
         ->get();
        
         return view('home' , ['myUnits' => $my_units
@@ -58,7 +60,7 @@ class UnitController extends Controller
         //dd($unit_details);
             $units =Door::create([
                 'door_name' => $door_names,
-                'unit_id' =>   5,
+                'unit_id' => $units['id'],
                
             ]);
         }
@@ -118,9 +120,13 @@ class UnitController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)// open/close
+    public function update(Request $request, string $id, string $status )// open/close
     {
-        $id=base64_decode($id);  //
+        $door_id=base64_decode($id); 
+        $status= base64_decode($status);
+       // DoorStatus::update(['status'=>'open'])
+       // ->where('door_id', $door_id);
+       // dd($id,  $status);
     }
 
     /**

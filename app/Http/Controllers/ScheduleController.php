@@ -11,6 +11,7 @@ use App\Models\DoorSecheduleCounter;
 use App\Models\DoorSechedulePermission;
 use App\Models\Unit;
 use App\Models\Door;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
@@ -25,10 +26,19 @@ class ScheduleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, string $id)
     {
         //
-        $schedules = $request->all();
+        if($request->isMethod('get')){
+             $doors= Door::all();
+            return view('add_schedule' , [
+                'doors'=>  $doors,
+                'unit_id' => $id
+                   ]);
+
+        }
+        else
+       { $schedules = $request->all();
        // DB::beginTransaction();
        // try{
         $door_sechedule_permission =DoorSechedulePermission::create([
@@ -46,7 +56,7 @@ class ScheduleController extends Controller
             'close_out' =>  $schedules['close_out'],
            'start_date' =>  $schedules['start_date'],
            'end_date' =>  $schedules['end_date'],
-           'user_id' =>  3,
+           'user_id' =>  Auth::id(),
            'open_in_fre' =>  $schedules['open_in_fre'],
            'close_in_fre' =>  $schedules['close_in_fre'],
            'open_out_fre' =>  $schedules['open_out_fre'],
@@ -59,7 +69,7 @@ class ScheduleController extends Controller
             'status'=>'success',
             'message'=>'Schedule set Successfull'
         ]);  
-
+}
       /*  }
      catch (\Exception $e) {
         DB::rollback();

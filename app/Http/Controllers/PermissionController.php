@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 use Sentinel;
 use DB;
 use App\Models\Permission;
+use App\Models\Role;
 use App\Models\MyPermission;
 use App\Models\MyUnit;
 use App\Models\PermissionGroup;
@@ -21,20 +24,39 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        //
+        $roles=Role::all();
+        $doors=Door::all();
+        $units=Unit::leftjoin("my_units","my_units.unit_id","=","units.id")
+        ->where('my_units.user_id',Auth::id());
+        return view('add_permission' , ['roles' => $roles,
+        'doors' => $doors,
+         'units'=>  $units
+            ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
+        
+      if($request->isMethod('get'))
+       { $roles=Role::all();
+        $doors=Door::all();
+        $units=Unit::leftjoin("my_units","my_units.unit_id","=","units.id")
+        ->where('my_units.user_id',Auth::id());
+        return view('add_permission' , ['roles' => $roles,
+        'doors' => $doors,
+         'units'=>  $units,
+         'unit_id' => $id
+            ]);}
+            else{
         $permissions = $request->all();
         DB::beginTransaction();
         try{
         $permission_group =PermissionGroup::create([
             'name' => $permissions['permission_group'],
-            'creator_id' => 3,
+            'creator_id' =>  Auth::id(),
         ]);
        // foreach ( $permissions as  $permission)  {
         $permission = $permissions;
@@ -75,7 +97,7 @@ class PermissionController extends Controller
             'status' => 'error',
             'message' => 'Oooops!! an error occurred please try again later'
         ]);
-    } 
+    } }
     
     }
 
