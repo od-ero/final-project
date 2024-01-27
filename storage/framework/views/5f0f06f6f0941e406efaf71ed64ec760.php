@@ -10,31 +10,153 @@ Give access permission
 <?php $__env->startSection('content'); ?>
    
       
-<form name="register-form" id="register-form" method="post" action="<?php echo e(url('/register')); ?>">
+<form name="register-form" id="register-form" method="post" action="<?php echo e(url('/add/permissions/creates')); ?>">
 <div class="container">
 
   
     <fieldset>
-    <legend>Give Priviledges</legend>
+  
+   <legend>Give Priviledges</legend>
     <p>Please Fill In This Form To Assign Access Priviledges.</p>
 
+   
     <hr>
     
     <input class="userInput" type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>" />
     <label for="fname"><b>User</b></label>
-    <input  class="userInput" type="text" placeholder="Enter Your First Name" name="fname" id="fname" required>
-    <label for="open"><i>Select either to use existing permissions or to create a new one</i></label>
+    <p><i>
+      Kindly enter either of the Users name and and phone number and search to select the user
+    </i></p>
+   
+    <div class="row userxxInput">
+        <div class="col-5">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name" name="name" value="<?php echo e(old('name')); ?>" placeholder=" " required="required" autofocus>
+                <label for="name">Name</label>
+            </div>
+        </div>
+
+        <div class="col-5">
+            <div class="form-floating mb-3">
+                <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo e(old('phone')); ?>" placeholder=" " required="required" autofocus>
+                <label for="phone">Phone number</label>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <button class="btn btn-outline-secondary" type="button" id="searchButton">search</button>
+        </div>
+        
+        </div>
+        <ul class="dropdown-menu" id="searchResults" style="display: none;">
+    <!-- Display search results here -->
+</ul>
+   
+
+    <label for="selectPermissionGroup"><i>Select either to use existing permissions or to create a new one</i></label>
+    <div class="d-flex align-items-center userInput">
+        <div class="form-check form-check-inline" >
+              <label class="form-check-label" for="inlineRadio1">Use existing</label>
+              <input class="form-check-input" type="radio" name="permission_group" id="use_existing" value="use_existing">
+           </div>
+         <div class="form-check form-check-inline ">
+            <label class="form-check-label" for="inlineRadio2">Create A new one</label>
+            <input class="form-check-input" type="radio" name="permission_group" id="create_new" value="create_new">
+         </div>
+
+        </div>
+      <div class="create_new">
+            
+      <label for="permission_group_name"><b>Permission Name</b></label>
+    <input class="userInput"type="text" placeholder="Please Enter permission Name" name="permission_group_name" id="permission_group_name" required>
+   
+    <label for="open"><b>Give Access Permission</b></label>
+    <div class="d-flex align-items-center userInput">
+    <div class="form-check form-check-inline">
+        <label class="form-check-label" for="give_permission_yes">Yes</label>
+        <input class="form-check-input" type="radio" name="give_permission" id="give_permission_yes" value="yes">
+    </div>
+
+    <div class="form-check form-check-inline">
+        <label class="form-check-label" for="give_permission_no">No</label>
+        <input class="form-check-input" type="radio" name="give_permission" id="give_permission_no" value="no">
+    </div>
+
+    <div class="form-floating ">
+        <input type="text" class="form-control" name="give_permission_fre" value="<?php echo e(old('give_permission_fre')); ?>" placeholder="Frequency" required="required" autofocus>
+        <label for="give_permission_fre">Frequency</label>
+    </div>
+</div>
+
+  <label for="open"><b>Open</b></label>
  <div class="d-flex align-items-center userInput">
  <div class="form-check form-check-inline" >
-      <label class="form-check-label" for="inlineRadio1">Use existing</label>
-      <input class="form-check-input" type="radio" name="permission_group" id="use_existing" value="use_existing">
+      <label class="form-check-label" for="open_yes">Yes</label>
+      <input class="form-check-input" type="radio" name="open" id="open_yes" value="yes">
     </div>
-<div class="form-check form-check-inline ">
-    <label class="form-check-label" for="inlineRadio2">Create A new one</label>
-   <input class="form-check-input" type="radio" name="permission_group" id="create_new" value="create_new" checked>
+<div class="form-check form-check-inline">
+    <label class="form-check-label" for="open_no">No</label>
+   <input class="form-check-input" type="radio" name="open" id="open_no" value="no">
  </div>
+ <div class="form-floating">
+        <input type="text" class="form-control" name="open_fre" value="<?php echo e(old('open_fre')); ?>" placeholder="Frequency" required="required" autofocus>
+        <label for="open_fre">Frequency</label>
+    </div>
+ </div>
+  
+ <label for="open"><b>Close</b></label>
+  <div class="d-flex align-items-center userInput">
+  <div class="form-check form-check-inline ">
+      <label class="form-check-label" for="close_yes">Yes</label>
+      <input class="form-check-input" type="radio" name="close" id="close_yes" value="yes">
+    </div>
+<div class="form-check form-check-inline">
+   <label class="form-check-label" for="close_no">No</label>
+   <input class="form-check-input" type="radio" name="close" id="close_no" value="no">
+ </div>
+ <div class="form-floating">
+        <input type="text" class="form-control" name="close_fre" value="<?php echo e(old('close_fre')); ?>" placeholder="Frequency" required="required" autofocus>
+        <label for="close_fre">Frequency</label>
+    </div>
+  </div>
 
+ <label for="open"><b>Schedule Button Access</b></label>
+ <div class="d-flex align-items-center userInput">
+ <div class="form-check form-check-inline ">
+      <label class="form-check-label" for="schedule_yes">Yes</label>
+      <input class="form-check-input" type="radio" name="schedule" id="schedule_yes" value="yes">
+    </div>
+<div class="form-check form-check-inline">
+   <label class="form-check-label" for="schedule_yes">No</label>
+   <input class="form-check-input" type="radio" name="schedule" id="schedule_no" value="no">
  </div>
+ <div class="form-floating">
+        <input type="text" class="form-control" name="schedule_fre" value="<?php echo e(old('schedule_fre')); ?>" placeholder="Frequency" required="required" autofocus>
+        <label for="schedule_fre">Frequency</label>
+    </div>
+ </div>
+  </div>
+  <div class="use_existing">
+  <label for="permission_group_id"><i>Permision Name</i></label>
+  <select  name="permission_group_id" id="permission_group_id" required class="form-control userInput">
+    <option value="">Select</option>
+    <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <option value="<?php echo e($role->id); ?>"><?php echo e($role->role_name); ?></option>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+ <label for="door"><i>Select the the doors to be affected by the permissions</i></label>
+    
+   
+    <div class="userCheck  userInput" >
+    <?php $__currentLoopData = $doors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $door): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+    <div class="form-check" >
+    <label class="form-check-label" for="flexCheckDefault">
+      <?php echo e($door->door_name); ?>
+
+      </label>
+      <input class="form-check-input" type="checkbox" name="door_id_" value="<?php echo e($door->id); ?>" id="flexCheckDefault">
+    </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    </div>
 <label for="role_id"><b>Role</b></label>
 
   <select  name="role_id" id="role_id" required class="form-control userInput">
@@ -52,101 +174,120 @@ Give access permission
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </select>
 
-    <label for="email"><b>Start Date</b></label>
+    <label for="start_date"><b>Start Date</b></label>
     <input class="userInput" type="datetime-local" placeholder="Please Enter the check in time" name="start_date" id="start_date" required>
 
-    <label for="phone"><b>End Date</b></label>
+    <label for="end_date"><b>End Date</b></label>
     <input class="userInput" type="datetime-local" placeholder="Please Enter the check out time" name="end_date" id="end_date" required>
-    
-    
-    <label for="open"><i>Select the the doors to be affected by the permissions</i></label>
-    
    
-<div class="userCheck  userInput" >
-<?php $__currentLoopData = $doors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $door): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-<div class="form-check" >
-<label class="form-check-label" for="flexCheckDefault">
-  <?php echo e($door->door_name); ?>
-
-  </label>
-  <input class="form-check-input" type="checkbox" name="door_id_" value="<?php echo e($door->id); ?>" id="flexCheckDefault">
-</div>
-<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-</div>
-    <label for="permission_group"><b>Permission Name</b></label>
-    <input class="userInput"type="text" placeholder="Please Enter permission Name" name="permission_group" id="permission_group" required>
-   
-    <label for="open"><b>Give Access Permission</b></label>
-    <div class="d-flex align-items-center userInput">
-    <div class="form-check form-check-inline">
-        <label class="form-check-label" for="inlineRadio1">Yes</label>
-        <input class="form-check-input" type="radio" name="give_permission" id="give_permission_yes" value="yes">
-    </div>
-
-    <div class="form-check form-check-inline">
-        <label class="form-check-label" for="inlineRadio2">No</label>
-        <input class="form-check-input" type="radio" name="give_permission" id="give_permission_no" value="no">
-    </div>
-
-    <div class="form-floating ">
-        <input type="text" class="form-control" name="give_permission_fre" value="<?php echo e(old('give_permission_fre')); ?>" placeholder="Frequency" required="required" autofocus>
-        <label for="floatingName">Frequency</label>
-    </div>
-</div>
-
-  <label for="open"><b>Open</b></label>
- <div class="d-flex align-items-center userInput">
- <div class="form-check form-check-inline" >
-      <label class="form-check-label" for="inlineRadio1">Yes</label>
-      <input class="form-check-input" type="radio" name="open" id="open_yes" value="yes">
-    </div>
-<div class="form-check form-check-inline">
-    <label class="form-check-label" for="inlineRadio2">No</label>
-   <input class="form-check-input" type="radio" name="open" id="open_no" value="no">
- </div>
- <div class="form-floating">
-        <input type="text" class="form-control" name="open_fre" value="<?php echo e(old('open_fre')); ?>" placeholder="Frequency" required="required" autofocus>
-        <label for="floatingName">Frequency</label>
-    </div>
- </div>
-  
- <label for="open"><b>Close</b></label>
-  <div class="d-flex align-items-center userInput">
-  <div class="form-check form-check-inline ">
-      <label class="form-check-label" for="inlineRadio1">Yes</label>
-      <input class="form-check-input" type="radio" name="close" id="close_yes" value="yes">
-    </div>
-<div class="form-check form-check-inline">
-   <label class="form-check-label" for="inlineRadio2">No</label>
-   <input class="form-check-input" type="radio" name="close" id="close_no" value="no">
- </div>
- <div class="form-floating">
-        <input type="text" class="form-control" name="close_fre" value="<?php echo e(old('close_fre')); ?>" placeholder="Frequency" required="required" autofocus>
-        <label for="floatingName">Frequency</label>
-    </div>
-  </div>
-
- <label for="open"><b>Schedule Button Access</b></label>
- <div class="d-flex align-items-center userInput">
- <div class="form-check form-check-inline ">
-      <label class="form-check-label" for="inlineRadio1">Yes</label>
-      <input class="form-check-input" type="radio" name="schedule" id="schedule_yes" value="yes">
-    </div>
-<div class="form-check form-check-inline">
-   <label class="form-check-label" for="inlineRadio2">No</label>
-   <input class="form-check-input" type="radio" name="schedule" id="schedule_no" value="no">
- </div>
- <div class="form-floating">
-        <input type="text" class="form-control" name="schedule_fre" value="<?php echo e(old('schedule_fre')); ?>" placeholder="Frequency" required="required" autofocus>
-        <label for="floatingName">Frequency</label>
-    </div>
- </div>
+    
     <hr>
  
-  <button type="submit" class="btn btn-primary">Give Priviledges</button>
+  <button type="submit" class="btn btn-success">Give Priviledges</button>
   </fieldset>
 </div>
 </form>  
+<style>
+    .use_existing, .create_new {
+      display: none;
+    }
+
+    .visible {
+      display: block;
+    }
+  </style>
+    <script>
+    $(document).ready(function () {
+      $('input[type=radio][name=permission_group]').change(function() {
+        var selectedClass = $(this).val();
+
+        // Hide all classes
+        $('.use_existing, .create_new').removeClass('visible');
+
+        // Show the selected class
+        $('.' + selectedClass).addClass('visible');
+      });
+    });
+  </script> 
+<script>
+    $(document).ready(function() {
+    $('#searchButton').click(function() {
+      // Get the values from the input fields
+      var searchTerm1 = $('#name').val();
+      var searchTerm2 = $('#phone').val();
+
+      // Call the search method in the controller using Ajax
+      $.ajax({
+        type: 'GET',
+        url: '/user/search', // Replace with your actual search endpoint
+        data: { term1: searchTerm1, term2: searchTerm2 },
+        success: function(data) {
+         
+          // Update the search results in the dropdown menu
+          displaySearchResults(data);
+        }
+      });
+    });
+
+    // Handle item selection in the search results
+    $('#searchResults').on('click', '.search-item', function() {
+    var selectedValue = $(this).data('id');
+    var selectedDisplayName = $(this).text();
+    var displayPhone = $(this).data('phone'); // Correct variable name
+
+    // Update input fields with the selected values
+    $('#name').val(selectedDisplayName);
+    $('#owner_id').val(selectedValue);
+
+    // Use the correct variable name here
+    $('#phone').val(displayPhone);
+
+    // Clear the search results dropdown
+    $('#searchResults').empty();
+});
+    function displaySearchResults(results) {
+   // console.log(results); // Log the results to the console
+
+    var $searchResults = $('#searchResults');
+    $searchResults.empty();
+
+    if (results.length > 0) {
+      console.log(results);
+        results.forEach(function(result) {
+            // Append list item directly without creating a jQuery object
+            $searchResults.append('<li class="dropdown-item search-item" data-id="' + result.id + '" data-phone="' + result.displayPhone + '">' + result.displayName + '</li>');
+
+        });
+        $searchResults.show();  // Show the dropdown if there are results
+    } else {
+      $searchResults.append('<li class="dropdown-item">Ooopss!! Dis not match any user</li>');  // Hide the dropdown if there are no results
+    }
+}
+
+  });
+
+</script>
+<script>
+    $(document).ready(function () {
+      $('input[type=radio][name=permission_group]').change(function() {
+        var selectedClass = $(this).val();
+
+        // Hide all classes
+        $('.use_existing, .create_new').removeClass('visible');
+
+        // Disable elements within the invisible class
+        $('.use_existing *').prop('disabled', true);
+        $('.create_new *').prop('disabled', true);
+
+        // Show the selected class
+        $('.' + selectedClass).addClass('visible');
+
+        // Enable elements within the visible class
+        $('.' + selectedClass + ' *').prop('disabled', false);
+      });
+    });
+  </script>
 
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layouts.app-master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\LaravelAPI\resources\views/add_permission.blade.php ENDPATH**/ ?>

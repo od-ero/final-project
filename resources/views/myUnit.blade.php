@@ -31,8 +31,9 @@
     </a>
 </button>
 </div> -->
-<table id="units">
-    <tr>
+<table class="table table-striped" id="units">
+   <thead>
+   <tr>
         <th style="width:5%">ID</th>
         
         <th>Door</th>
@@ -40,74 +41,59 @@
         <th>Action</th>
     </tr>
 
-    <?php
-    
-    
-
-    foreach ($myUnits as $key => $myUnit) {
-      
-        // Rest of your code for processing each $myUnit goes here
-        // For example, you need to get $role_name, $start_date, and $end_date from $myUnit
-
-        // Output the table row for each $myUnit
-        ?>
-       <tr>
-    <td style="width:5%"><?= ++$key ?></td>
-    <td><?= $myUnit['door_name'] ?></td>
-    <td><?= $myUnit['status']  ?></td>
-    <td>
-    <?php
-    // Assuming $myUnit['status'] contains the initial status from the database
-    $initialStatus = $myUnit['status'];
-    ?>
-
-<button class="button button1" style="background-color: <?php echo ($initialStatus === 'close') ? '#04AA6D' : 'red'; ?>; color: white;">
-    <a href="/home/myunits/action/<?php echo base64_encode($myUnit['id']); ?>/<?php echo base64_encode($myUnit['status']); ?>" style="text-decoration: none; color: inherit;">
-        <?php echo ($initialStatus === 'close') ? 'Open' : 'Close'; ?>
-    </a>
-</button>
-
-  
-</td>
-   
-</tr>
-
-        <?php
-    }
-    ?>
+   </thead>
 </table>
-<script>
-     function populateOptions() {
-        var dropdown = document.getElementById('statusDropdown');
-        var initialStatus = '<?php echo $initialStatus; ?>';
+<script type="text/javascript">
+$(function () {
+ 
+    $('#units').DataTable({
+        processing: true,
+        serverSide: true,
+        paging: true,
+        ordering: true,
+        searching: true,
+        language: {
+            emptyTable: "We are Sorry, No door has been assigned for you yet, kindly contact your host for assistance"
+        },
+        ajax: {
+            url: '/selected/unit/data/{{$unit_id}}',  // Check if row is available in this context
+        },
+        columns: [
+            {
+                data: 'id',
+                name: 'id',
+                render: function (data, type, row, meta) {
+                    var incrementedValue = meta.row + 1;
+                    return incrementedValue;
+                }
+            },
+            {
+                data: 'door_name',
+                name: 'door_name',
+            },
+            {
+                data: 'status',
+                name: 'status',
+            },
+            {
+                data: 'status',
+                name: 'status',
+                render: function (data, type, row) {
+                    var initialStatus = row.status;
+                    var buttonColor = (initialStatus === 'closed') ? '#04AA6D' : 'red';
+                    var buttonText = (initialStatus === 'closed') ? 'Open' : 'Close';
 
-        // Remove existing options
-        while (dropdown.options.length > 0) {
-            dropdown.remove(0);
-        }
-
-        // Add new options
-        var openOption = document.createElement('option');
-        openOption.value = 'open';
-        openOption.text = 'Open';
-        openOption.selected = (initialStatus === 'open');
-        dropdown.add(openOption);
-
-        var closeOption = document.createElement('option');
-        closeOption.value = 'close';
-        closeOption.text = 'Close';
-        closeOption.selected = (initialStatus === 'close');
-        dropdown.add(closeOption);
-    }
-
-    function redirectToView(id) {
-    // Add logic to construct the URL based on the provided id
-    var url = '/home/myunits/action/' + id;
-
-    // Redirect to the constructed URL
-    window.location.href = url;
-}
+                    return '<button class="button" style="background-color: ' + buttonColor + '; color: white;">' +
+                           '<a href="/home/myunits/action/' + btoa(row.id) + '/' + btoa(row.status) + '" style="text-decoration: none; color: inherit;">' +
+                           buttonText +
+                           '</a></button>';
+                }
+            }
+        ]
+    });
+});
 </script>
+
 
 @endauth
 @endsection

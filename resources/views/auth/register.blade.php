@@ -10,22 +10,22 @@
         <div class="form-group form-floating mb-3">
             <input type="text" class="form-control" name="fname" value="{{ old('fname') }}" placeholder="First Name" required="required" autofocus>
             <label for="floatingEmail">First Name</label>
-            @if ($errors->has('email'))
-                <span class="text-danger text-left">{{ $errors->first('email') }}</span>
+            @if ($errors->has('fname'))
+                <span class="text-danger text-left">{{ $errors->first('fname') }}</span>
             @endif
         </div>
         <div class="form-group form-floating mb-3">
             <input type="text" class="form-control" name="lname" value="{{ old('lname') }}" placeholder="Last Name" required="required" autofocus>
             <label for="floatingEmail">Last Name</label>
-            @if ($errors->has('email'))
-                <span class="text-danger text-left">{{ $errors->first('email') }}</span>
+            @if ($errors->has('lname'))
+                <span class="text-danger text-left">{{ $errors->first('lname') }}</span>
             @endif
         </div>
         <div class="form-group form-floating mb-3">
             <input type="tel" class="form-control" name="phone" value="{{ old('email') }}" placeholder="0798765432" required="required" autofocus>
             <label for="floatingEmail">Phone Number</label>
-            @if ($errors->has('email'))
-                <span class="text-danger text-left">{{ $errors->first('email') }}</span>
+            @if ($errors->has('phone'))
+                <span class="text-danger text-left">{{ $errors->first('phone') }}</span>
             @endif
         </div>
         <div class="form-group form-floating mb-3">

@@ -39,9 +39,8 @@ class PermissionController extends Controller
      */
     public function store(Request $request, $id)
     {
-        
-      if($request->isMethod('get'))
-       { $roles=Role::all();
+     
+        $roles=Role::all();
         $doors=Door::all();
         $units=Unit::leftjoin("my_units","my_units.unit_id","=","units.id")
         ->where('my_units.user_id',Auth::id());
@@ -49,9 +48,14 @@ class PermissionController extends Controller
         'doors' => $doors,
          'units'=>  $units,
          'unit_id' => $id
-            ]);}
-            else{
+            ]);
+
+    
+    }
+public function create(){
+    
         $permissions = $request->all();
+        dd($permissions);
         DB::beginTransaction();
         try{
         $permission_group =PermissionGroup::create([
@@ -97,10 +101,8 @@ class PermissionController extends Controller
             'status' => 'error',
             'message' => 'Oooops!! an error occurred please try again later'
         ]);
-    } }
-    
-    }
-
+     }
+}
     /**
      * Display the specified resource.
      */

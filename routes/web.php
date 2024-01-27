@@ -61,16 +61,19 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
      * Home Routes
      */
     Route::get('/', 'HomeController@index')->name('home.index');
+    Route::get('/home/data', 'HomeController@index_data')->name('home.index.data');
     Route::get('/home/myunits','UnitController@index')->name('home.login.index');
     Route::match(['GET','POST'],'/units/create','UnitController@create')->name('unit.create');
 
 Route::match(['GET','update','POST'],'/home/myunits/action/{id}/{status}','UnitController@update')->name('unit.update');
 Route::get('/selected/unit/{id}','UnitController@selectedUnit')->name('unit.selected');
+Route::get('/selected/unit/data/{id}','UnitController@selectedUnitData')->name('unit.selected.data');
 Route::get('/view/door/{id}','UnitController@show')->name('unit.show');
 Route::match(['GET','update','POST'],'add/permissions/{id}','PermissionController@store')->name('permissons.store');
 Route::post('/add/myunits','PermissionController@show')->name('permissons.show');
+Route::post('/add/permissions/creates/','PermissionController@create')->name('permissons.create');
 Route::match(['GET','update','POST'], '/make/schedule/{id}','ScheduleController@store')->name('schedule.store');
-//Route::match(['GET','update','POST'], '/user/search','UsersController@search')->name('search');
+Route::match(['GET','update','POST'], '/user/search','UsersController@search')->name('search');
 Route::get('/ajax/search','UsersController@index');
 Route::get('/search','UsersController@search');
 

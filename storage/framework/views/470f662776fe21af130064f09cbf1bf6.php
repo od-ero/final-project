@@ -8,22 +8,22 @@
         <div class="form-group form-floating mb-3">
             <input type="text" class="form-control" name="fname" value="<?php echo e(old('fname')); ?>" placeholder="First Name" required="required" autofocus>
             <label for="floatingEmail">First Name</label>
-            <?php if($errors->has('email')): ?>
-                <span class="text-danger text-left"><?php echo e($errors->first('email')); ?></span>
+            <?php if($errors->has('fname')): ?>
+                <span class="text-danger text-left"><?php echo e($errors->first('fname')); ?></span>
             <?php endif; ?>
         </div>
         <div class="form-group form-floating mb-3">
             <input type="text" class="form-control" name="lname" value="<?php echo e(old('lname')); ?>" placeholder="Last Name" required="required" autofocus>
             <label for="floatingEmail">Last Name</label>
-            <?php if($errors->has('email')): ?>
-                <span class="text-danger text-left"><?php echo e($errors->first('email')); ?></span>
+            <?php if($errors->has('lname')): ?>
+                <span class="text-danger text-left"><?php echo e($errors->first('lname')); ?></span>
             <?php endif; ?>
         </div>
         <div class="form-group form-floating mb-3">
             <input type="tel" class="form-control" name="phone" value="<?php echo e(old('email')); ?>" placeholder="0798765432" required="required" autofocus>
             <label for="floatingEmail">Phone Number</label>
-            <?php if($errors->has('email')): ?>
-                <span class="text-danger text-left"><?php echo e($errors->first('email')); ?></span>
+            <?php if($errors->has('phone')): ?>
+                <span class="text-danger text-left"><?php echo e($errors->first('phone')); ?></span>
             <?php endif; ?>
         </div>
         <div class="form-group form-floating mb-3">

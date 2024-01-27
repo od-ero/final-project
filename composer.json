@@ -11,7 +11,8 @@
         "laravel/passport": "^11.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "nesbot/carbon": "^2.72"
+        "nesbot/carbon": "^2.72",
+        "yajra/laravel-datatables-oracle": "^10.11"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

@@ -12,9 +12,12 @@
     
 <form name="register-form" id="register-form" method="post" action="{{url('/make/schedule/<?php echo ($unit_id); ?>)}}">
   <div class="container">
-    <legend>Active the door buttons access</legend> 
+   
+   <legend>Active the door buttons access</legend> 
     <p>Welcome to my schedule, this will activate the respective door buttons at given times.</p>
-    <hr>
+    
+  
+  <hr>
     <label for="open"><i>Select the the doors to be affected by the permissions</i></label>
     
    

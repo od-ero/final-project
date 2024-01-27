@@ -14,6 +14,18 @@
   border: none;
   background: #f1f1f1;
 } 
+.userxxInput {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+ 
+  border: none;
+  background: #f1f1f1;
+} 
+.userxxInput {
+  background-color: #ddd;
+  outline: none;
+} 
 /* .d-flex{
   width: 100%;
   padding: 15px;
@@ -51,34 +63,19 @@ a {
   text-align: center;
 }
 
-#units {
-    
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  #units td, #units th {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  
-  #units tr:nth-child(even){background-color: #f2f2f2;}
-  
-  #units tr:hover {background-color: #ddd;}
-  
   #units th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #04AA6D;
-    color: white;
+     background-color: #04AA6D; 
+     color: white; 
   }
-  
+   
    
     /* You can add more specific styling for each button if needed */
   
   
-  .button {
+  /* .button {
     border: none;
     color: white;
     padding: 10px 20px;
@@ -93,25 +90,5 @@ a {
     cursor: pointer;
    
   }
+   */
   
-  .button1 {
-    background-color: white; 
-    color: black; 
-    border: 2px solid #04AA6D;
-  }
-  
-  .button1:hover {
-    background-color: #04AA6D;
-    color: white;
-  }
-  
-  .button2 {
-    background-color: white; 
-    color: black; 
-    border: 2px solid #008CBA;
-  }
-  
-  .button2:hover {
-    background-color: #008CBA;
-    color: white;
-  }

@@ -14,7 +14,7 @@ use App\Models\User;
 use App\Models\MyUnit;
 use App\Models\Door;
 use App\Models\DoorStatus;
-
+use DataTables;
 class UnitController extends Controller
 {
     /**
@@ -27,7 +27,7 @@ class UnitController extends Controller
         ->leftjoin("roles","my_units.role_id","=","roles.id")
         ->where('user_id',Auth::id())
         ->get();
-       
+        $my_units= DataTables::of($my_units)->make(true);
         return view('home' , ['myUnits' => $my_units
             ]);
     }
@@ -42,9 +42,9 @@ class UnitController extends Controller
     else{
         $unit_details = $request->all();
        
-       // dd($unit_details);
-       // DB::beginTransaction();
-        //try{
+       //dd($unit_details);
+        DB::beginTransaction();
+        try{
         $units =Unit::create([
             'unit_name' => $unit_details['unit_name'],
             'owner_id' =>   $unit_details['owner_id'],
@@ -65,20 +65,24 @@ class UnitController extends Controller
             ]);
         }
     
-  //  DB::commit();
-        return response()->json([
-            'status'=>'success',
-            'message'=>'unit regestration succesful'
-        ]);  
+    DB::commit();
+  $notification = array(
+    'message'    => 'unit regestration succesful',
+    'alert-type' => 'success',
+);
 
-     //   }
-    /* catch (\Exception $e) {
+return redirect()->back()->with($notification);
+       
+
+       }
+       
+     catch (\Exception $e) {
         DB::rollback();
-        return response()->json([
-            'status' => 'error',
-            'message' => 'unit regestration failed. Contact adminstrator'
-        ]);
-    } */
+        $notification = array(
+    'message'    => 'unit regestration succesful',
+    'alert-type' => 'success',
+);
+    } 
 }
        
     }
@@ -99,16 +103,30 @@ class UnitController extends Controller
      public function selectedUnit(string  $unit_id)
      {
         $unit_id=base64_decode($unit_id);
-      // dd($unit_id);
+       //dd($unit_id);
        $unit= unit::find($unit_id);
-         $my_unit = Door::leftjoin("door_statuses","door_statuses.door_id","=","doors.id")
+         
+         //dd( $my_unit);
+         return view('myUnit' , [
+         'unit'=> $unit
+            ]);
+
+     }
+ 
+     public function selectedUnitData(string  $unit_id)
+     {
+        $unit_id=base64_decode($unit_id);
+       //dd($unit_id);
+       
+         $my_units = Door::leftjoin("door_statuses","door_statuses.door_id","=","doors.id")
          
           ->where('doors.unit_id',$unit_id)
          ->get();
          //dd( $my_unit);
-         return view('myUnit' , ['myUnits' => $my_unit,
-         'unit'=> $unit
-            ]);
+         return DataTables::of($my_units)->make(true);
+         
+         
+        
 
      }
  

@@ -10,20 +10,39 @@ use Auth;
 
 class UsersController extends Controller
 {
-  public function test(){
-    return response()->json([
-      'Password' => '12wq',
-      'user' => 'ttttt'
-  ]);
 
-  }
   
   public function index()
   {
   return view('search.search');
   }
- 
-    public function search(Request $request)
+  public function search(Request $request)
+  {
+      // Get the search terms from the request
+      $name = $request->input('term1');
+      $phone = $request->input('term2');
+  
+      // Perform your search logic
+      $results = User::query()
+                ->where('fname', 'LIKE', "%{$name}%")
+                ->orWhere('lname', 'LIKE', "%{$name}%")
+                ->where('phone', 'LIKE', "%{$phone}%")
+                ->get();
+               // dd($results);
+      // Process the results
+      $formattedResults = $results->map(function ($result) {
+          $displayName = $result->fname . ' ' . $result->lname;
+          
+          return [
+              'id' => $result->id,
+              'displayPhone' => $result->phone,
+              'displayName' => $displayName,
+          ];
+      });
+  
+      return response()->json($formattedResults);
+  }
+    public function searchajax(Request $request)
     {
       $search = $request->input('search');
     if($request->ajax())

@@ -30,7 +30,10 @@ class RegisterController extends Controller
         $user = User::create($request->validated());
        
         auth()->login($user);
-
-        return redirect('/')->with('success', "Account successfully registered.");
+        $notification = array(
+            'message' => 'Account registered successfully',
+            'alert-type' => 'success'
+        );
+        return redirect('/')->with($notification);
     }
 }
