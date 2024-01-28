@@ -15,7 +15,11 @@ use App\Models\MyUnit;
 use App\Models\PermissionGroup;
 use App\Models\Unit;
 use App\Models\Door;
+use App\Models\MyPermissionDoor;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+
 
 
 class PermissionController extends Controller
@@ -44,35 +48,25 @@ class PermissionController extends Controller
        if($request->isMethod('get')){
       // $roles=Role::all();
        $doors=Door::where('unit_id', $unit_id)
-       ->get();
+                    ->get();
+       $permission_groups=PermissionGroup::where('creator_id', Auth::id())
+                                             ->get();
        $units=Unit::leftjoin("my_units","my_units.unit_id","=","units.id")
-       ->where('my_units.user_id',Auth::id())
-       ->where('my_units.end_date','>', Carbon::now())
-       ->get();
-
+                    ->where('my_units.user_id',Auth::id())
+                    ->where('my_units.end_date','>', Carbon::now())
+                    ->get();
        return view('add_permission' , [
-       'doors' => $doors,
-        'units'=>  $units,
-        'unit_id' => $unit_id
-           ]);}
+                    'doors' => $doors,
+                        'units'=>  $units,
+                        'permission_groups' => $permission_groups,
+                        'unit_id' => $unit_id
+                        ]);}
 else{
     $permissions = $request->all();
-   // dd($permissions);
-    $doorIdComponents = [];
-
-    // Assuming $data contains only one array
-    $permissionData = reset($permissions);
-
-    foreach ($permissionData as $key => $value) {
-        if (strpos($key, 'door_id_') === 0) {
-            $doorIdComponents[$key] = $value;
-            unset($permissionData[$key]); // Remove the door_id component from the original array
-        }}
-        dd($doorIdComponents);
-       
-    DB::beginTransaction();
-    try{
-        if($permissions['permission_group_type'==='create_new']){
+   
+     DB::beginTransaction();
+     try{
+        if($permissions['permission_group']==='create_new'){
 
                 $permission_group =PermissionGroup::create([
                     'name' => $permissions['permission_group'],
@@ -80,44 +74,65 @@ else{
                 ]);
             // foreach ( $permissions as  $permission)  {
                 $permission = $permissions;
-                $permissions =Permission::create([
+                $create_permissions =Permission::create([
                     'permission_group_id' => $permission_group['id'],
-                    'give_permission' => $permission['give_permission'],
-                    'open' => $permission['open'],
-                    'close' => $permission['close'],
-                ' schedule' => $permission['schedule'],
-                'give_permission_fre' => $permission['give_permission_fre'],
-                'open_fre' => $permission['open_fre'],
-                'close_fre' => $permission['close_fre'],
-                'schedule_fre' => $permission['schedule_fre']
-                ]);}
+                    'give_permission' =>  $permissions['give_permission'],
+                    'open' =>  $permissions['open'],
+                    'close' =>  $permissions['close'],
+                ' schedule' =>  $permissions['schedule'],
+                'give_permission_fre' =>  $permissions['give_permission_fre'],
+                'open_fre' =>  $permissions['open_fre'],
+                'close_fre' =>  $permissions['close_fre'],
+                'schedule_fre' =>  $permissions['schedule_fre']
+                ]);
+                $use_permission_group_id=  $permission_group['id'];
+            }
+                else{
+                    $use_permission_group_id=  $permissions['permission_group_id'] ;
+                }
             $my_permissions =MyPermission::create([
-                'user_id' => $permission['user_id'],
+                'user_id' => $permissions['user_id'],
                // 'door_id' => $permission['door_id'],
-                'permission_group_id' => $permission_group['id'],
-                'permissioner_id' =>  3,
-                'start_date' => $permission['start_date'],
-                'end_date' => $permission['end_date'],
+                'permission_group_id' => $use_permission_group_id,
+                'permissioner_id' =>  Auth::id(),
+
+                'start_date' => Carbon::parse($permissions['start_date'])->toW3cString() ,
+                'end_date' =>  $permissions['end_date'],
+                //'end_date' =>  Carbon::parse($permissions['end_date'])->toW3cString(),
             ]);
 
+           
 
-                DB::commit();
-                return response()->json([
-                    'status'=>'success',
-                    'message'=>'Permission Allocated Successfull'
-                ]);  
-
+            foreach ($permissions as $door_name_ => $door_id) {
+                if (strpos($door_name_, 'door_id_') !== false) {
+                    
+                    MyPermissionDoor::create(
+                        [
+                            'my_permission_id' => $my_permissions['id'],
+                            'door_id' => $door_id,
+                        ]);
                 }
+            }
+            
+            
+                DB::commit();
+                $notification = array(
+                    'alert-type' => 'success',
+                    'message' => 'Permission allocated successfully'
+                );
+
+            }
             catch (\Exception $e) {
                 DB::rollback();
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Oooops!! an error occurred please try again later'
-                ]);
-            }
+                $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Oooops!! an error occurred please try again later'
+                     );
+ } 
+ return redirect()->back()->with($notification);
 }
+}   
     
-    }
 public function create(Request $request){
     
        
@@ -128,8 +143,8 @@ public function create(Request $request){
     public function show(Request $request,)// add unit
     {
         $my_units_details = $request->all();
-       // DB::beginTransaction();
-       // try{
+        DB::beginTransaction();
+        try{
         $my_units =MyUnit::create([
             'user_id' => $my_units_details['user_id'],
             'unit_id' =>  $my_units_details['unit_id'],
@@ -138,20 +153,23 @@ public function create(Request $request){
             'end_date' =>  $my_units_details['end_date'],
             'permissioner_id' => 4,
         ]);
-      //  DB::commit();
-        return response()->json([
-            'status'=>'success',
-            'message'=>'Unit Allocated Successfullly'
-        ]);  
-   // }
-   /* catch (\Exception $e) {
-        DB::rollback();
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Oooops!! an error occurred please try again later'
-        ]);
-    } */
+        DB::commit();
+      $notification = array(
+        'message'    => 'Priviledges assigned successfully',
+        'alert-type' => 'success',
+);
+} 
 
+        
+   // }
+   catch (\Exception $e) {
+        DB::rollback();
+           $notification = array(
+            'alert-type' => 'error',
+            'message' => 'Oooops!! an error occurred please try again later'
+        );
+    } 
+    return redirect()->back()->with($notification);
     }
 
     /**

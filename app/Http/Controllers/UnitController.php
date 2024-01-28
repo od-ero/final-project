@@ -71,7 +71,7 @@ class UnitController extends Controller
     'alert-type' => 'success',
 );
 
-return redirect()->back()->with($notification);
+
        
 
        }
@@ -79,10 +79,11 @@ return redirect()->back()->with($notification);
      catch (\Exception $e) {
         DB::rollback();
         $notification = array(
-    'message'    => 'unit regestration succesful',
-    'alert-type' => 'success',
+    'message'    => 'Ooops!! an error occurred while processing your request.',
+    'alert-type' => 'error',
 );
     } 
+    return redirect()->back()->with($notification);
 }
        
     }

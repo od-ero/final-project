@@ -142,8 +142,8 @@
   <label for="permission_group_id"><i>Permision Name</i></label>
   <select  name="permission_group_id" id="permission_group_id" required class="form-control userInput">
     <option value="">Select</option>
-    @foreach($doors as $role)
-        <option value="{{ $role->id }}"> {{ $role->role_name }}</option>
+    @foreach($permission_groups as $permission_group)
+        <option value="{{ $permission_group->id }}"> {{ $permission_group->name }}</option>
     @endforeach
   </select>
   </div>

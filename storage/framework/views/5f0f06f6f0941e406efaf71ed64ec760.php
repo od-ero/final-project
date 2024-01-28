@@ -142,8 +142,8 @@
   <label for="permission_group_id"><i>Permision Name</i></label>
   <select  name="permission_group_id" id="permission_group_id" required class="form-control userInput">
     <option value="">Select</option>
-    <?php $__currentLoopData = $doors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <option value="<?php echo e($role->id); ?>"> <?php echo e($role->role_name); ?></option>
+    <?php $__currentLoopData = $permission_groups; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission_group): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <option value="<?php echo e($permission_group->id); ?>"> <?php echo e($permission_group->name); ?></option>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
   </select>
   </div>
