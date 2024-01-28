@@ -110,7 +110,7 @@ Add Unit
     var selectedValue = $(this).data('id');
     var selectedDisplayName = $(this).text();
     var displayPhone = $(this).data('phone'); // Correct variable name
-console.log(displayPhone, 'mkenya');
+
     // Update input fields with the selected values
     $('#name').val(selectedDisplayName);
     $('#owner_id').val(selectedValue);

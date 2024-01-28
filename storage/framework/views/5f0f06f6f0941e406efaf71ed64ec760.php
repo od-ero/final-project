@@ -1,16 +1,16 @@
 
 <?php $__env->startSection('subtitle'); ?>
-Give access permission
+ Give access permission
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('contentheader_title'); ?>
-Give access permission
+    Give access permission
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
    
       
-<form name="register-form" id="register-form" method="post" action="<?php echo e(url('/add/permissions/creates')); ?>">
+<form name="add_permission" id="add_permission" method="post" action="<?php echo e(url('add/permissions/' . base64_encode($unit_id))); ?>">
 <div class="container">
 
   
@@ -23,6 +23,7 @@ Give access permission
     <hr>
     
     <input class="userInput" type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>" />
+    <input  class="userInput" id="owner_id" type="hidden"  name="user_id">
     <label for="fname"><b>User</b></label>
     <p><i>
       Kindly enter either of the Users name and and phone number and search to select the user
@@ -65,9 +66,10 @@ Give access permission
          </div>
 
         </div>
+        
       <div class="create_new">
             
-      <label for="permission_group_name"><b>Permission Name</b></label>
+       <label for="permission_group_name"><b>Permission Name</b></label>
     <input class="userInput"type="text" placeholder="Please Enter permission Name" name="permission_group_name" id="permission_group_name" required>
    
     <label for="open"><b>Give Access Permission</b></label>
@@ -133,46 +135,31 @@ Give access permission
  <div class="form-floating">
         <input type="text" class="form-control" name="schedule_fre" value="<?php echo e(old('schedule_fre')); ?>" placeholder="Frequency" required="required" autofocus>
         <label for="schedule_fre">Frequency</label>
-    </div>
- </div>
   </div>
+ </div>
+  </div> 
   <div class="use_existing">
   <label for="permission_group_id"><i>Permision Name</i></label>
   <select  name="permission_group_id" id="permission_group_id" required class="form-control userInput">
     <option value="">Select</option>
-    <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <option value="<?php echo e($role->id); ?>"><?php echo e($role->role_name); ?></option>
+    <?php $__currentLoopData = $doors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <option value="<?php echo e($role->id); ?>"> <?php echo e($role->role_name); ?></option>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+  </select>
+  </div>
  <label for="door"><i>Select the the doors to be affected by the permissions</i></label>
-    
-   
-    <div class="userCheck  userInput" >
-    <?php $__currentLoopData = $doors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $door): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-    <div class="form-check" >
-    <label class="form-check-label" for="flexCheckDefault">
-      <?php echo e($door->door_name); ?>
+ <div class="userCheck userInput">
+    <?php $__currentLoopData = $doors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $door): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="form-check">
+            <label class="form-check-label" for="flexCheckDefault">
+                <?php echo e($door->door_name); ?>
 
-      </label>
-      <input class="form-check-input" type="checkbox" name="door_id_" value="<?php echo e($door->id); ?>" id="flexCheckDefault">
-    </div>
+            </label>
+            <input class="form-check-input" type="checkbox" name="door_id_<?php echo e($index + 1); ?>" value="<?php echo e($door->id); ?>" id="flexCheckDefault">
+        </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-    </div>
-<label for="role_id"><b>Role</b></label>
-
-  <select  name="role_id" id="role_id" required class="form-control userInput">
-    <option value="">Select</option>
-    <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <option value="<?php echo e($role->id); ?>"><?php echo e($role->role_name); ?></option>
-    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
 </div>
-  <label for="unit_id"><b>Unit</b></label>
-<select name="unit_id" id="unit_id" required class="form-control userInput">
-    <option value="">select</option>
-    <?php $__currentLoopData = $units; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $unit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <option value="<?php echo e($unit->id); ?>"><?php echo e($unit->unit_name); ?></option>
-    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-</select>
+ </div>
 
     <label for="start_date"><b>Start Date</b></label>
     <input class="userInput" type="datetime-local" placeholder="Please Enter the check in time" name="start_date" id="start_date" required>

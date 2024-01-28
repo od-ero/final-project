@@ -1,16 +1,16 @@
 @extends('layouts.app-master')
 @section('subtitle')
-Give access permission
+ Give access permission
 @endsection
 
 @section('contentheader_title')
-Give access permission
+    Give access permission
 @endsection
 
 @section('content')
    
       
-<form name="add_permission" id="add_permission" method="post" action="{{url('/add/permissions/creates')}}">
+<form name="add_permission" id="add_permission" method="post" action="{{ url('add/permissions/' . base64_encode($unit_id)) }}">
 <div class="container">
 
   
@@ -23,6 +23,7 @@ Give access permission
     <hr>
     
     <input class="userInput" type="hidden" name="_token" value="{{ csrf_token() }}" />
+    <input  class="userInput" id="owner_id" type="hidden"  name="user_id">
     <label for="fname"><b>User</b></label>
     <p><i>
       Kindly enter either of the Users name and and phone number and search to select the user
@@ -65,9 +66,10 @@ Give access permission
          </div>
 
         </div>
+        
       <div class="create_new">
             
-      <label for="permission_group_name"><b>Permission Name</b></label>
+       <label for="permission_group_name"><b>Permission Name</b></label>
     <input class="userInput"type="text" placeholder="Please Enter permission Name" name="permission_group_name" id="permission_group_name" required>
    
     <label for="open"><b>Give Access Permission</b></label>
@@ -133,45 +135,30 @@ Give access permission
  <div class="form-floating">
         <input type="text" class="form-control" name="schedule_fre" value="{{ old('schedule_fre') }}" placeholder="Frequency" required="required" autofocus>
         <label for="schedule_fre">Frequency</label>
-    </div>
- </div>
   </div>
+ </div>
+  </div> 
   <div class="use_existing">
   <label for="permission_group_id"><i>Permision Name</i></label>
   <select  name="permission_group_id" id="permission_group_id" required class="form-control userInput">
     <option value="">Select</option>
-    @foreach($roles as $role)
-        <option value="{{ $role->id }}">{{ $role->role_name }}</option>
+    @foreach($doors as $role)
+        <option value="{{ $role->id }}"> {{ $role->role_name }}</option>
     @endforeach
+  </select>
+  </div>
  <label for="door"><i>Select the the doors to be affected by the permissions</i></label>
-    
-   
-    <div class="userCheck  userInput" >
-    @foreach($doors as $door)
-    <div class="form-check" >
-    <label class="form-check-label" for="flexCheckDefault">
-      {{$door->door_name}}
-      </label>
-      <input class="form-check-input" type="checkbox" name="door_id_" value="{{ $door->id }}" id="flexCheckDefault">
-    </div>
+ <div class="userCheck userInput">
+    @foreach($doors as $index => $door)
+        <div class="form-check">
+            <label class="form-check-label" for="flexCheckDefault">
+                {{ $door->door_name }}
+            </label>
+            <input class="form-check-input" type="checkbox" name="door_id_{{ $index + 1 }}" value="{{ $door->id }}" id="flexCheckDefault">
+        </div>
     @endforeach
-    </div>
-<label for="role_id"><b>Role</b></label>
-
-  <select  name="role_id" id="role_id" required class="form-control userInput">
-    <option value="">Select</option>
-    @foreach($roles as $role)
-        <option value="{{ $role->id }}">{{ $role->role_name }}</option>
-    @endforeach
-
 </div>
-  <label for="unit_id"><b>Unit</b></label>
-<select name="unit_id" id="unit_id" required class="form-control userInput">
-    <option value="">select</option>
-    @foreach($units as $unit)
-        <option value="{{ $unit->id }}">{{ $unit->unit_name }}</option>
-    @endforeach
-</select>
+ </div>
 
     <label for="start_date"><b>Start Date</b></label>
     <input class="userInput" type="datetime-local" placeholder="Please Enter the check in time" name="start_date" id="start_date" required>

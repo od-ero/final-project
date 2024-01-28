@@ -71,7 +71,7 @@ Route::get('/selected/unit/data/{id}','UnitController@selectedUnitData')->name('
 Route::get('/view/door/{id}','UnitController@show')->name('unit.show');
 Route::match(['GET','update','POST'],'add/permissions/{id}','PermissionController@store')->name('permissons.store');
 Route::post('/add/myunits','PermissionController@show')->name('permissons.show');
-Route::post('/add/permissions/creates/','PermissionController@create')->name('permissons.create');
+Route::post('/add/creates/permission','PermissionController@create')->name('permissons.create');
 Route::match(['GET','update','POST'], '/make/schedule/{id}','ScheduleController@store')->name('schedule.store');
 Route::match(['GET','update','POST'], '/user/search','UsersController@search')->name('search');
 Route::get('/ajax/search','UsersController@index');

@@ -15,6 +15,7 @@ use App\Models\MyUnit;
 use App\Models\PermissionGroup;
 use App\Models\Unit;
 use App\Models\Door;
+use Carbon\Carbon;
 
 
 class PermissionController extends Controller
@@ -37,71 +38,89 @@ class PermissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, $id)
-    {
-     
-        $roles=Role::all();
-        $doors=Door::all();
-        $units=Unit::leftjoin("my_units","my_units.unit_id","=","units.id")
-        ->where('my_units.user_id',Auth::id());
-        return view('add_permission' , ['roles' => $roles,
-        'doors' => $doors,
-         'units'=>  $units,
-         'unit_id' => $id
+    public function store(Request $request, $unit_id)
+    { 
+        $unit_id= base64_decode($unit_id);
+       if($request->isMethod('get')){
+      // $roles=Role::all();
+       $doors=Door::where('unit_id', $unit_id)
+       ->get();
+       $units=Unit::leftjoin("my_units","my_units.unit_id","=","units.id")
+       ->where('my_units.user_id',Auth::id())
+       ->where('my_units.end_date','>', Carbon::now())
+       ->get();
+
+       return view('add_permission' , [
+       'doors' => $doors,
+        'units'=>  $units,
+        'unit_id' => $unit_id
+           ]);}
+else{
+    $permissions = $request->all();
+   // dd($permissions);
+    $doorIdComponents = [];
+
+    // Assuming $data contains only one array
+    $permissionData = reset($permissions);
+
+    foreach ($permissionData as $key => $value) {
+        if (strpos($key, 'door_id_') === 0) {
+            $doorIdComponents[$key] = $value;
+            unset($permissionData[$key]); // Remove the door_id component from the original array
+        }}
+        dd($doorIdComponents);
+       
+    DB::beginTransaction();
+    try{
+        if($permissions['permission_group_type'==='create_new']){
+
+                $permission_group =PermissionGroup::create([
+                    'name' => $permissions['permission_group'],
+                    'creator_id' =>  Auth::id(),
+                ]);
+            // foreach ( $permissions as  $permission)  {
+                $permission = $permissions;
+                $permissions =Permission::create([
+                    'permission_group_id' => $permission_group['id'],
+                    'give_permission' => $permission['give_permission'],
+                    'open' => $permission['open'],
+                    'close' => $permission['close'],
+                ' schedule' => $permission['schedule'],
+                'give_permission_fre' => $permission['give_permission_fre'],
+                'open_fre' => $permission['open_fre'],
+                'close_fre' => $permission['close_fre'],
+                'schedule_fre' => $permission['schedule_fre']
+                ]);}
+            $my_permissions =MyPermission::create([
+                'user_id' => $permission['user_id'],
+               // 'door_id' => $permission['door_id'],
+                'permission_group_id' => $permission_group['id'],
+                'permissioner_id' =>  3,
+                'start_date' => $permission['start_date'],
+                'end_date' => $permission['end_date'],
             ]);
 
+
+                DB::commit();
+                return response()->json([
+                    'status'=>'success',
+                    'message'=>'Permission Allocated Successfull'
+                ]);  
+
+                }
+            catch (\Exception $e) {
+                DB::rollback();
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Oooops!! an error occurred please try again later'
+                ]);
+            }
+}
     
     }
-public function create(){
+public function create(Request $request){
     
-        $permissions = $request->all();
-        dd($permissions);
-        DB::beginTransaction();
-        try{
-        $permission_group =PermissionGroup::create([
-            'name' => $permissions['permission_group'],
-            'creator_id' =>  Auth::id(),
-        ]);
-       // foreach ( $permissions as  $permission)  {
-        $permission = $permissions;
-        $permissions =Permission::create([
-            'permission_group_id' => $permission_group['id'],
-            'door_id' => $permission['door_id'],
-           
-            'give_permission' => $permission['give_permission'],
-            'open' => $permission['open'],
-            'close' => $permission['close'],
-           ' schedule' => $permission['schedule'],
-           'give_permission_fre' => $permission['give_permission_fre'],
-           'open_fre' => $permission['open_fre'],
-           'close_fre' => $permission['close_fre'],
-           'schedule_fre' => $permission['schedule_fre']
-        ]);
-
-    
-  //  $users=  $permissions['user_id'];
-  //  foreach (  $users as $user)  {
-    $my_permissions =MyPermission::create([
-        'user_id' => $permission['user_id'],
-        'permission_group_id' => $permission_group['id'],
-        'permissioner_id' =>  3,
-        'start_date' => $permission['start_date'],
-        'end_date' => $permission['end_date'],
-    ]);
-        DB::commit();
-        return response()->json([
-            'status'=>'success',
-            'message'=>'Permission Allocated Successfull'
-        ]);  
-
-        }
-     catch (\Exception $e) {
-        DB::rollback();
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Oooops!! an error occurred please try again later'
-        ]);
-     }
+       
 }
     /**
      * Display the specified resource.

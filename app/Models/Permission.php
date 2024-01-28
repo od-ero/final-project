@@ -14,7 +14,6 @@ class Permission extends Model
     protected $fillable = [
        
         'permission_group_id',
-        'door_id',
         'give_permission',
         'open',
         'close',
