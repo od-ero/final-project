@@ -21,22 +21,15 @@
       <label for="open"><i>Select the doors to be affected by the permissions</i></label>
 
       <div class="userCheck userInput">
-        @foreach($doors as $door)
-        <div class="form-check">
-          <label class="form-check-label" for="flexCheckDefault">
-            {{ $door->door_name }}
-          </label>
-          <input class="form-check-input" type="checkbox" name="door_id_" value="{{ $door->id }}" id="flexCheckDefault">
-        </div>
-        @endforeach
+          @foreach($doors as $index => $door)
+              <div class="form-check">
+                  <label class="form-check-label" for="flexCheckDefault">
+                      {{ $door->door_name }}
+                  </label>
+                  <input class="form-check-input" type="checkbox" name="door_id_{{ $index + 1 }}" value="{{ $door->id }}" id="flexCheckDefault">
+              </div>
+          @endforeach
       </div>
-
-      <label for="email"><b>Start Date And Time</b></label>
-      <input class="userInput" type="datetime-local" placeholder="Please Enter the check-in time" name="start_date" id="start_date" required>
-
-      <label for="phone"><b>End Date And Time</b></label>
-      <input class="userInput" type="datetime-local" placeholder="Please Enter the check-out time" name="end_date" id="end_date" required>
-
       <label for="open"><i>Select either to use existing permissions or to create a new one</i></label>
       <div class="d-flex align-items-center userInput">
         <div class="form-check form-check-inline">
@@ -45,19 +38,123 @@
         </div>
         <div class="form-check form-check-inline">
           <label class="form-check-label" for="inlineRadio2">Create A new one</label>
-          <input class="form-check-input" type="radio" name="permission_group" id="create_new" value="create_new" checked>
+          <input class="form-check-input" type="radio" name="permission_group" id="create_new" value="create_new">
         </div>
       </div>
+      <div class="use_existing">
+          <label for="permission_group_id"><b>Permision Name</b></label>
+          <select  name="permission_group_id" id="permission_group_id" required class="form-control userInput">
+                <option value="">Select</option>
+                @foreach($permission_groups as $permission_group)
+                <option value="{{ $permission_group->id }}"> {{ $permission_group->name }}</option>
+            @endforeach
+          </select>
+      </div>
 
+      <div class="create_new">
       <label for="permission_group"><b>Permission Name</b></label>
       <input class="userInput" type="text" placeholder="Please Enter permission Name" name="permission_group" id="permission_group" required>
+    
+   <label for="open"><b>Open from outside</b></label>
+   <div class="d-flex align-items-center userInput">
+   <div class="form-check form-check-inline">
+       <label class="form-check-label" for="inlineRadio1">Yes</label>
+       <input class="form-check-input" type="radio" name="give_permission" id="give_permission_yes" value="yes">
+   </div>
 
-      <!-- The rest of your form fields go here... -->
+   <div class="form-check form-check-inline">
+       <label class="form-check-label" for="inlineRadio2">No</label>
+       <input class="form-check-input" type="radio" name="give_permission" id="give_permission_no" value="no">
+   </div>
+
+   <div class="form-floating ">
+       <input type="text" class="form-control" name="give_permission_fre"  placeholder="Frequency" required="required" autofocus>
+       <label for="floatingName">Frequency</label>
+   </div>
+</div>
+
+ <label for="open"><b>Close from outside</b></label>
+<div class="d-flex align-items-center userInput">
+<div class="form-check form-check-inline" >
+     <label class="form-check-label" for="inlineRadio1">Yes</label>
+     <input class="form-check-input" type="radio" name="open" id="open_yes" value="yes">
+   </div>
+<div class="form-check form-check-inline">
+   <label class="form-check-label" for="inlineRadio2">No</label>
+  <input class="form-check-input" type="radio" name="open" id="open_no" value="no">
+</div>
+<div class="form-floating">
+       <input type="text" class="form-control" name="open_fre"  placeholder="Frequency" required="required" autofocus>
+       <label for="floatingName">Frequency</label>
+   </div>
+</div>
+ 
+<label for="open"><b>Open from Inside</b></label>
+ <div class="d-flex align-items-center userInput">
+ <div class="form-check form-check-inline ">
+     <label class="form-check-label" for="inlineRadio1">Yes</label>
+     <input class="form-check-input" type="radio" name="close" id="close_yes" value="yes">
+   </div>
+<div class="form-check form-check-inline">
+  <label class="form-check-label" for="inlineRadio2">No</label>
+  <input class="form-check-input" type="radio" name="close" id="close_no" value="no">
+</div>
+<div class="form-floating">
+       <input type="text" class="form-control" name="close_fre"  placeholder="Frequency" required="required" autofocus>
+       <label for="floatingName">Frequency</label>
+   </div>
+ </div>
+
+<label for="open"><b>Lock from Inside</b></label>
+<div class="d-flex align-items-center userInput">
+<div class="form-check form-check-inline ">
+     <label class="form-check-label" for="inlineRadio1">Yes</label>
+     <input class="form-check-input" type="radio" name="schedule" id="schedule_yes" value="yes">
+   </div>
+<div class="form-check form-check-inline">
+  <label class="form-check-label" for="inlineRadio2">No</label>
+  <input class="form-check-input" type="radio" name="schedule" id="schedule_no" value="no">
+</div>
+<div class="form-floating">
+       <input type="text" class="form-control" name="schedule_fre"  placeholder="Frequency" required="required" autofocus>
+       <label for="floatingName">Frequency</label>
+   </div>
+</div>
+</div>
+      <label for="email"><b>Start Date And Time</b></label>
+      <input class="userInput" type="datetime-local" placeholder="Please Enter the check-in time" name="start_date" id="start_date" required>
+
+      <label for="phone"><b>End Date And Time</b></label>
+      <input class="userInput" type="datetime-local" placeholder="Please Enter the check-out time" name="end_date" id="end_date" required>
+
 
       <hr>
+    <div class="text-center">
+        <button type="submit" class="btn btn-success mb-3 mx-3">Give Privileges</button><button type="#" class="btn btn-primary mx-3">cancel</button>
+    </div>
     </fieldset>
-
-    <button type="submit" class="btn btn-primary">Give Privileges</button>
   </div>
 </form>
+<style>
+    .use_existing, .create_new {
+      display: none;
+    }
+
+    .visible {
+      display: block;
+    }
+  </style>
+    <script>
+    $(document).ready(function () {
+      $('input[type=radio][name=permission_group]').change(function() {
+        var selectedClass = $(this).val();
+
+        // Hide all classes
+        $('.use_existing, .create_new').removeClass('visible');
+
+        // Show the selected class
+        $('.' + selectedClass).addClass('visible');
+      });
+    });
+  </script> 
 @endsection

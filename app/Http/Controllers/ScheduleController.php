@@ -26,14 +26,19 @@ class ScheduleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, string $id)
+    public function store(Request $request, string $passed_unit_id)
     {
         //
         if($request->isMethod('get')){
-             $doors= Door::all();
+            $unit_id= base64_decode($passed_unit_id);
+             $doors= Door::where('unit_id', $unit_id)
+                             ->get();
+             $permission_groups=DoorSechedulePermission::where('user_id',Auth::id())
+                                                        ->get();
             return view('add_schedule' , [
                 'doors'=>  $doors,
-                'unit_id' => $id
+                'permission_groups'=>  $permission_groups,
+                'unit_id' => $passed_unit_id
                    ]);
 
         }
@@ -43,7 +48,7 @@ class ScheduleController extends Controller
        // try{
         $door_sechedule_permission =DoorSechedulePermission::create([
             'name' => $schedules['schedule_group'],
-            'user_id' => 3,
+            'user_id' => Auth::id(),
         ]);
        // foreach ( $permissions as  $permission)  {
        

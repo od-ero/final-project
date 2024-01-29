@@ -42,8 +42,9 @@
 
 /* Overwrite default styles of hr */
 hr {
-  border: 1px solid #f1f1f1;
+  border: 1px solid  #04AA6D;
   margin-bottom: 25px;
+  color: #04AA6D;
  
 }
 

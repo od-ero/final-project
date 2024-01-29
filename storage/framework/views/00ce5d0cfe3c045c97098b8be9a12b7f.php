@@ -15,6 +15,7 @@
 
 <p>Welcome to <?php echo e($unit['premises_name'] . ', ' . $unit['unit_name']); ?> </p>
 <?php $unit_id = base64_encode($unit['id']); ?>
+
 <!-- <div><button class="button button1">
     <a href="/units/create" style="text-decoration: none; color: inherit;">
        Add Unit

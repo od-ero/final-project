@@ -79,7 +79,7 @@ Add Unit
 
   <div class="text-center">
     
-  <a href="/link-to/whatever-address/" id="cancel" name="cancel" class="btn btn-primary">Cancel</a> <button type="submit" class="btn btn-success"> Register</button>  <button type="reset" class="btn btn-default pull-right">Cancel reset</button> <button id="cancel" name="cancel" class="btn btn-default" onclick="history.back()">Cancel onclick</button>
+  <a href="/link-to/whatever-address/" id="cancel" name="cancel" class="btn btn-primary mx-3">Cancel</a> <button type="submit" class="btn btn-success mx-3"> Register</button>  <button type="reset" class="btn btn-default pull-right">Cancel reset</button> <button id="cancel" name="cancel" class="btn btn-default" onclick="history.back()">Cancel onclick</button>
   </div>
   </div>
   <fieldset>

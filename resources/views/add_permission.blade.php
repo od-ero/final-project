@@ -9,7 +9,7 @@
 
 @section('content')
    
-      
+     
 <form name="add_permission" id="add_permission" method="post" action="{{ url('add/permissions/' . base64_encode($unit_id)) }}">
 <div class="container">
 
@@ -66,7 +66,15 @@
          </div>
 
         </div>
-        
+        <div class="use_existing">
+            <label for="permission_group_id"><i>Permision Name</i></label>
+            <select  name="permission_group_id" id="permission_group_id" required class="form-control userInput">
+              <option value="">Select</option>
+              @foreach($permission_groups as $permission_group)
+                  <option value="{{ $permission_group->id }}"> {{ $permission_group->name }}</option>
+              @endforeach
+            </select>
+       </div> 
       <div class="create_new">
             
        <label for="permission_group_name"><b>Permission Name</b></label>
@@ -138,38 +146,37 @@
   </div>
  </div>
   </div> 
-  <div class="use_existing">
-  <label for="permission_group_id"><i>Permision Name</i></label>
-  <select  name="permission_group_id" id="permission_group_id" required class="form-control userInput">
-    <option value="">Select</option>
-    @foreach($permission_groups as $permission_group)
-        <option value="{{ $permission_group->id }}"> {{ $permission_group->name }}</option>
-    @endforeach
-  </select>
-  </div>
+ 
+    
  <label for="door"><i>Select the the doors to be affected by the permissions</i></label>
- <div class="userCheck userInput">
-    @foreach($doors as $index => $door)
-        <div class="form-check">
-            <label class="form-check-label" for="flexCheckDefault">
-                {{ $door->door_name }}
-            </label>
-            <input class="form-check-input" type="checkbox" name="door_id_{{ $index + 1 }}" value="{{ $door->id }}" id="flexCheckDefault">
-        </div>
-    @endforeach
-</div>
- </div>
-
-    <label for="start_date"><b>Start Date</b></label>
+      <div class="userCheck userInput">
+          @foreach($doors as $index => $door)
+              <div class="form-check">
+                  <label class="form-check-label" for="flexCheckDefault">
+                      {{ $door->door_name }}
+                  </label>
+                  <input class="form-check-input" type="checkbox" name="door_id_{{ $index + 1 }}" value="{{ $door->id }}" id="flexCheckDefault">
+              </div>
+          @endforeach
+      </div>
+      <label for="start_date"><b>Start Date</b></label>
     <input class="userInput" type="datetime-local" placeholder="Please Enter the check in time" name="start_date" id="start_date" required>
 
     <label for="end_date"><b>End Date</b></label>
     <input class="userInput" type="datetime-local" placeholder="Please Enter the check out time" name="end_date" id="end_date" required>
    
-    
+
+ </div>
+
+   
     <hr>
- 
-  <button type="submit" class="btn btn-success">Give Priviledges</button>
+
+    <div class="text-center">
+  <button type="submit" class="btn btn-success mx-3">Give Priviledges</button><button type="submit" class="btn btn-primary mx-3">Cancel</button>
+    </div>
+
+
+    <!-- next elements -->
   </fieldset>
 </div>
 </form>  

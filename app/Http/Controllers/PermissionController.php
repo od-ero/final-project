@@ -42,9 +42,9 @@ class PermissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, $unit_id)
+    public function store(Request $request, $passed_unit_id)
     { 
-        $unit_id= base64_decode($unit_id);
+        $unit_id= base64_decode($passed_unit_id);
        if($request->isMethod('get')){
       // $roles=Role::all();
        $doors=Door::where('unit_id', $unit_id)
@@ -59,7 +59,7 @@ class PermissionController extends Controller
                     'doors' => $doors,
                         'units'=>  $units,
                         'permission_groups' => $permission_groups,
-                        'unit_id' => $unit_id
+                        'unit_id' => $passed_unit_id
                         ]);}
 else{
     $permissions = $request->all();
