@@ -18,7 +18,7 @@
       <tr>
         <th style="width:5%">ID</th>
         <th style="width:35%">Name</th>
-        <th>Role</th>
+       
         <th>Start Date</th>
         <th>End Date</th>
     </tr>
@@ -53,25 +53,25 @@
                         return '<a href="/selected/unit/' + btoa(row.id) + '">' + data + '</a>';
                     }
                 },
-                {
-                    data: 'role_name',
-                    name: 'role_name',
-                    render: function (data, type, row) {
-                        return '<a href="/selected/unit/' + btoa(row.id) + '">' + data + '</a>';
-                    }
-                },
+                
                 {
                     data: 'start_date',
                     name: 'start_date',
                     render: function (data, type, row) {
-                        return '<a href="/selected/unit/' + btoa(row.id) + '">' + data + '</a>';
+                        // Parse the date using Carbon
+                        var formattedDate = moment(data).format('ddd, MMM DD, YYYY h:mm A');
+                        
+                        // Return the formatted date as a link
+                        return '<a href="/selected/unit/' + btoa(row.id) + '">' + formattedDate + '</a>';
                     }
-                },
+                }
+                ,
                 {
                     data: 'end_date',
                     name: 'end_date',
                     render: function (data, type, row) {
-                        return '<a href="/selected/unit/' + btoa(row.id) + '">' + data + '</a>';
+                        var formattedDate = moment(data).format('ddd, MMM DD, YYYY h:mm A');
+                        return '<a href="/selected/unit/' + btoa(row.id) + '">' + formattedDate + '</a>';
                     }
                 }
             ]

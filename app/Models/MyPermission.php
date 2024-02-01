@@ -15,8 +15,10 @@ class MyPermission extends Model
         'user_id',
         'permission_group_id',
         'permissioner_id',
+        'unit_id',
         'start_date',
         'end_date',
         'frequency',
+       
     ];
 }

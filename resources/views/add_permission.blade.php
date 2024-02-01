@@ -130,7 +130,7 @@
     </div>
   </div>
 
- <label for="open"><b>Schedule Button Access</b></label>
+ <label for="schedule"><b>Schedule Button Access</b></label>
  <div class="d-flex align-items-center userInput">
  <div class="form-check form-check-inline ">
       <label class="form-check-label" for="schedule_yes">Yes</label>

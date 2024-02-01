@@ -79,8 +79,8 @@ class UnitController extends Controller
      catch (\Exception $e) {
         DB::rollback();
         $notification = array(
-    'message'    => 'Ooops!! an error occurred while processing your request.',
-    'alert-type' => 'error',
+            'message'    => 'Ooops!! an error occurred while processing your request.',
+            'alert-type' => 'error',
 );
     } 
     return redirect()->back()->with($notification);

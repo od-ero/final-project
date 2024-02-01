@@ -17,7 +17,7 @@
       <p>Welcome to my schedule, this will activate the respective door buttons at given times.</p>
 
       <hr>
-
+      <input class="userInput" type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>" />
       <label for="open"><i>Select the doors to be affected by the permissions</i></label>
 
       <div class="userCheck userInput">
@@ -47,77 +47,77 @@
           <select  name="permission_group_id" id="permission_group_id" required class="form-control userInput">
                 <option value="">Select</option>
                 <?php $__currentLoopData = $permission_groups; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission_group): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <option value="<?php echo e($permission_group->id); ?>"> <?php echo e($permission_group->name); ?></option>
+                <option value="<?php echo e($permission_group->id); ?>"> <?php echo e($permission_group->permission_name); ?></option>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
       </div>
 
       <div class="create_new">
-      <label for="permission_group"><b>Permission Name</b></label>
-      <input class="userInput" type="text" placeholder="Please Enter permission Name" name="permission_group" id="permission_group" required>
+      <label for="permission_group_name"><b>Permission Name</b></label>
+      <input class="userInput" type="text" placeholder="Please Enter permission Name" name="permission_group_name" id="permission_group_name" required>
     
-   <label for="open"><b>Open from outside</b></label>
+   <label for="open_out"><b>Unlock from outside</b></label>
    <div class="d-flex align-items-center userInput">
    <div class="form-check form-check-inline">
        <label class="form-check-label" for="inlineRadio1">Yes</label>
-       <input class="form-check-input" type="radio" name="give_permission" id="give_permission_yes" value="yes">
+       <input class="form-check-input" type="radio" name="open_out" id="open_out" value="yes">
    </div>
 
    <div class="form-check form-check-inline">
        <label class="form-check-label" for="inlineRadio2">No</label>
-       <input class="form-check-input" type="radio" name="give_permission" id="give_permission_no" value="no">
+       <input class="form-check-input" type="radio" name="open_out" id="open_out" value="no">
    </div>
 
    <div class="form-floating ">
-       <input type="text" class="form-control" name="give_permission_fre"  placeholder="Frequency" required="required" autofocus>
+       <input type="text" class="form-control" name="open_out_fre"  placeholder="Frequency" required="required" autofocus>
        <label for="floatingName">Frequency</label>
    </div>
 </div>
 
- <label for="open"><b>Close from outside</b></label>
+ <label for="close_out"><b>Lock from outside</b></label>
 <div class="d-flex align-items-center userInput">
 <div class="form-check form-check-inline" >
      <label class="form-check-label" for="inlineRadio1">Yes</label>
-     <input class="form-check-input" type="radio" name="open" id="open_yes" value="yes">
+     <input class="form-check-input" type="radio" name="close_out" id="close_out" value="yes">
    </div>
 <div class="form-check form-check-inline">
    <label class="form-check-label" for="inlineRadio2">No</label>
-  <input class="form-check-input" type="radio" name="open" id="open_no" value="no">
+  <input class="form-check-input" type="radio" name="close_out" id="close_out" value="no">
 </div>
 <div class="form-floating">
-       <input type="text" class="form-control" name="open_fre"  placeholder="Frequency" required="required" autofocus>
+       <input type="text" class="form-control" name="close_out_fre"  placeholder="Frequency" required="required" autofocus>
        <label for="floatingName">Frequency</label>
    </div>
 </div>
  
-<label for="open"><b>Open from Inside</b></label>
+<label for="open_in"><b>Unlock from Inside</b></label>
  <div class="d-flex align-items-center userInput">
  <div class="form-check form-check-inline ">
      <label class="form-check-label" for="inlineRadio1">Yes</label>
-     <input class="form-check-input" type="radio" name="close" id="close_yes" value="yes">
+     <input class="form-check-input" type="radio" name="open_in" id="open_in" value="yes">
    </div>
 <div class="form-check form-check-inline">
   <label class="form-check-label" for="inlineRadio2">No</label>
-  <input class="form-check-input" type="radio" name="close" id="close_no" value="no">
+  <input class="form-check-input" type="radio" name="open_in" id="open_in" value="no">
 </div>
 <div class="form-floating">
-       <input type="text" class="form-control" name="close_fre"  placeholder="Frequency" required="required" autofocus>
+       <input type="text" class="form-control" name="open_in_fre"  placeholder="Frequency" required="required" autofocus>
        <label for="floatingName">Frequency</label>
    </div>
  </div>
 
-<label for="open"><b>Lock from Inside</b></label>
+<label for="close_in"><b>Lock from Inside</b></label>
 <div class="d-flex align-items-center userInput">
 <div class="form-check form-check-inline ">
      <label class="form-check-label" for="inlineRadio1">Yes</label>
-     <input class="form-check-input" type="radio" name="schedule" id="schedule_yes" value="yes">
+     <input class="form-check-input" type="radio" name="close_in" id="close_in" value="yes">
    </div>
 <div class="form-check form-check-inline">
   <label class="form-check-label" for="inlineRadio2">No</label>
-  <input class="form-check-input" type="radio" name="schedule" id="schedule_no" value="no">
+  <input class="form-check-input" type="radio" name="close_in" id="close_in" value="no">
 </div>
 <div class="form-floating">
-       <input type="text" class="form-control" name="schedule_fre"  placeholder="Frequency" required="required" autofocus>
+       <input type="text" class="form-control" name="close_in_fre"  placeholder="Frequency" required="required" autofocus>
        <label for="floatingName">Frequency</label>
    </div>
 </div>
@@ -131,8 +131,8 @@
 
       <hr>
     <div class="text-center">
-     <button type="submit" class="btn btn-success mx-3">Give Privileges</button><button type="#" class="btn btn-primary mx-3">cancel</button>
-     </div>
+        <button type="submit" class="btn btn-success mb-3 mx-3">Give Privileges</button><button type="#" class="btn btn-primary mx-3">cancel</button>
+    </div>
     </fieldset>
   </div>
 </form>
@@ -158,6 +158,26 @@
       });
     });
   </script> 
+  <script>
+    $(document).ready(function () {
+      $('input[type=radio][name=permission_group]').change(function() {
+        var selectedClass = $(this).val();
+
+        // Hide all classes
+        $('.use_existing, .create_new').removeClass('visible');
+
+        // Disable elements within the invisible class
+        $('.use_existing *').prop('disabled', true);
+        $('.create_new *').prop('disabled', true);
+
+        // Show the selected class
+        $('.' + selectedClass).addClass('visible');
+
+        // Enable elements within the visible class
+        $('.' + selectedClass + ' *').prop('disabled', false);
+      });
+    });
+  </script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.app-master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\LaravelAPI\resources\views/add_schedule.blade.php ENDPATH**/ ?>

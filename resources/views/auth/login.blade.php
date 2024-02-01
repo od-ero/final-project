@@ -1,5 +1,7 @@
 @extends('layouts.auth-master')
-
+@section('subtitle')
+Login
+@endsection
 @section('content')
     <form method="post" action="{{ route('login.perform') }}">
         

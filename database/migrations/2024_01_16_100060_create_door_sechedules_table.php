@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('door_sechedules', function (Blueprint $table) {
+        Schema::create('fffdoor_sechedules', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('door_id')->unsigned();
             $table->foreign('door_id')->references('id')->on('doors');

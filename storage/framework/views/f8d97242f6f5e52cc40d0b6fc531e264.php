@@ -1,3 +1,6 @@
+<?php $__env->startSection('subtitle'); ?>
+Login
+<?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
     <form method="post" action="<?php echo e(route('login.perform')); ?>">
         
