@@ -22,11 +22,11 @@
 
     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
-        <li><a href="/units/create" class="nav-link px-2 text-white">Add A Unit</a></li>
+        <li><a href="/units/create" class="nav-link px-2 text-white">Add A Room</a></li>
 
-        <?php if(isset($unit_id)): ?>
-            <li><a href="/add/permissions/<?php echo e($unit_id); ?>" class="nav-link px-2 text-white">Give Permission</a></li>
-            <li><a href="/make/schedule/<?php echo e($unit_id); ?>" class="nav-link px-2 text-white">Activate Button Access</a></li>
+        <?php if(isset($encoded_permission_id)): ?>
+            <li><a href="/add/permissions/<?php echo e($encoded_permission_id); ?>" class="nav-link px-2 text-white">Give Permission</a></li>
+            <li><a href="/make/schedule/<?php echo e($encoded_permission_id); ?>" class="nav-link px-2 text-white">Activate Button Access</a></li>
         <?php endif; ?>
     </ul>
 

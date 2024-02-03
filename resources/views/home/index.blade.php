@@ -46,13 +46,19 @@
         return '<a href="/selected/unit/' + btoa(row.id) + '">' + incrementedValue + '</a>';
     }
 },
-                {
-                    data: 'premises_name',
-                    name: 'premises_name',
-                    render: function (data, type, row) {
-                        return '<a href="/selected/unit/' + btoa(row.id) + '">' + data + '</a>';
-                    }
-                },
+{
+    data: null,
+    name: 'combined_name',
+    render: function (data, type, row) {
+        // Combine premises_name and unit_name with a comma
+        var combinedName = row.premises_name + ', ' + row.unit_name;
+
+        // Create a link with the combined name
+        var link = '<a href="/selected/unit/' + btoa(row.id) + '">' + combinedName + '</a>';
+
+        return link;
+    }
+},
                 
                 {
                     data: 'start_date',

@@ -21,11 +21,11 @@
       {{ auth()->user()->name }}
     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
-        <li><a href="/units/create" class="nav-link px-2 text-white">Add A Unit</a></li>
+        <li><a href="/units/create" class="nav-link px-2 text-white">Add A Room</a></li>
 
-        @isset($unit_id)
-            <li><a href="/add/permissions/{{ $unit_id }}" class="nav-link px-2 text-white">Give Permission</a></li>
-            <li><a href="/make/schedule/{{ $unit_id }}" class="nav-link px-2 text-white">Activate Button Access</a></li>
+        @isset($encoded_permission_id)
+            <li><a href="/add/permissions/{{ $encoded_permission_id }}" class="nav-link px-2 text-white">Give Permission</a></li>
+            <li><a href="/make/schedule/{{ $encoded_permission_id }}" class="nav-link px-2 text-white">Activate Button Access</a></li>
         @endisset
     </ul>
 

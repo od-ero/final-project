@@ -10,10 +10,10 @@
 @section('content')
 @csrf
 
-<form name="register-form" id="register-form" method="post" action="{{ url('/make/schedule/' . $unit_id) }}">
+<form name="register-form" id="register-form" method="post" action="{{ url('/make/schedule/' . $encoded_permission_id) }}">
   <div class="container">
     <fieldset>
-      <legend>Active the door buttons access</legend>
+      <legend>Active The Door Buttons Access To {{$unit['premises_name'] . ', ' . $unit['unit_name']}} </legend>
       <p>Welcome to my schedule, this will activate the respective door buttons at given times.</p>
 
       <hr>

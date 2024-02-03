@@ -10,13 +10,13 @@
 <?php $__env->startSection('content'); ?>
    
      
-<form name="add_permission" id="add_permission" method="post" action="<?php echo e(url('add/permissions/' . base64_encode($unit_id))); ?>">
+<form name="add_permission" id="add_permission" method="post" action="<?php echo e(url('add/permissions/' .$encoded_permission_id)); ?>">
 <div class="container">
 
   
     <fieldset>
   
-   <legend>Give Priviledges</legend>
+   <legend>Give Access Priviledges To <?php echo e($unit['premises_name'] . ', ' . $unit['unit_name']); ?> </legend>
     <p>Please Fill In This Form To Assign Access Priviledges.</p>
 
    
@@ -130,7 +130,7 @@
     </div>
   </div>
 
- <label for="open"><b>Schedule Button Access</b></label>
+ <label for="schedule"><b>Schedule Button Access</b></label>
  <div class="d-flex align-items-center userInput">
  <div class="form-check form-check-inline ">
       <label class="form-check-label" for="schedule_yes">Yes</label>
