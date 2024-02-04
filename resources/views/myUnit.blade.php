@@ -1,10 +1,10 @@
 @extends('layouts.app-master')
 @section('subtitle')
-   My Units
+   My Rooms
 @endsection
 
 @section('contentheader_title')
-  My Units
+  My Room
 @endsection
 
 @section('content')
@@ -18,26 +18,27 @@
 
 <input type="text" id="encoded_permission_id" value="{{$encoded_permission_id}}" hidden>
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-  Launch demo modal
-</button>
+
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+      <div class="modal-header bg-success">
+        <h5 class="modal-title bg-success" id="exampleModalLongTitle"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ...
+
+        <!-- Replace '...' with the content you want in the modal body -->
+        <h2>Are you sure you want to perform this operation?</h2>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary"  href="#" >Save changes</button>
+      <div class="modal-footer ">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <!-- onclick="redirectToAction(row_id, encoded_permission_id, status)" -->
+        <button  class="btn btn-success" onclick="redirectToAction(row_id, encoded_permission_id, status)">Yes</button>
       </div>
     </div>
   </div>
@@ -72,6 +73,10 @@
    </thead>
 </table>
 <script type="text/javascript">
+  let row_id;
+  let status;
+  let encoded_permission_id;
+
 $(function () {
  
     $('#units').DataTable({
@@ -107,26 +112,51 @@ $(function () {
                 data: 'status',
                 name: 'status',
                 render: function (data, type, row) {
-                    var initialStatus = row.status;
-                    var buttonColor = (initialStatus === 'Locked') ? '#04AA6D' : 'red';
-                    var buttonText = (initialStatus === 'Locked') ? 'Unlock' : 'Lock';
-                    var encoded_permission_id = document.getElementById("encoded_permission_id").value;
-                   console.log(encoded_permission_id);
-                    return '<button class="btn data-toggle="modal" data-target="#exampleModalCenter" "style="background-color: ' + buttonColor + '; color: white;">' 
-                    // +
-                    // '<a href="/home/myunits/action/' + btoa(row.id) + '/' + encoded_permission_id + '/' + btoa(row.status) + '" style="text-decoration: none; color: inherit;">' +
-                    // buttonText +
-                    // '</a>'
-                    '</button>';
+    var initialStatus = row.status;
+    var row_id = row.id;
+    var encoded_permission_id= document.getElementById("encoded_permission_id").value;
+    var buttonColor = (initialStatus === 'Locked') ? '#04AA6D' : 'red';
+    var buttonText = (initialStatus === 'Locked') ? 'Unlock' : 'Lock';
+console.log(initialStatus, row_id)
+    // ...
 
-                   
-                }
+    // Modal button with data-rowid attribute
+    return '<button class="btn" style="background-color: ' + buttonColor + '; color: white;" data-toggle="modal" data-target="#exampleModalCenter" data-rowid="' + row_id + '" data-status="' + initialStatus + '" data-encoded_permission_id="' + encoded_permission_id + '">'
+    + buttonText + 
+    '</button>';
+}
+
+
+
             }
         ]
     });
 });
+
+$(document).on('click', '#exampleModalCenter .btn', function() {
+  console.log('new',row_id, encoded_permission_id, status)
+
+  redirectToAction(row_id, encoded_permission_id, status);
+});
+// Example function that uses row_id, encoded_permission_id, and status
+
+$(document).on('click', '#units .btn', function() {
+ 
+    row_id = $(this).data('rowid'); 
+    status = $(this).data('status');
+    encoded_permission_id = $(this).data('encoded_permission_id'); 
+    console.log('roooo', status, row_id);
+
+    
+   // redirectToAction(row_id, encoded_permission_id, status);
+});
+    function redirectToAction(row_id, encoded_permission_id, status) {
+    
+    console.log("redirect", row_id, encoded_permission_id, status)
+
+        
+       window.location.href = '/home/myunits/action/' + btoa(row_id) + '/' + encoded_permission_id + '/' + btoa(status);
+    }
 </script>
-
-
 @endauth
 @endsection

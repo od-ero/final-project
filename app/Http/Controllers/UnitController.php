@@ -121,7 +121,7 @@ class UnitController extends Controller
                             ->where('doors.unit_id',$unit_id)
                             ->select('doors.*','door_statuses.status')
                             ->get();
-         
+        // dd($my_units);
          return DataTables::of($my_units)->make(true);
          
          
@@ -139,10 +139,10 @@ class UnitController extends Controller
      */
     public function update(Request $request, string $id, string $encoded_permission_id, string $status )// open/close
     { 
-        $door_id=base64_decode($id); 
+        $door_id= base64_decode($id); 
         $permission_id= base64_decode($encoded_permission_id);
         $status= base64_decode($status);
-        //dd($door_id);
+       //dd($door_id,$permission_id, $status);
 
         $permissioner_permissions = MyPermission::leftjoin('permissions','my_permissions.permission_group_id','=','permissions.permission_group_id')
                                                 -> where('my_permissions.id', $permission_id)
@@ -150,15 +150,16 @@ class UnitController extends Controller
        $permissioner_permission_end_date= Carbon::parse($permissioner_permissions['end_date']);
        $permissioner_permission_start_date= Carbon::parse($permissioner_permissions['start_date']);
        
-       $permissioner_permissions_counters= MyPermissionCounter:://where('my_permission_id', $permission_id)
-                                                               // ->
-                                                                where('door_id', $door_id)
+       $permissioner_permissions_counters= MyPermissionCounter::where('my_permission_id', $permission_id)
+                                                                ->where('door_id', $door_id)
+                                                                
                                                                 ->first();
       
       
-      
+     
        if($status==='Locked') {
         $permissioner_permissions_count= $permissioner_permissions_counters['open'];
+       // dd($permissioner_permissions_count);
        if( $permissioner_permissions['open']==='no'){
         $notification = array(
             'alert-type' => 'error',
@@ -195,6 +196,7 @@ class UnitController extends Controller
                             ->where('door_id', $door_id)
                             ->update([
                                 'open' => $permissioner_permissions_count + 1,
+                               
                             ]);
         
                            
@@ -255,7 +257,7 @@ else{
     MyPermissionCounter::where('my_permission_id' ,$permission_id)
                         ->where('door_id', $door_id)
                         ->update([
-                            'open' => $permissioner_permissions_count + 1,
+                            'close' => $permissioner_permissions_count + 1,
                         ]);
     
                        
