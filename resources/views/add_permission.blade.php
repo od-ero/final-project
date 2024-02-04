@@ -80,7 +80,7 @@
        <label for="permission_group_name"><b>Permission Name</b></label>
     <input class="userInput"type="text" placeholder="Please Enter permission Name" name="permission_group_name" id="permission_group_name" required>
    
-    <label for="open"><b>Give Access Permission</b></label>
+    <label for="give_permission"><b>Give Access Permission</b></label>
     <div class="d-flex align-items-center userInput">
     <div class="form-check form-check-inline">
         <label class="form-check-label" for="give_permission_yes">Yes</label>
@@ -98,7 +98,7 @@
     </div>
 </div>
 
-  <label for="open"><b>Open</b></label>
+  <label for="open"><b>Unlock</b></label>
  <div class="d-flex align-items-center userInput">
  <div class="form-check form-check-inline" >
       <label class="form-check-label" for="open_yes">Yes</label>
@@ -114,7 +114,7 @@
     </div>
  </div>
   
- <label for="open"><b>Close</b></label>
+ <label for="open"><b>Lock</b></label>
   <div class="d-flex align-items-center userInput">
   <div class="form-check form-check-inline ">
       <label class="form-check-label" for="close_yes">Yes</label>
