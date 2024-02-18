@@ -11,14 +11,14 @@
 <?php echo csrf_field(); ?>
 
 <form name="register-form" id="register-form" method="post" action="<?php echo e(url('/make/schedule/' . $encoded_permission_id)); ?>">
-  <div class="container">
+  
     <fieldset>
       <legend>Active The Door Buttons Access To <?php echo e($unit['premises_name'] . ', ' . $unit['unit_name']); ?> </legend>
       <p>Welcome to my schedule, this will activate the respective door buttons at given times.</p>
 
       <hr>
       <input class="userInput" type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>" />
-      <label for="open"><i>Select the doors to be affected by the permissions</i></label>
+      <label for="door"><i>Select the doors to be affected by the permissions</i></label>
 
       <div class="userCheck userInput">
           <?php $__currentLoopData = $doors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $door): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -134,7 +134,7 @@
         <button type="submit" class="btn btn-success mb-3 mx-3">Give Privileges</button><button type="#" class="btn btn-primary mx-3">cancel</button>
     </div>
     </fieldset>
-  </div>
+  
 </form>
 <style>
     .use_existing, .create_new {

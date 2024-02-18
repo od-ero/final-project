@@ -10,9 +10,6 @@
 <?php $__env->startSection('content'); ?>
    
 <?php if(auth()->guard()->check()): ?>      
-
-
-
 <p>Welcome to <?php echo e($unit['premises_name'] . ', ' . $unit['unit_name']); ?> </p>
 <?php $unit_id = base64_encode($unit['id']); ?>
 
@@ -72,13 +69,15 @@
 
    </thead>
 </table>
+
+
 <script type="text/javascript">
+
   let row_id;
   let status;
   let encoded_permission_id;
 
 $(function () {
- 
     $('#units').DataTable({
         processing: true,
         serverSide: true,
@@ -117,7 +116,7 @@ $(function () {
     var encoded_permission_id= document.getElementById("encoded_permission_id").value;
     var buttonColor = (initialStatus === 'Locked') ? '#04AA6D' : 'red';
     var buttonText = (initialStatus === 'Locked') ? 'Unlock' : 'Lock';
-console.log(initialStatus, row_id)
+
     // ...
 
     // Modal button with data-rowid attribute
@@ -134,7 +133,7 @@ console.log(initialStatus, row_id)
 });
 
 $(document).on('click', '#exampleModalCenter .btn', function() {
-  console.log('new',row_id, encoded_permission_id, status)
+ 
 
   redirectToAction(row_id, encoded_permission_id, status);
 });
@@ -145,18 +144,81 @@ $(document).on('click', '#units .btn', function() {
     row_id = $(this).data('rowid'); 
     status = $(this).data('status');
     encoded_permission_id = $(this).data('encoded_permission_id'); 
-    console.log('roooo', status, row_id);
+    
 
     
    // redirectToAction(row_id, encoded_permission_id, status);
 });
-    function redirectToAction(row_id, encoded_permission_id, status) {
-    
-    console.log("redirect", row_id, encoded_permission_id, status)
+async function redirectToAction(row_id, encoded_permission_id, status) {
+  let loadingToast;
+  toastr.info('Loading...', {
+        closeButton: false,
+        progressBar: true,
+        positionClass: 'toast-top-full-width'
+    });
 
+   let actionURL = '/home/myunits/action/' + btoa(row_id) + '/' + encoded_permission_id + '/' + btoa(status);
+   let pinURL = "http://192.168.43.51/";
+
+   let res = await fetch(actionURL);
+   let data = await res.json();
+    try {
         
-       window.location.href = '/home/myunits/action/' + btoa(row_id) + '/' + encoded_permission_id + '/' + btoa(status);
+        toastr.clear(loadingToast);
+        if (data.alertType == "success") {
+        
+        console.log("Server Response: ", data);
+
+        let action = status == "Locked" ? "led_2_on" : "led_2_off";
+        let pinRes = await fetch(pinURL + "?" + action);
+
+            toastr.success(data.message);
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        } else if (data.alertType == "error") {
+            toastr.error(data.message);
+        } else if (data.alertType == "success2") {
+            toastr.info(data.message);
+        }
+        
+    } catch (error) {
+        toastr.clear(loadingToast);
+        toastr.error('An error occurred while fetching data', {
+            closeButton: true,
+            positionClass: 'toast-top-full-width'
+        });
+        console.error(error);
     }
+    $('#exampleModalCenter').modal('hide');
+    //close modal from here
+   
+}
+
+
+// if ("geolocation" in navigator) {
+//     // Geolocation is supported
+//     navigator.geolocation.getCurrentPosition(
+//         function(position) {
+//             // Handle successful position retrieval
+//             const latitude = position.coords.latitude;
+//             const longitude = position.coords.longitude;
+
+//             console.log("Latitude: " + latitude);
+//             console.log("Longitude: " + longitude);
+
+//             // You can use the latitude and longitude values as needed
+//         },
+//         function(error) {
+//             // Handle error (e.g., user denied location access)
+//             console.error("Error getting location:", error.message);
+//         }
+//     );
+// } else {
+//     // Geolocation is not supported by the browser
+//     console.error("Geolocation is not supported by your browser");
+// }
+
 </script>
 <?php endif; ?>
 <?php $__env->stopSection(); ?>

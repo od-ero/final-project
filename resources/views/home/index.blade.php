@@ -1,4 +1,5 @@
 @extends('layouts.app-master')
+@auth
 @section('subtitle')
    Dashboard
 @endsection
@@ -7,9 +8,9 @@
   Dashboard
 @endsection
 @section('content')
-    <div class="bg-light p-5 rounded">
+   
        
-        @auth
+      
 <legend>Dashboard</legend>
 
 <p>My Units</p>
@@ -87,18 +88,26 @@
 
 
 
-
+@endsection
         @endauth
 
         @guest
+        @section('subtitle')
+            Welcome
+            @endsection
+
+            @section('contentheader_title')
+            Welcome
+            @endsection
+            @section('content')
     
         <h1>Unikey</h1>
         <p class="lead">Your Premise at your pocket.</p>
-        
+        @endsection
         @endguest
     </div>
     
-    @endsection
+   
 
     
     

@@ -11,13 +11,14 @@ use Sentinel;
 use DB;
 use App\Models\Unit;
 use App\Models\User;
-use App\Models\MyUnit; 
 use App\Models\MyPermissionCounter;
 use App\Models\Door;
 use App\Models\DoorStatus;
 use App\Models\DoorStatusSetter;
 use App\Models\MyPermission;
 use DataTables;
+use Stevebauman\Location\Facades\Location;
+
 class UnitController extends Controller
 {
     /**
@@ -30,6 +31,7 @@ class UnitController extends Controller
     }
     public function create(Request $request)
     {   if ($request->isMethod('get')) {
+        
         $users= User::all();
         return view('add_my_unit' , [
         'users'=>  $users
@@ -105,7 +107,7 @@ class UnitController extends Controller
        $unit_id= $my_permissions['unit_id'];
        $unit= unit::find($unit_id);
       
-        // dd( $unit_id);
+        //dd( $unit_id);
          return view('myUnit' , [
          'unit'=> $unit,
          'encoded_permission_id'=> $encoded_permission_id,
@@ -143,7 +145,41 @@ class UnitController extends Controller
         $permission_id= base64_decode($encoded_permission_id);
         $status= base64_decode($status);
        //dd($door_id,$permission_id, $status);
+       $units=Door::where('id', $door_id)
+                    ->select('unit_id')->first();
+    $unit_id =$units->unit_id;
+      $ip = $request->ip();
+      $ip= '102.215.32.244';
+      $distanceMeters=0;
+     if($ip){
+      //$currentUserInfo = Location::get($ip);
+     
 
+         //  $userLat = $currentUserInfo->latitude; // User's live latitude
+       //   $userLon = $currentUserInfo->longitude;   // User's live longitude
+         
+        //   $unit = Unit::where('id', $unit_id)->first(); // Assuming Unit is the model for the units table
+
+        //   $unitLat = $unit->latitude; // Room's latitude
+        //   $unitLon = $unit->longitude; // Room's longitude
+      
+        //   // Calculate distance using Haversine formula
+        //  // $distanceKm = 6371 * acos(cos(deg2rad($userLat)) * cos(deg2rad($unitLat)) * cos(deg2rad($unitLon) - deg2rad($userLon)) + sin(deg2rad($userLat)) * sin(deg2rad($unitLat)));
+      
+        //   // Convert distance to meters
+        //   $distanceMeters = $distanceKm * 1000;
+      
+          // $distanceMeters now contains the distance between the user's live location and the room's location in meters
+         
+      } 
+     // dd($distanceMeters, $currentUserInfo);
+    //  if($distanceMeters >500){
+    //     $notification = array(
+    //         'alertType' => 'error',
+    //         'message' => 'Oooops!! You are too far to perfrm this action kindly enable door access via button'
+    //               );
+    //  }
+    //  else{
         $permissioner_permissions = MyPermission::leftjoin('permissions','my_permissions.permission_group_id','=','permissions.permission_group_id')
                                                 -> where('my_permissions.id', $permission_id)
                                                  ->first();
@@ -162,26 +198,26 @@ class UnitController extends Controller
        // dd($permissioner_permissions_count);
        if( $permissioner_permissions['open']==='no'){
         $notification = array(
-            'alert-type' => 'error',
+            'alertType' => 'error',
             'message' => 'Ooops!!!, You are not allowed to open this door'
         );   
     }
    else if($permissioner_permissions_count >= $permissioner_permissions['open_fre']){
         $notification = array(
-        'alert-type' => 'error',
+        'alertType' => 'error',
         'message' => 'Ooops!!!, You have exhausted your open permissions on this door' 
         );       
         }
     else if($permissioner_permission_start_date->gt(Carbon::now())){
         $notification = array(
-             'alert-type' => 'error',
+             'alertType' => 'error',
              'message' => 'Ooops!!!, You are not allowed to open this door at this time'
          );     
     }
 
     else if($permissioner_permission_end_date->lt(Carbon::now())){
         $notification = array(
-            'alert-type' => 'error',
+            'alertType' => 'error',
             'message' => 'Ooops!!!, Your priviledge to open this door expired'
         );     
     }
@@ -207,14 +243,14 @@ class UnitController extends Controller
             ]) ;
             DB::commit();
             $notification = array(
-                'alert-type' => 'success',
+                'alertType' => 'success',
                 'message' => 'Door unlocked successfully'
             );
         }
         catch (\Exception $e) {
            DB::rollback();
           $notification = array(
-          'alert-type' => 'error',
+          'alertType' => 'error',
           'message' => 'Oooops!! an error occurred please try again later'
                 );
 } 
@@ -224,26 +260,26 @@ if($status==='Unlocked') {
     $permissioner_permissions_count= $permissioner_permissions_counters['close'];
    if( $permissioner_permissions['close']==='no'){
     $notification = array(
-        'alert-type' => 'error',
+        'alertType' => 'error',
         'message' => 'Ooops!!!, You are not allowed to lock this door'
     );   
 }
 else if($permissioner_permissions_count >= $permissioner_permissions['close_fre']){
     $notification = array(
-    'alert-type' => 'error',
+    'alertType' => 'error',
     'message' => 'Ooops!!!, You have exhausted your lock permissions on this door' 
     );       
     }
 else if($permissioner_permission_start_date->gt(Carbon::now())){
     $notification = array(
-         'alert-type' => 'error',
+         'alertType' => 'error',
          'message' => 'Ooops!!!, You are not allowed to lock this door at this time'
      );     
 }
 
 else if($permissioner_permission_end_date->lt(Carbon::now())){
     $notification = array(
-        'alert-type' => 'error',
+        'alertType' => 'error',
         'message' => 'Ooops!!!, Your priviledge to lock this door expired'
     );     
 }
@@ -268,22 +304,25 @@ else{
         ]) ;
         DB::commit();
         $notification = array(
-            'alert-type' => 'success',
+            'alertType' => 'success',
             'message' => 'Door locked successfully'
         );
     }
     catch (\Exception $e) {
        DB::rollback();
       $notification = array(
-      'alert-type' => 'error',
+      'alertType' => 'error',
       'message' => 'Oooops!! an error occurred please try again later'
             );
 } 
 }
 }
-return redirect()->back()->with($notification);     
-    }
+//}
 
+return response()->json($notification); 
+    
+}
+   
     /**
      * Remove the specified resource from storage.
      */

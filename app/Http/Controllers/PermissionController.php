@@ -17,8 +17,7 @@ use App\Models\Door;
 use App\Models\MyPermissionCounter;
 use App\Models\MyPermissionDoor;
 use Carbon\Carbon;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+
 
 
 
@@ -30,13 +29,7 @@ class PermissionController extends Controller
     public function index()
     {
        
-        $doors=Door::all();
-        $units=Unit::leftjoin("my_units","my_units.unit_id","=","units.id")
-        ->where('my_units.user_id',Auth::id());
-        return view('add_permission' , [
-        'doors' => $doors,
-         'units'=>  $units
-            ]);
+       
     }
 
     /**

@@ -88,7 +88,7 @@ desired effect
         <?php echo $__env->make('layouts.partials.contentheader', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
        
         <!-- Main content -->
-        <section class="content">
+        <section class="content bg-light p-md-5 p-sm-1 rounded">
             <!-- Your Page Content Here -->
             <?php echo $__env->yieldContent('content'); ?>
            

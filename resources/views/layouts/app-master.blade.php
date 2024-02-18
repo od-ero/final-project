@@ -88,7 +88,7 @@ desired effect
         @include('layouts.partials.contentheader')
        
         <!-- Main content -->
-        <section class="content">
+        <section class="content bg-light p-md-5 p-sm-1 rounded">
             <!-- Your Page Content Here -->
             @yield('content')
            

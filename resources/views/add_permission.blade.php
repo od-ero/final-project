@@ -11,7 +11,7 @@
    
      
 <form name="add_permission" id="add_permission" method="post" action="{{ url('add/permissions/' .$encoded_permission_id) }}">
-<div class="container">
+
 
   
     <fieldset>
@@ -166,9 +166,6 @@
     <input class="userInput" type="datetime-local" placeholder="Please Enter the check out time" name="end_date" id="end_date" required>
    
 
- </div>
-
-   
     <hr>
 
     <div class="text-center">

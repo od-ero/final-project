@@ -1,3 +1,4 @@
+<?php if(auth()->guard()->check()): ?>
 <?php $__env->startSection('subtitle'); ?>
    Dashboard
 <?php $__env->stopSection(); ?>
@@ -6,9 +7,9 @@
   Dashboard
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
-    <div class="bg-light p-5 rounded">
+   
        
-        <?php if(auth()->guard()->check()): ?>
+      
 <legend>Dashboard</legend>
 
 <p>My Units</p>
@@ -86,18 +87,26 @@
 
 
 
-
+<?php $__env->stopSection(); ?>
         <?php endif; ?>
 
         <?php if(auth()->guard()->guest()): ?>
+        <?php $__env->startSection('subtitle'); ?>
+            Welcome
+            <?php $__env->stopSection(); ?>
+
+            <?php $__env->startSection('contentheader_title'); ?>
+            Welcome
+            <?php $__env->stopSection(); ?>
+            <?php $__env->startSection('content'); ?>
     
         <h1>Unikey</h1>
         <p class="lead">Your Premise at your pocket.</p>
-        
+        <?php $__env->stopSection(); ?>
         <?php endif; ?>
     </div>
     
-    <?php $__env->stopSection(); ?>
+   
 
     
     

@@ -14,8 +14,8 @@ Add Unit
 
 
 
-<form name="register-form" id="register-form" onsubmit="return validateForm()"  method="post" action="<?php echo e(url('/units/create')); ?>">
-  <div class="container">
+<form name="add_unit" id="add_unit" onsubmit="return validateForm()"  method="post" action="<?php echo e(url('/units/create')); ?>">
+  
   <fieldset>
     
     <legend >Add a unit:</legend>
@@ -78,7 +78,7 @@ Add Unit
    
 
   <div class="text-center">
-    
+   <hr> 
   <a href="/link-to/whatever-address/" id="cancel" name="cancel" class="btn btn-primary mx-3">Cancel</a> <button type="submit" class="btn btn-success mx-3"> Register</button>  <button type="reset" class="btn btn-default pull-right">Cancel reset</button> <button id="cancel" name="cancel" class="btn btn-default" onclick="history.back()">Cancel onclick</button>
   </div>
   </div>

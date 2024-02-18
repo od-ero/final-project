@@ -11,7 +11,7 @@
 @csrf
 
 <form name="register-form" id="register-form" method="post" action="{{ url('/make/schedule/' . $encoded_permission_id) }}">
-  <div class="container">
+  
     <fieldset>
       <legend>Active The Door Buttons Access To {{$unit['premises_name'] . ', ' . $unit['unit_name']}} </legend>
       <p>Welcome to my schedule, this will activate the respective door buttons at given times.</p>
@@ -133,7 +133,7 @@
         <button type="submit" class="btn btn-success mb-3 mx-3">Give Privileges</button><button type="#" class="btn btn-primary mx-3">cancel</button>
     </div>
     </fieldset>
-  </div>
+  
 </form>
 <style>
     .use_existing, .create_new {
