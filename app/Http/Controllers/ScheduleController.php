@@ -1,29 +1,71 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-use Sentinel;
 use DB;
 use App\Models\MyPermissionCounter;
 use App\Models\DoorSchedule;
 use App\Models\MyPermission;
-use App\Models\DoorSecheduleCounter;
+use App\Models\DoorScheduleCounter;
 use App\Models\DoorSchedulePermission;
 use App\Models\Unit;
 use App\Models\Door;
+use App\Models\DoorStatusSetter;
+use App\Models\DoorStatus;
 use App\Models\DoorScheduleDoor;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+
+use function PHPUnit\Framework\isEmpty;
 
 class ScheduleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($door_id)
     {
         //
+        $door_status = DoorStatus::select('status')
+                                ->where('door_id', $door_id)
+                                ->first();
+        if($door_status['status']==='Locked'){
+            return response()->json(1);
+        }
+        else if($door_status['status']==='Unlocked'){
+            return response()->json(0);
+        }
+    }
+
+    public function doorStatus($status){
+            if($status===true) {
+                    $pinURL = "http://192.168.137.43/?led_2_on";}
+            else if($status===false){
+                $pinURL = "http://192.168.137.43/?led_2_off";
+            }
+            else if($status===null){
+                $pinURL = "http://192.168.137.43/?led_2_auth";
+            }
+            // Initialize cURL session
+            $ch = curl_init();
+
+            // Set cURL options
+            curl_setopt($ch, CURLOPT_URL, $pinURL);  // Set the URL
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Return the response as a string
+
+            // Execute cURL request
+            $response = curl_exec($ch);
+
+            // Check for errors
+            if($response === false) {
+                echo 'Curl error: ' . curl_error($ch);
+            } else {
+                // Output the response
+                echo $response;
+            }
+
+            // Close cURL session
+            curl_close($ch);
     }
 
     /**
@@ -131,12 +173,19 @@ foreach ($schedules as $door_name_ => $door_id) {
         'message' => 'Ooops!!!, You have exhausted your permissions on door' .$door_name 
         );       
         }else{
-        DoorScheduleDoor::create(
+       $door_schedule_door = DoorScheduleDoor::create(
             [
                 'door_schedule_id' => $schedule_create['id'],
                 'door_id' => $door_id,
             ]);
-        
+        DoorScheduleCounter::create([
+            'door_schedule_door_id' => $door_schedule_door['id'],
+            'open_in' => 0,
+            'open_out' => 0,
+            'close_in' => 0,
+            'close_out' => 0,
+                            
+        ]);
         MyPermissionCounter::where('my_permission_id' ,$passed_permission_id)
         ->where('door_id', $door_id)
         ->update([
@@ -145,7 +194,7 @@ foreach ($schedules as $door_name_ => $door_id) {
     }
 }
 }
- DB::commit();
+  DB::commit();
 $notification = array(
     'alert-type' => 'success',
     'message' => 'Door activation schedule set successfully');
@@ -178,11 +227,145 @@ return redirect()->back()->with($notification);
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(string $door_id, $action)
     {
         //
+        $button_requests = DoorSchedule::leftJoin('door_schedule_permissions', 'door_schedules.door_schedule_permission_id', '=', 'door_schedule_permissions.id')
+                                        ->leftJoin('door_schedule_doors', 'door_schedules.id', '=', 'door_schedule_doors.door_schedule_id')
+                                        ->select('door_schedule_permissions.*', 'door_schedule_doors.id as door_schedule_door_id')
+                                        ->where('door_schedule_doors.door_id', $door_id)
+                                        ->where('door_schedules.end_date', '>', Carbon::now())
+                                        ->orderBy('door_schedules.created_at', 'desc')
+                                        ->first();
+                                        // dd($button_requests);
+        if($button_requests===null||empty($button_requests)){
+            $response_status = $button_requests; 
+        }
+        else{
+        $button_request_counters= DoorScheduleCounter::select('door_schedule_counters.*')
+                                                    ->where('door_schedule_door_id', $button_requests['door_schedule_door_id'])
+                                                     ->first();
+        //dd($button_request_counters);
+        if($action === 'openOut'){
+            if($button_requests['open_out']=== 'no'|| $button_requests['open_out_fre']<= $button_request_counters['open_out']){
+               
+                 $response_status = -1;
+            }
+          
+            else{
+            DB::beginTransaction();
+            try{
+              $button_request_counters->increment('open_out');
+              $button_request_counters ->save();
+              DoorStatus::where('door_id', $door_id)
+                            ->update(['status'=>'Unlocked',
+                            'status_setter'=>1000,
+                 ]);
+              DoorStatusSetter::create([
+                'door_id'=> $door_id,
+                'status' => 'Unlocked',
+                'user_id'=> 1000
+                ]) ;
+                DB::commit();
+                $response_status = 0;
+                }
+                catch (\Exception $e) {
+                DB::rollback();
+                $response_status = $e;
+                            }
+                        }
+         }
+        if($action === 'openIn'){
 
+            if($button_requests['open_in'] === 'no'||$button_requests['open_in_fre']<= $button_request_counters['open_in']){
+                $response_status = -1; 
+            }
+          
+            else{
+             DB::beginTransaction();
+             try{
+              $button_request_counters->increment('open_in');
+              $button_request_counters ->save();
+              DoorStatus::where('door_id', $door_id)
+                            ->update(['status'=>'Unlocked',
+                            'status_setter'=>1000,
+                 ]);
+              DoorStatusSetter::create([
+                'door_id'=> $door_id,
+                'status' => 'Unlocked',
+                'user_id'=> 1000
+                ]) ;
+                DB::commit();
+               $response_status = 0;
+                }
+                catch (\Exception $e) {
+                DB::rollback();
+                $response_status = $e;
+                            }
+                        } 
+            }
         
+        if($action === 'closeOut'){
+           // dd($button_requests['close_out'],$button_requests['close_out_fre'] <= $button_request_counters['close_out'], $button_requests['close_out_fre'], $button_request_counters['close_out'] );
+            if($button_requests['close_out']==='no'|| $button_requests['close_out_fre']<= $button_request_counters['close_out']){
+                $response_status = 'closeout'; 
+            }
+            else{
+                DB::beginTransaction();
+                try{
+                  $button_request_counters->increment('close_out');
+                  $button_request_counters ->save();
+                  DoorStatus::where('door_id', $door_id)
+                                ->update(['status'=>'Locked',
+                                'status_setter'=>1000,
+                     ]);
+                  DoorStatusSetter::create([
+                    'door_id'=> $door_id,
+                    'status' => 'Locked',
+                    'user_id'=> 1000
+                    ]) ;
+                    DB::commit();
+                    $response_status = 1;
+                    }
+                    catch (\Exception $e) {
+                    DB::rollback();
+                    $response_status = $e;
+                                }
+                            }
+            }
+        
+        if($action === 'closeIn'){
+            if($button_requests['close_in']=== 'no'|| $button_requests['close_in_fre']<= $button_request_counters['close_in']){
+            //    $this->doorStatus(null);
+               $response_status = -1;
+            }
+            else{
+                DB::beginTransaction();
+                try{
+                  $button_request_counters ->increment('close_out');
+                  $button_request_counters ->save();
+                  DoorStatus::where('door_id', $door_id)
+                                ->update(['status'=>'Locked',
+                                'status_setter'=>1000,
+                     ]);
+                  DoorStatusSetter::create([
+                    'door_id'=> $door_id,
+                    'status' => 'Locked',
+                    'user_id'=> 1000
+                    ]) ;
+                    DB::commit();
+                    
+                    $response_status = 1;
+
+                    }
+                    catch (\Exception $e) {
+                    DB::rollback();
+                    $response_status = $e;
+                                }
+                            }
+            }
+        }
+        return response()->json($response_status);
     }
 
     /**

@@ -131,12 +131,6 @@ $(function () {
         ]
     });
 });
-
-$(document).on('click', '#exampleModalCenter .btn', function() {
- 
-
-  redirectToAction(row_id, encoded_permission_id, status);
-});
 // Example function that uses row_id, encoded_permission_id, and status
 
 $(document).on('click', '#units .btn', function() {
@@ -158,7 +152,7 @@ async function redirectToAction(row_id, encoded_permission_id, status) {
     });
 
    let actionURL = '/home/myunits/action/' + btoa(row_id) + '/' + encoded_permission_id + '/' + btoa(status);
-   let pinURL = "http://192.168.43.51/";
+   let pinURL = "http://192.168.137.26/";
 
    let res = await fetch(actionURL);
    let data = await res.json();
@@ -175,7 +169,7 @@ async function redirectToAction(row_id, encoded_permission_id, status) {
             toastr.success(data.message);
             setTimeout(() => {
                 location.reload();
-            }, 1000);
+            }, 500);
         } else if (data.alertType == "error") {
             toastr.error(data.message);
         } else if (data.alertType == "success2") {

@@ -76,27 +76,30 @@ Route::match(['GET','update','POST'], '/make/schedule/{id}','ScheduleController@
 Route::match(['GET','update','POST'], '/user/search','UsersController@search')->name('search');
 Route::get('/ajax/search','UsersController@index');
 Route::get('/search','UsersController@search');
+Route::get('/schedule/permissions/check/{id}/{action}','ScheduleController@update')->name('schedule.update');
+Route::get('/door/state/check/{id}','ScheduleController@index')->name('schedule.index');
 
 
-    Route::group(['middleware' => ['guest']], function() {
-        /**
-         * Register Routes
-         */
-        Route::get('/register', 'RegisterController@show')->name('register.show');
-        Route::post('/register', 'RegisterController@register')->name('register.perform');
 
-        /**
-         * Login Routes
-         */
-        Route::get('/login', 'LoginController@show')->name('login.show');
-        Route::post('/login', 'LoginController@login')->name('login.perform');
+Route::group(['middleware' => ['guest']], function() {
+/**
+ * Register Routes
+ */
+Route::get('/register', 'RegisterController@show')->name('register.show');
+Route::post('/register', 'RegisterController@register')->name('register.perform');
 
-    });
+/**
+ * Login Routes
+ */
+Route::get('/login', 'LoginController@show')->name('login.show');
+Route::post('/login', 'LoginController@login')->name('login.perform');
 
-    Route::group(['middleware' => ['auth']], function() {
-        /**
-         * Logout Routes
-         */
-        Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
-    });
+});
+
+Route::group(['middleware' => ['auth']], function() {
+/**
+ * Logout Routes
+ */
+Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
+});
 });

@@ -23,7 +23,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('permissions',[PermissionController::class,'store']);
     Route::post('/add/myunits',[PermissionController::class,'show']);
     Route::post('/make/schedule',[ScheduleController::class,'store']);
-    Route::post('/schedule/permissions/check/{id}/{action}',[ScheduleController::class,'update']);
+    Route::get('/schedule/permissions/check/{id}/{action}',[ScheduleController::class,'update']);
     Route::get('/door/state/check/{id}',[ScheduleController::class,'update']);
 
     

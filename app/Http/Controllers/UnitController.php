@@ -151,6 +151,14 @@ class UnitController extends Controller
       $ip = $request->ip();
       $ip= '102.215.32.244';
       $distanceMeters=0;
+     if($door_id != 9)
+     {
+        $notification = array(
+            'alertType' => 'error',
+            'message' => 'Oooops!! Ooops the door is not fullly configured kindly contact your host for assistance'
+                  );
+     }
+     else{
      if($ip){
       //$currentUserInfo = Location::get($ip);
      
@@ -318,7 +326,7 @@ else{
 }
 }
 //}
-
+}
 return response()->json($notification); 
     
 }
