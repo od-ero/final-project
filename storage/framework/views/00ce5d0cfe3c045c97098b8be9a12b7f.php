@@ -152,10 +152,10 @@ async function redirectToAction(row_id, encoded_permission_id, status) {
     });
 
    let actionURL = '/home/myunits/action/' + btoa(row_id) + '/' + encoded_permission_id + '/' + btoa(status);
-   let pinURL = "http://192.168.137.26/";
+   //let pinURL = "http://192.168.137.159/";
 
    let res = await fetch(actionURL);
-   let data = await res.json();
+  let data = await res.json();
     try {
         
         toastr.clear(loadingToast);
@@ -163,17 +163,23 @@ async function redirectToAction(row_id, encoded_permission_id, status) {
         
         console.log("Server Response: ", data);
 
-        let action = status == "Locked" ? "led_2_on" : "led_2_off";
-        let pinRes = await fetch(pinURL + "?" + action);
+       // let action = status == "Locked" ? "led_2_on" : "led_2_off";
+       // let pinRes = await fetch(pinURL + "?" + action);
 
             toastr.success(data.message);
             setTimeout(() => {
-                location.reload();
+                 location.reload();
             }, 500);
         } else if (data.alertType == "error") {
             toastr.error(data.message);
+            setTimeout(() => {
+                 location.reload();
+            }, 500);
         } else if (data.alertType == "success2") {
             toastr.info(data.message);
+            setTimeout(() => {
+                 location.reload();
+            }, 500);
         }
         
     } catch (error) {

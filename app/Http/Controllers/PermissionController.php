@@ -58,9 +58,7 @@ else{
     $permissioner_permissions = MyPermission::leftjoin('permissions','my_permissions.permission_group_id','=','permissions.permission_group_id')
                                              -> where('my_permissions.id', $passed_permission_id)
                                             ->first();
-    //dd($permissioner_permissions);
-   
-     //dd($permissioner_permissions_count);                                                    
+                                                        
     $permissions = $request->all();
 
     

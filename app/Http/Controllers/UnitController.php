@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-
-
-use Sentinel;
 use DB;
 use App\Models\Unit;
 use App\Models\User;
@@ -17,7 +14,8 @@ use App\Models\DoorStatus;
 use App\Models\DoorStatusSetter;
 use App\Models\MyPermission;
 use DataTables;
-use Stevebauman\Location\Facades\Location;
+use Illuminate\Support\Facades\Http;
+
 
 class UnitController extends Controller
 {
@@ -26,8 +24,10 @@ class UnitController extends Controller
      */
     public function index()
     {
-        
+        $response = Http::get('192.168.137.135/?led_2_on'); 
+        dd($response);
        
+        return response()->json($response);
     }
     public function create(Request $request)
     {   if ($request->isMethod('get')) {
@@ -249,7 +249,10 @@ class UnitController extends Controller
                           'status' => 'Unlocked',
                           'user_id'=> Auth::id()
             ]) ;
+        $response = Http::get('http://192.168.137.135/?led_2_on');
+       // dd($response);
             DB::commit();
+           // dd($response);
             $notification = array(
                 'alertType' => 'success',
                 'message' => 'Door unlocked successfully'
@@ -310,6 +313,8 @@ else{
                       'status' => 'Lock',
                       'user_id'=> Auth::id()
         ]) ;
+        $response = Http::get('http://192.168.137.135/?led_2_off');
+        //dd($response);
         DB::commit();
         $notification = array(
             'alertType' => 'success',

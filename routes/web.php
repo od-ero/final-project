@@ -78,7 +78,7 @@ Route::get('/ajax/search','UsersController@index');
 Route::get('/search','UsersController@search');
 Route::get('/schedule/permissions/check/{id}/{action}','ScheduleController@update')->name('schedule.update');
 Route::get('/door/state/check/{id}','ScheduleController@index')->name('schedule.index');
-
+Route::get('/response/view','UnitController@index')->name('unit.index');
 
 
 Route::group(['middleware' => ['guest']], function() {

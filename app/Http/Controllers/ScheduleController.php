@@ -15,8 +15,7 @@ use App\Models\DoorStatus;
 use App\Models\DoorScheduleDoor;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-
-use function PHPUnit\Framework\isEmpty;
+use Illuminate\Support\Facades\Http;
 
 class ScheduleController extends Controller
 {
@@ -237,9 +236,13 @@ return redirect()->back()->with($notification);
                                         ->where('door_schedules.end_date', '>', Carbon::now())
                                         ->orderBy('door_schedules.created_at', 'desc')
                                         ->first();
-                                        // dd($button_requests);
+        $door_status  = DoorStatus::select('status')
+                                    ->where('door_id', $door_id)
+                                    ->first(); 
+                                                
         if($button_requests===null||empty($button_requests)){
-            $response_status = $button_requests; 
+            
+            $response_status = 2; 
         }
         else{
         $button_request_counters= DoorScheduleCounter::select('door_schedule_counters.*')
@@ -249,7 +252,7 @@ return redirect()->back()->with($notification);
         if($action === 'openOut'){
             if($button_requests['open_out']=== 'no'|| $button_requests['open_out_fre']<= $button_request_counters['open_out']){
                
-                 $response_status = -1;
+                 $response_status = 2;
             }
           
             else{
@@ -271,14 +274,14 @@ return redirect()->back()->with($notification);
                 }
                 catch (\Exception $e) {
                 DB::rollback();
-                $response_status = $e;
+                $response_status = 2;
                             }
                         }
          }
         if($action === 'openIn'){
 
             if($button_requests['open_in'] === 'no'||$button_requests['open_in_fre']<= $button_request_counters['open_in']){
-                $response_status = -1; 
+                $response_status = 2; 
             }
           
             else{
@@ -295,12 +298,14 @@ return redirect()->back()->with($notification);
                 'status' => 'Unlocked',
                 'user_id'=> 1000
                 ]) ;
+                $response = Http::get('192.168.137.135/?led_2_on'); 
                 DB::commit();
+               
                $response_status = 0;
                 }
                 catch (\Exception $e) {
                 DB::rollback();
-                $response_status = $e;
+                $response_status = 2;
                             }
                         } 
             }
@@ -308,7 +313,7 @@ return redirect()->back()->with($notification);
         if($action === 'closeOut'){
            // dd($button_requests['close_out'],$button_requests['close_out_fre'] <= $button_request_counters['close_out'], $button_requests['close_out_fre'], $button_request_counters['close_out'] );
             if($button_requests['close_out']==='no'|| $button_requests['close_out_fre']<= $button_request_counters['close_out']){
-                $response_status = 'closeout'; 
+                $response_status = 2; 
             }
             else{
                 DB::beginTransaction();
@@ -324,12 +329,13 @@ return redirect()->back()->with($notification);
                     'status' => 'Locked',
                     'user_id'=> 1000
                     ]) ;
+                    $response = Http::get('192.168.137.135/?led_2_off');
                     DB::commit();
                     $response_status = 1;
                     }
                     catch (\Exception $e) {
                     DB::rollback();
-                    $response_status = $e;
+                    $response_status = 2;
                                 }
                             }
             }
@@ -337,7 +343,7 @@ return redirect()->back()->with($notification);
         if($action === 'closeIn'){
             if($button_requests['close_in']=== 'no'|| $button_requests['close_in_fre']<= $button_request_counters['close_in']){
             //    $this->doorStatus(null);
-               $response_status = -1;
+               $response_status = 2;
             }
             else{
                 DB::beginTransaction();
@@ -353,6 +359,7 @@ return redirect()->back()->with($notification);
                     'status' => 'Locked',
                     'user_id'=> 1000
                     ]) ;
+
                     DB::commit();
                     
                     $response_status = 1;
@@ -360,7 +367,7 @@ return redirect()->back()->with($notification);
                     }
                     catch (\Exception $e) {
                     DB::rollback();
-                    $response_status = $e;
+                    $response_status = 2;
                                 }
                             }
             }
