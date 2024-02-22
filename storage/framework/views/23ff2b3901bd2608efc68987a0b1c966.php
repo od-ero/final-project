@@ -27,9 +27,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- DataTables CSS -->
 <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">
 
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.css" rel="stylesheet">
 
 <!-- Your custom CSS -->
 <link href="<?php echo url('assets/css/all.css'); ?>" rel="stylesheet" type="text/css">
+
 
   
     <style>
