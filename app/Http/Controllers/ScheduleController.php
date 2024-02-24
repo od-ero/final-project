@@ -298,7 +298,7 @@ return redirect()->back()->with($notification);
                 'status' => 'Unlocked',
                 'user_id'=> 1000
                 ]) ;
-                $response = Http::get('192.168.137.135/?led_2_on'); 
+                
                 DB::commit();
                
                $response_status = 0;
@@ -329,7 +329,7 @@ return redirect()->back()->with($notification);
                     'status' => 'Locked',
                     'user_id'=> 1000
                     ]) ;
-                    $response = Http::get('192.168.137.135/?led_2_off');
+                   
                     DB::commit();
                     $response_status = 1;
                     }

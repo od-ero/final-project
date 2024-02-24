@@ -24,27 +24,27 @@ Add Unit
     <hr>
     <input class="userInput" type="hidden" name="_token" value="{{ csrf_token() }}" />
     <input  class="userInput" id="owner_id" type="hidden"  name="owner_id">
-    <label for="owner_id"><b>Owner Details</b></label>
+    <label class="inputLabel"  for="owner_id"><b>Owner Details</b></label>
     <p><i>
       Kindly enter either of the owners name and and Phone number and search to select the user
     </i></p>
    
     <div class="row userxxInput">
-        <div class="col-5">
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder=" " required="required" autofocus>
-                <label for="name">Name</label>
+        <div class="col-md-5">
+            <div class="form-floating m-3">
+                <input type="text" class="inputUserInput form-control" id="name" name="name" value="{{ old('name') }}" placeholder=" " required="required" autofocus>
+                <label class="inputLabel" for="name">Name</label>
             </div>
         </div>
 
-        <div class="col-5">
-            <div class="form-floating mb-3">
+        <div class="col-md-4">
+            <div class="inputUserInput form-floating m-3">
                 <input type="tel" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" placeholder=" " required="required" autofocus>
-                <label for="phone">Phone number</label>
+                <label class="inputLabel" for="phone">Phone number</label>
             </div>
         </div>
 
-        <div class="col-2">
+        <div class="col-md-2 mt-4 mb-3">
             <button class="btn btn-outline-secondary" type="button" id="searchButton">search</button>
         </div>
         
@@ -54,24 +54,24 @@ Add Unit
 </ul>
    
   
-    <label  for="lname"><b>Premises Name</b></label>
+    <label class="inputLabel" class="inputLabel" for="premises_name"><b>Premises Name</b></label>
     <input  class="userInput" type="text" placeholder="Enter Premises Name" name="premises_name" id="premises_name" required>
 
-    <label  for="unit_name"><b>Unit Name</b></label>
+    <label class="inputLabel"  for="unit_name"><b>Unit Name</b></label>
     <input  class="userInput" type="text" placeholder=" Enter Unit Name" name="unit_name" id="unit_name" required>
    
    
-    <label for="longitude"><b>Longitude</b></label>
+    <label class="inputLabel" for="longitude"><b>Longitude</b></label>
     <input class="userInput" type="text" placeholder="Enter longitude" name="longitude" id="longitude" required>
 
-    <label  for="latitude"><b>Latitude</b></label>
+    <label class="inputLabel"  for="latitude"><b>Latitude</b></label>
     <input class="userInput" type="text" placeholder="Enter Latitude" name="latitude" id="latitude" required>
 
     
-    <label for="doors"><b>Number Of Doors</b></label>
+    <label class="inputLabel" for="doors"><b>Number Of Doors</b></label>
     <input class="userInput" type="number" placeholder="Enter Number Of Doors" name="doors" id="doors" min="1" required>
 
-    <label for="validateCheckbox"><b>Kindly Check The Box To Enter the Doors Names</b></label>
+    <label class="inputLabel" for="validateCheckbox"><b>Kindly Check The Box To Enter the Doors Names</b></label>
     <input type="checkbox" id="validateCheckbox" onchange="toggleValidation()" required>
 
     <div id="doorNamesContainer"></div>

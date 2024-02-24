@@ -7,14 +7,19 @@
 .userInput {
   width: 100%;
   margin: 5px 0 22px 0;
+  padding: 1.2%;
+
   display: inline-block;
   border: none;
   background: #f1f1f1;
 } 
+/* .inputLabel{
+  padding: 0.5%;
+} */
 .userxxInput {
   width: 100%;
   margin: 5px 0 22px 0;
- 
+  padding: 1.2%;
   border: none;
   background: #f1f1f1;
 } 
@@ -22,7 +27,9 @@
   background-color: #ddd;
   outline: none;
 } 
-
+.inputUserInput{
+  padding: 1.2%; 
+}
 .userInput {
   background-color: #ddd;
   outline: none;

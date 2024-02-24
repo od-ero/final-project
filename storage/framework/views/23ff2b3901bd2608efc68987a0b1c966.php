@@ -109,11 +109,5 @@ desired effect
     </div>
 </div>
 
-
-
-
-
-
-
 </body>
 </html><?php /**PATH C:\xampp\htdocs\LaravelAPI\resources\views/layouts/app-master.blade.php ENDPATH**/ ?>

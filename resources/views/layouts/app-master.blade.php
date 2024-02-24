@@ -109,11 +109,5 @@ desired effect
     </div>
 </div>
 
-
-
-
-
-
-
 </body>
 </html>

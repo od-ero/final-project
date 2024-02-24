@@ -1,3 +1,4 @@
+  
 <?php $__env->startSection('subtitle'); ?>
 Register
 <?php $__env->stopSection(); ?>

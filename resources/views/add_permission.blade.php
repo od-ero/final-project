@@ -31,20 +31,20 @@
    
     <div class="row userxxInput">
         <div class="col-5">
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder=" " required="required" autofocus>
+            <div class="form-floating mt-3 mb-3">
+                <input type="text" class=".inputUserInput form-control" id="name" name="name" value="{{ old('name') }}" placeholder=" " required="required" autofocus>
                 <label for="name">Name</label>
             </div>
         </div>
 
         <div class="col-5">
-            <div class="form-floating mb-3">
-                <input type="tel" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" placeholder=" " required="required" autofocus>
+            <div class="form-floating mt-3 mb-3">
+                <input type="tel" class=".inputUserInput form-control" id="phone" name="phone" value="{{ old('phone') }}" placeholder=" " required="required" autofocus>
                 <label for="phone">Phone number</label>
             </div>
         </div>
 
-        <div class="col-2">
+        <div class="col-2 mt-4 mb-3">
             <button class="btn btn-outline-secondary" type="button" id="searchButton">search</button>
         </div>
         

@@ -31,17 +31,17 @@
     </style>
 
     
-    <!-- Custom styles for this template -->
-    <link href="signin.css" rel="stylesheet">
+    <!-- Custom styles for this template
+      <link href="{!! url('assets/css/signin.css') !!}" rel="stylesheet"> -->
 </head>
-
 <body class="text-center">
-    <main class="form-signin">
+ 
+   
+  <main class="form-signin">
 
-        @yield('content')
-        
-    </main>
-    
+          @yield('content')
+           
+      </main>
 
 </body>
 </html>

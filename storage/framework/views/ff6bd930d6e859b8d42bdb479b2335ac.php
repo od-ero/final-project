@@ -31,17 +31,17 @@
     </style>
 
     
-    <!-- Custom styles for this template -->
-    <link href="signin.css" rel="stylesheet">
+    <!-- Custom styles for this template
+      <link href="<?php echo url('assets/css/signin.css'); ?>" rel="stylesheet"> -->
 </head>
-
 <body class="text-center">
-    <main class="form-signin">
+ 
+   
+  <main class="form-signin">
 
-        <?php echo $__env->yieldContent('content'); ?>
-        
-    </main>
-    
+          <?php echo $__env->yieldContent('content'); ?>
+           
+      </main>
 
 </body>
 </html>

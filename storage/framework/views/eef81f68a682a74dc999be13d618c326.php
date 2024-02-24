@@ -88,7 +88,7 @@
       <div class="container">
       
       <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use href="<?php echo e(asset('images/unikey.png')); ?>"/></svg>
       </a>
 
    
@@ -136,7 +136,7 @@
               <a href="/units/create" class="nav-link px-2 text-white">Add A Room</a>
             </li>
           </ul>
-          <div class="text-lg-end">
+          <div class="text-end">
           <a href="<?php echo e(route('logout.perform')); ?>" class="btn btn-outline-danger ">Logout</a>
         </div>
         <?php endif; ?>
