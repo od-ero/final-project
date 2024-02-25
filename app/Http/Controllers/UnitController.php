@@ -139,12 +139,14 @@ class UnitController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id, string $encoded_permission_id, string $status )// open/close
+    public function update(Request $request, string $id, string $encoded_permission_id, string $status , string $userLatitude, string $userLongitude)// open/close
     { 
         $door_id= base64_decode($id); 
         $permission_id= base64_decode($encoded_permission_id);
         $status= base64_decode($status);
-       //dd($door_id,$permission_id, $status);
+        $userLatitude= base64_decode($userLatitude);
+        $userLongitude= base64_decode($userLongitude);
+       dd($door_id,$permission_id, $status, $userLatitude, $userLongitude);
        $units=Door::where('id', $door_id)
                     ->select('unit_id')->first();
     $unit_id =$units->unit_id;

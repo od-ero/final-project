@@ -65,7 +65,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
     Route::get('/home/myunits','UnitController@index')->name('home.login.index');
     Route::match(['GET','POST'],'/units/create','UnitController@create')->name('unit.create');
 
-Route::match(['GET','UPDATE','POST'],'/home/myunits/action/{id}/{permission_id}/{status}','UnitController@update')->name('unit.update');
+Route::match(['GET','UPDATE','POST'],'/home/myunits/action/{id}/{permission_id}/{status}/{latitude}/{longitude}','UnitController@update')->name('unit.update');
 Route::get('/selected/unit/{id}','UnitController@selectedUnit')->name('unit.selected');
 Route::get('/selected/unit/data/{id}','UnitController@selectedUnitData')->name('unit.selected.data');
 Route::get('/view/door/{id}','UnitController@show')->name('unit.show');

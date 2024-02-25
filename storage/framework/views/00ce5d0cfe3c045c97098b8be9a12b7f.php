@@ -144,14 +144,37 @@ $(document).on('click', '#units .btn', function() {
    // redirectToAction(row_id, encoded_permission_id, status);
 });
 async function redirectToAction(row_id, encoded_permission_id, status) {
+   var latitude ;
+   var longitude;
   let loadingToast;
   toastr.info('Loading...', {
         closeButton: false,
         progressBar: true,
         positionClass: 'toast-top-full-width'
     });
+        if ("geolocation" in navigator) {
+        // Geolocation is supported
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                // Handle successful position retrieval
+                 position.coords.latitude;
+                 longitude = position.coords.longitude;
 
-   let actionURL = '/home/myunits/action/' + btoa(row_id) + '/' + encoded_permission_id + '/' + btoa(status);
+                console.log("Latitude: " + latitude);
+                console.log("Longitude: " + longitude);
+
+                // You can use the latitude and longitude values as needed
+            },
+            function(error) {
+                // Handle error (e.g., user denied location access)
+                console.error("Error getting location:", error.message);
+            }
+        );
+        } else {
+            // Geolocation is not supported by the browser
+            console.error("Geolocation is not supported by your browser");
+        }
+      let actionURL = '/home/myunits/action/' + btoa(row_id) + '/' + encoded_permission_id + '/' + btoa(status)+'/' + btoa(latitude)+'/' + btoa(longitude);
    //let pinURL = "http://192.168.137.159/";
 
    let res = await fetch(actionURL);
@@ -160,9 +183,6 @@ async function redirectToAction(row_id, encoded_permission_id, status) {
         
         toastr.clear(loadingToast);
         if (data.alertType == "success") {
-        
-        console.log("Server Response: ", data);
-
        // let action = status == "Locked" ? "led_2_on" : "led_2_off";
        // let pinRes = await fetch(pinURL + "?" + action);
 

@@ -106,7 +106,7 @@
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form> -->
-          <ul class="navbar-nav col-10">
+          <ul class="navbar-nav col-md-10">
             <!-- <li class="nav-item">
               <a class="nav-link active px-2 text-white" aria-current="page" href="/">Home</a>
             </li> -->
