@@ -32,14 +32,14 @@
     <div class="row userxxInput">
         <div class="col-5">
             <div class="form-floating mt-3 mb-3">
-                <input type="text" class="form-control" id="name" name="name" value="<?php echo e(old('name')); ?>" placeholder=" " required="required" autofocus>
+                <input type="text" class=".inputUserInput form-control" id="name" name="name" value="<?php echo e(old('name')); ?>" placeholder=" " required="required" autofocus>
                 <label for="name">Name</label>
             </div>
         </div>
 
         <div class="col-5">
             <div class="form-floating mt-3 mb-3">
-                <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo e(old('phone')); ?>" placeholder=" " required="required" autofocus>
+                <input type="tel" class=".inputUserInput form-control" id="phone" name="phone" value="<?php echo e(old('phone')); ?>" placeholder=" " required="required" autofocus>
                 <label for="phone">Phone number</label>
             </div>
         </div>

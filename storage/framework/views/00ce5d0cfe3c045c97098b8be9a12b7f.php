@@ -144,101 +144,64 @@ $(document).on('click', '#units .btn', function() {
    // redirectToAction(row_id, encoded_permission_id, status);
 });
 async function redirectToAction(row_id, encoded_permission_id, status) {
-   var latitude ;
-   var longitude;
-  let loadingToast;
-  toastr.info('Loading...', {
-        closeButton: false,
-        progressBar: true,
-        positionClass: 'toast-top-full-width'
-    });
-        if ("geolocation" in navigator) {
-        // Geolocation is supported
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                // Handle successful position retrieval
-                 position.coords.latitude;
-                 longitude = position.coords.longitude;
+    let latitude;
+    let longitude;
+    let loadingToast;
 
-                console.log("Latitude: " + latitude);
-                console.log("Longitude: " + longitude);
-
-                // You can use the latitude and longitude values as needed
-            },
-            function(error) {
-                // Handle error (e.g., user denied location access)
-                console.error("Error getting location:", error.message);
-            }
-        );
-        } else {
-            // Geolocation is not supported by the browser
-            console.error("Geolocation is not supported by your browser");
-        }
-      let actionURL = '/home/myunits/action/' + btoa(row_id) + '/' + encoded_permission_id + '/' + btoa(status)+'/' + btoa(latitude)+'/' + btoa(longitude);
-   //let pinURL = "http://192.168.137.159/";
-
-   let res = await fetch(actionURL);
-  let data = await res.json();
     try {
-        
-        toastr.clear(loadingToast);
-        if (data.alertType == "success") {
-       // let action = status == "Locked" ? "led_2_on" : "led_2_off";
-       // let pinRes = await fetch(pinURL + "?" + action);
+        // Display loading message
+        toastr.info('Loading...', {
+            closeButton: false,
+            progressBar: true,
+            positionClass: 'toast-top-full-width'
+        });
 
-            toastr.success(data.message);
-            setTimeout(() => {
-                 location.reload();
-            }, 500);
-        } else if (data.alertType == "error") {
-            toastr.error(data.message);
-            setTimeout(() => {
-                 location.reload();
-            }, 500);
-        } else if (data.alertType == "success2") {
-            toastr.info(data.message);
-            setTimeout(() => {
-                 location.reload();
-            }, 500);
+        // Get user's geolocation
+        if ("geolocation" in navigator) {
+            const position = await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+            });
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+            console.log("Latitude: " + latitude);
+            console.log("Longitude: " + longitude);
+        } else {
+            throw new Error("Geolocation is not supported by your browser");
         }
-        
-    } catch (error) {
+
+        // Construct action URL
+        const actionURL = '/home/myunits/action/' + btoa(row_id) + '/' + encoded_permission_id + '/' + btoa(status) + '/' + btoa(latitude) + '/' + btoa(longitude);
+
+        // Fetch data
+        const res = await fetch(actionURL);
+        const data = await res.json();
+console.log(data);
+        // Display appropriate toastr message based on response
         toastr.clear(loadingToast);
-        toastr.error('An error occurred while fetching data', {
+        if (data.alertType == 'success' || data.alertType === 'error' || data.alertType === 'success2') {
+            toastr[data.alertType](data.message);
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+        } else {
+            throw new Error("Unknown alert type in response data");
+        }
+    } catch (error) {
+        // Display error toast
+        toastr.clear(loadingToast);
+        toastr.error(error.message, {
             closeButton: true,
             positionClass: 'toast-top-full-width'
         });
         console.error(error);
     }
+
+    // Close modal
     $('#exampleModalCenter').modal('hide');
-    //close modal from here
-   
 }
 
 
-// if ("geolocation" in navigator) {
-//     // Geolocation is supported
-//     navigator.geolocation.getCurrentPosition(
-//         function(position) {
-//             // Handle successful position retrieval
-//             const latitude = position.coords.latitude;
-//             const longitude = position.coords.longitude;
-
-//             console.log("Latitude: " + latitude);
-//             console.log("Longitude: " + longitude);
-
-//             // You can use the latitude and longitude values as needed
-//         },
-//         function(error) {
-//             // Handle error (e.g., user denied location access)
-//             console.error("Error getting location:", error.message);
-//         }
-//     );
-// } else {
-//     // Geolocation is not supported by the browser
-//     console.error("Geolocation is not supported by your browser");
-// }
-
+//z
 </script>
 <?php endif; ?>
 <?php $__env->stopSection(); ?>

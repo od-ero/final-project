@@ -79,8 +79,9 @@ Route::get('/search','UsersController@search');
 Route::get('/schedule/permissions/check/{id}/{action}','ScheduleController@update')->name('schedule.update');
 Route::get('/door/state/check/{id}','ScheduleController@index')->name('schedule.index');
 Route::get('/response/view','UnitController@index')->name('unit.index');
-
-
+Route::get('/get/unit/ipAddresses/{id}','GlobalController@index')->name('global.index');
+Route::get('/get/unit/ipAddresses/data/{id}','GlobalController@index_data')->name('global.index_data');
+Route::match(['GET','update','POST'], '/units/ipAdress/add','GlobalController@create')->name('global.create');
 Route::group(['middleware' => ['guest']], function() {
 /**
  * Register Routes

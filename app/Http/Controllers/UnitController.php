@@ -13,6 +13,7 @@ use App\Models\Door;
 use App\Models\DoorStatus;
 use App\Models\DoorStatusSetter;
 use App\Models\MyPermission;
+use App\Models\DoorIp;
 use DataTables;
 use Illuminate\Support\Facades\Http;
 
@@ -22,8 +23,9 @@ class UnitController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index($door_id)
+    {$ip_address= (new GlobalController)->getIp($door_id);
+        $response = Http::get('http://'+$ip_address+'/?led_2_on');
         $response = Http::get('192.168.137.135/?led_2_on'); 
         dd($response);
        
@@ -146,14 +148,14 @@ class UnitController extends Controller
         $status= base64_decode($status);
         $userLatitude= base64_decode($userLatitude);
         $userLongitude= base64_decode($userLongitude);
-       dd($door_id,$permission_id, $status, $userLatitude, $userLongitude);
+       //dd($door_id,$permission_id, $status, $userLatitude, $userLongitude);
        $units=Door::where('id', $door_id)
                     ->select('unit_id')->first();
     $unit_id =$units->unit_id;
-      $ip = $request->ip();
-      $ip= '102.215.32.244';
-      $distanceMeters=0;
-     if($door_id != 9)
+    $ip_address = DoorIp::select('ip_address')
+                        ->where('door_id', $door_id)
+                        ->first();
+     if($ip_address === null || empty($ip_address))
      {
         $notification = array(
             'alertType' => 'error',
@@ -161,28 +163,22 @@ class UnitController extends Controller
                   );
      }
      else{
-     if($ip){
-      //$currentUserInfo = Location::get($ip);
-     
-
-         //  $userLat = $currentUserInfo->latitude; // User's live latitude
-       //   $userLon = $currentUserInfo->longitude;   // User's live longitude
          
-        //   $unit = Unit::where('id', $unit_id)->first(); // Assuming Unit is the model for the units table
-
-        //   $unitLat = $unit->latitude; // Room's latitude
-        //   $unitLon = $unit->longitude; // Room's longitude
+         $ip_address =$ip_address->ip_address ;
+          $unit = Unit::where('id', $unit_id)->first(); 
+          $unitLat = $unit->latitude; // Room's latitude
+          $unitLon = $unit->longitude; // Room's longitude
       
-        //   // Calculate distance using Haversine formula
-        //  // $distanceKm = 6371 * acos(cos(deg2rad($userLat)) * cos(deg2rad($unitLat)) * cos(deg2rad($unitLon) - deg2rad($userLon)) + sin(deg2rad($userLat)) * sin(deg2rad($unitLat)));
+          // Calculate distance using Haversine formula
+          $distanceKm = 6371 * acos(cos(deg2rad($userLatitude)) * cos(deg2rad($unitLat)) * cos(deg2rad($unitLon) - deg2rad($userLongitude)) + sin(deg2rad($userLatitude)) * sin(deg2rad($unitLat)));
       
-        //   // Convert distance to meters
-        //   $distanceMeters = $distanceKm * 1000;
+          // Convert distance to meters
+          $distanceMeters = $distanceKm * 1000;
       
           // $distanceMeters now contains the distance between the user's live location and the room's location in meters
          
-      } 
-     // dd($distanceMeters, $currentUserInfo);
+      
+     // dd($distanceMeters);
     //  if($distanceMeters >500){
     //     $notification = array(
     //         'alertType' => 'error',
@@ -251,7 +247,10 @@ class UnitController extends Controller
                           'status' => 'Unlocked',
                           'user_id'=> Auth::id()
             ]) ;
-        $response = Http::get('http://192.168.137.135/?led_2_on');
+           
+            $url = 'http://'.$ip_address.'/?led_2_on';
+            
+        $response = Http::get($url);
        // dd($response);
             DB::commit();
            // dd($response);
@@ -262,10 +261,10 @@ class UnitController extends Controller
         }
         catch (\Exception $e) {
            DB::rollback();
-          $notification = array(
+          $notification =
+        array(
           'alertType' => 'error',
-          'message' => 'Oooops!! an error occurred please try again later'
-                );
+          'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'  );
 } 
     }
 }
@@ -314,8 +313,14 @@ else{
                       'door_id'=> $door_id,
                       'status' => 'Lock',
                       'user_id'=> Auth::id()
-        ]) ;
-        $response = Http::get('http://192.168.137.135/?led_2_off');
+         ]) ;
+        // $ip_address= (new GlobalController)->getIp($door_id);
+        // //$baseurl=json_decode($baseurl);
+        // $ip_address = trim($ip_address, '"'); // Remove surrounding quotes if present
+        $url = 'http://'.$ip_address.'/?led_2_off';
+        
+        $response = Http::get($url);
+        
         //dd($response);
         DB::commit();
         $notification = array(
@@ -327,7 +332,7 @@ else{
        DB::rollback();
       $notification = array(
       'alertType' => 'error',
-      'message' => 'Oooops!! an error occurred please try again later'
+      'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
             );
 } 
 }
