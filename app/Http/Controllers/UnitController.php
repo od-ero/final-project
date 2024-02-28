@@ -178,14 +178,14 @@ class UnitController extends Controller
           // $distanceMeters now contains the distance between the user's live location and the room's location in meters
          
       
-     // dd($distanceMeters);
-    //  if($distanceMeters >500){
-    //     $notification = array(
-    //         'alertType' => 'error',
-    //         'message' => 'Oooops!! You are too far to perfrm this action kindly enable door access via button'
-    //               );
-    //  }
-    //  else{
+      //dd($distanceMeters, $unitLat,'user latitude:', $userLatitude,  $unitLon,'user long:', $userLongitude);
+     if($distanceMeters >500){
+        $notification = array(
+            'alertType' => 'error',
+            'message' => 'Oooops!! You are too far to perfrm this action kindly enable door access via button'
+                  );
+     }
+     else{
         $permissioner_permissions = MyPermission::leftjoin('permissions','my_permissions.permission_group_id','=','permissions.permission_group_id')
                                                 -> where('my_permissions.id', $permission_id)
                                                  ->first();
@@ -337,7 +337,7 @@ else{
 } 
 }
 }
-//}
+}
 }
 return response()->json($notification); 
     

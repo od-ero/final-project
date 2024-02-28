@@ -277,8 +277,8 @@ return redirect()->back()->with($notification);
             else{
             DB::beginTransaction();
             try{
-              $button_request_counters->increment('open_out');
-              $button_request_counters ->save();
+              DoorScheduleCounter::where('door_schedule_door_id', $button_requests['door_schedule_door_id'])
+                                        ->update(['open_out'=>$button_request_counters['open_out']+1,]);
               DoorStatus::where('door_id', $door_id)
                             ->update(['status'=>'Unlocked',
                             'status_setter'=>1000,
@@ -306,8 +306,8 @@ return redirect()->back()->with($notification);
             else{
              DB::beginTransaction();
              try{
-              $button_request_counters->increment('open_in');
-              $button_request_counters ->save();
+              DoorScheduleCounter::where('door_schedule_door_id', $button_requests['door_schedule_door_id'])
+                                        ->update(['open_in'=>$button_request_counters['open_in']+1,]);
               DoorStatus::where('door_id', $door_id)
                             ->update(['status'=>'Unlocked',
                             'status_setter'=>1000,
@@ -330,15 +330,15 @@ return redirect()->back()->with($notification);
             }
         
         if($action === 'closeOut'){
-           // dd($button_requests['close_out'],$button_requests['close_out_fre'] <= $button_request_counters['close_out'], $button_requests['close_out_fre'], $button_request_counters['close_out'] );
             if($button_requests['close_out']==='no'|| $button_requests['close_out_fre']<= $button_request_counters['close_out']){
                 $response_status = 2; 
             }
             else{
                 DB::beginTransaction();
                 try{
-                  $button_request_counters->increment('close_out');
-                  $button_request_counters ->save();
+                  
+                  DoorScheduleCounter::where('door_schedule_door_id', $button_requests['door_schedule_door_id'])
+                                        ->update(['close_out'=>$button_request_counters['close_out']+1,]);
                   DoorStatus::where('door_id', $door_id)
                                 ->update(['status'=>'Locked',
                                 'status_setter'=>1000,
@@ -367,8 +367,8 @@ return redirect()->back()->with($notification);
             else{
                 DB::beginTransaction();
                 try{
-                  $button_request_counters ->increment('close_out');
-                  $button_request_counters ->save();
+                  DoorScheduleCounter::where('door_schedule_door_id', $button_requests['door_schedule_door_id'])
+                                        ->update(['close_in'=>$button_request_counters['close_in']+1,]);
                   DoorStatus::where('door_id', $door_id)
                                 ->update(['status'=>'Locked',
                                 'status_setter'=>1000,
