@@ -82,6 +82,9 @@ Route::get('/response/view','UnitController@index')->name('unit.index');
 Route::get('/get/unit/ipAddresses/{id}','GlobalController@index')->name('global.index');
 Route::get('/get/unit/ipAddresses/data/{id}','GlobalController@index_data')->name('global.index_data');
 Route::match(['GET','update','POST'], '/units/ipAdress/add','GlobalController@create')->name('global.create');
+Route::post('units/doors/ip/update','GlobalController@update')->name('global.update');
+Route::get('units/doors/ip/show/{id}/{permission_id}','GlobalController@show')->name('global.show');
+
 Route::group(['middleware' => ['guest']], function() {
 /**
  * Register Routes

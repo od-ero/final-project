@@ -16,7 +16,10 @@
         Add IP Address
     </button>
 </div>
+<input type="text" id="encoded_permission_id" value="{{$encoded_permission_id}}"  hidden>
+  
 <?php $unit_id = base64_encode($unit['id']); ?>
+
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -52,8 +55,7 @@
   </div>
 </div>
 <table class="table table-striped" id="units">
-   <thead>
-   
+ <thead>
    <tr>
         <th style="width:5%">ID</th>
         
@@ -96,23 +98,20 @@ $(function () {
                 name: 'ip_address',
             },
             {
-                data: 'id',
-                name: 'id',
-                render:function(data,type,row,meta){
-               
-               var review=JSON.stringify(row);
-                return `<div class='btn-group'>
-                
-                        <a href='#' class='btn btn-success'>
-                            
-                            <span>edit</span>
-                        </a>
-                    </div>`;
-                }
-               
-}      
-        ]
-    });
+    data: 'id',
+    name: 'id',
+    render: function(data, type, row, meta) {
+        var review = JSON.stringify(row);
+        var encoded_permission_id= document.getElementById("encoded_permission_id").value;
+        return `
+            <div class='btn-group'>
+              <a href="{{ url('units/doors/ip/show/') }}/${data}/${encoded_permission_id}" class='btn btn-success'>
+                    <span>edit</span>
+                </a>
+            </div>
+        `;
+    }
+}]});
 });
 </script>
 @endauth

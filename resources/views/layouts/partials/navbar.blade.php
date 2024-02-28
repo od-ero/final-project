@@ -91,7 +91,7 @@
 
    
       <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 d-none d-sm-block">
-        <input type="text" class="form-control form-control-ligth  text-center" value="Unikey">
+        <input type="text" class="form-control form-control-ligth  text-center" value="Unikey" readonly>
       </form>
       @auth
       {{ auth()->user()->name }}

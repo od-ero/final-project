@@ -47,7 +47,7 @@ public function create(Request $request){
     if($add_ip){
         $notification = array(
             'alert-type' => 'success',
-            'message' => 'Ip Adress added successfully'
+            'message' => 'Ip Address added successfully'
                   );
     }
     else{
@@ -67,6 +67,38 @@ public function getIP($door_id){
          $baseurl = 'http://'.$ip_address ;
      dd($baseurl);
     return response()->json($ip_address);
+}
+public function show($door_ip_id, $encoded_permission_id){
+    $ip_details = DoorIp::LeftJoin('doors','doors.id','=','door_ips.door_id')
+    ->select('door_ips.*','doors.door_name')
+    ->where('door_ips.id', $door_ip_id)
+    ->first();
+    
+    return view('edit_ip',['ip_details'=>$ip_details,
+                           'encoded_permission_id'=> $encoded_permission_id]);
+}
+public function update(Request $request){
+
+    $ip_details = $request-> all();
+    $update_ip= DoorIp::where('id', $ip_details['id'])
+                        ->update([
+                            'ip_address'=>  $ip_details['ip_address'],
+                            ]);
+    if($update_ip){
+        $notification = array(
+            'alert-type' => 'success',
+            'message' => 'Ip Address updated successfully'
+                    );
+    }
+    else{
+        $notification = array(
+            'alert-type' => 'error',
+            'message' => 'Oooops!! An error occured!! Please try again later'
+                    );
+    }
+    return redirect()->route('global.index', ['id' => $ip_details['encoded_permission_id']])->with($notification);
+
+
 }
 }
 

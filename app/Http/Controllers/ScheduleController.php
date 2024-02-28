@@ -10,6 +10,7 @@ use App\Models\DoorScheduleCounter;
 use App\Models\DoorSchedulePermission;
 use App\Models\Unit;
 use App\Models\Door;
+use App\Models\DoorIp;
 use App\Models\DoorStatusSetter;
 use App\Models\DoorStatus;
 use App\Models\DoorScheduleDoor;
@@ -22,9 +23,18 @@ class ScheduleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($door_id)
+    public function index(Request $request, $door_id)
     {
         //
+        $clientIp= $request->ip();
+        $ip_details = DoorIp::select('ip_address')
+        ->where('door_id', $door_id)
+        ->first();
+        $ip_address = $ip_details['ip_address'] ;
+        if($ip_address != $clientIp){
+            DoorIp::where('door_id', $door_id)
+            ->update(['ip_address'=>$clientIp]);
+        }
         $door_status = DoorStatus::select('status')
                                 ->where('door_id', $door_id)
                                 ->first();
@@ -226,9 +236,18 @@ return redirect()->back()->with($notification);
     /**
      * Update the specified resource in storage.
      */
-    public function update(string $door_id, $action)
+    public function update(Request $request, string $door_id, $action)
     {
         //
+        $clientIp= $request->ip();
+        $ip_details = DoorIp::select('ip_address')
+        ->where('door_id', $door_id)
+        ->first();
+        $ip_address = $ip_details['ip_address'] ;
+        if($ip_address != $clientIp){
+            DoorIp::where('door_id', $door_id)
+            ->update(['ip_address'=>$clientIp]);
+        }
         $button_requests = DoorSchedule::leftJoin('door_schedule_permissions', 'door_schedules.door_schedule_permission_id', '=', 'door_schedule_permissions.id')
                                         ->leftJoin('door_schedule_doors', 'door_schedules.id', '=', 'door_schedule_doors.door_schedule_id')
                                         ->select('door_schedule_permissions.*', 'door_schedule_doors.id as door_schedule_door_id')
