@@ -238,14 +238,13 @@ return redirect()->back()->with($notification);
      */
     public function update(Request $request, string $door_id, $action)
     {
-        //
         $clientIp= $request->ip();
-        $ip_details = DoorIp::select('ip_address')
+        $ip_details = DoorIp::select('*')
         ->where('door_id', $door_id)
         ->first();
-        $ip_address = $ip_details['ip_address'] ;
+        $ip_address = $ip_details['ip_address'];
         if($ip_address != $clientIp){
-            DoorIp::where('door_id', $door_id)
+            DoorIp::where('id',$ip_details['id'])
             ->update(['ip_address'=>$clientIp]);
         }
         $button_requests = DoorSchedule::leftJoin('door_schedule_permissions', 'door_schedules.door_schedule_permission_id', '=', 'door_schedule_permissions.id')

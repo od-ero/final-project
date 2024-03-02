@@ -155,15 +155,6 @@ class UnitController extends Controller
     $ip_address = DoorIp::select('ip_address')
                         ->where('door_id', $door_id)
                         ->first();
-     if($ip_address === null || empty($ip_address))
-     {
-        $notification = array(
-            'alertType' => 'error',
-            'message' => 'Oooops!! Ooops the door is not fullly configured kindly contact your host for assistance'
-                  );
-     }
-     else{
-         
          $ip_address =$ip_address->ip_address ;
           $unit = Unit::where('id', $unit_id)->first(); 
           $unitLat = $unit->latitude; // Room's latitude
@@ -338,7 +329,7 @@ else{
 }
 }
 }
-}
+
 return response()->json($notification); 
     
 }

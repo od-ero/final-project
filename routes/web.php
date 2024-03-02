@@ -60,30 +60,10 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
     /**
      * Home Routes
      */
-    Route::get('/', 'HomeController@index')->name('home.index');
-    Route::get('/home/data', 'HomeController@index_data')->name('home.index.data');
-    Route::get('/home/myunits','UnitController@index')->name('home.login.index');
-    Route::match(['GET','POST'],'/units/create','UnitController@create')->name('unit.create');
-
-Route::match(['GET','UPDATE','POST'],'/home/myunits/action/{id}/{permission_id}/{status}/{latitude}/{longitude}','UnitController@update')->name('unit.update');
-Route::get('/selected/unit/{id}','UnitController@selectedUnit')->name('unit.selected');
-Route::get('/selected/unit/data/{id}','UnitController@selectedUnitData')->name('unit.selected.data');
-Route::get('/view/door/{id}','UnitController@show')->name('unit.show');
-Route::match(['GET','update','POST'],'add/permissions/{id}','PermissionController@store')->name('permissons.store');
-Route::post('/add/myunits','PermissionController@show')->name('permissons.show');
-Route::post('/add/creates/permission','PermissionController@create')->name('permissons.create');
-Route::match(['GET','update','POST'], '/make/schedule/{id}','ScheduleController@store')->name('schedule.store');
-Route::match(['GET','update','POST'], '/user/search','UsersController@search')->name('search');
-Route::get('/ajax/search','UsersController@index');
-Route::get('/search','UsersController@search');
+Route::get('/', 'HomeController@index')->name('home.index');
 Route::get('/schedule/permissions/check/{id}/{action}','ScheduleController@update')->name('schedule.update');
 Route::get('/door/state/check/{id}','ScheduleController@index')->name('schedule.index');
-Route::get('/response/view','UnitController@index')->name('unit.index');
-Route::get('/get/unit/ipAddresses/{id}','GlobalController@index')->name('global.index');
-Route::get('/get/unit/ipAddresses/data/{id}','GlobalController@index_data')->name('global.index_data');
-Route::match(['GET','update','POST'], '/units/ipAdress/add','GlobalController@create')->name('global.create');
-Route::post('units/doors/ip/update','GlobalController@update')->name('global.update');
-Route::get('units/doors/ip/show/{id}/{permission_id}','GlobalController@show')->name('global.show');
+   
 
 Route::group(['middleware' => ['guest']], function() {
 /**
@@ -104,6 +84,28 @@ Route::group(['middleware' => ['auth']], function() {
 /**
  * Logout Routes
  */
+Route::get('/home/data', 'HomeController@index_data')->name('home.index.data');
+Route::get('/home/myunits','UnitController@index')->name('home.login.index');
+Route::match(['GET','POST'],'/units/create','UnitController@create')->name('unit.create');
+
+Route::match(['GET','UPDATE','POST'],'/home/myunits/action/{id}/{permission_id}/{status}/{latitude}/{longitude}','UnitController@update')->name('unit.update');
+Route::get('/selected/unit/{id}','UnitController@selectedUnit')->name('unit.selected');
+Route::get('/selected/unit/data/{id}','UnitController@selectedUnitData')->name('unit.selected.data');
+Route::get('/view/door/{id}','UnitController@show')->name('unit.show');
+Route::match(['GET','update','POST'],'add/permissions/{id}','PermissionController@store')->name('permissons.store');
+Route::post('/add/myunits','PermissionController@show')->name('permissons.show');
+Route::post('/add/creates/permission','PermissionController@create')->name('permissons.create');
+Route::match(['GET','update','POST'], '/make/schedule/{id}','ScheduleController@store')->name('schedule.store');
+Route::match(['GET','update','POST'], '/user/search','UsersController@search')->name('search');
+Route::get('/ajax/search','UsersController@index');
+Route::get('/search','UsersController@search');
+Route::get('/response/view','UnitController@index')->name('unit.index');
+Route::get('/get/unit/ipAddresses/{id}','GlobalController@index')->name('global.index');
+Route::get('/get/unit/ipAddresses/data/{id}','GlobalController@index_data')->name('global.index_data');
+Route::match(['GET','update','POST'], '/units/ipAdress/add','GlobalController@create')->name('global.create');
+Route::post('units/doors/ip/update','GlobalController@update')->name('global.update');
+Route::get('units/doors/ip/show/{id}/{permission_id}','GlobalController@show')->name('global.show');
 Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
+
 });
 });

@@ -175,7 +175,7 @@ async function redirectToAction(row_id, encoded_permission_id, status) {
         // Fetch data
         const res = await fetch(actionURL);
         const data = await res.json();
-console.log(data);
+
         // Display appropriate toastr message based on response
         toastr.clear(loadingToast);
         if (data.alertType == 'success' || data.alertType === 'error' || data.alertType === 'success2') {
