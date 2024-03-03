@@ -15,9 +15,9 @@ blueLed.value(1)
 base_url1 = 'http://192.168.137.98'
 relay_pin_value = relayPin.value()
 
-def serverError(relay_state):
-        relay_pin_value= relay_state
-        relayPin.value(relay_state)
+def serverError():
+        #relay_pin_vlue= relay_state
+        #relayPin.value(relay_state)
         redLed.value(0) #on
         blueLed.value(1) #0ff
         greenLed.value(1) #off
@@ -26,6 +26,7 @@ def serverError(relay_state):
         blueLed.value(1) #0ff
         greenLed.value(1) #off
         sleep(0.1)
+        print('server error')
 #test_server = requests.get(base_url1)
 #print("Test server :", test_server)
 # if test_server.status_code == 200:
@@ -110,67 +111,70 @@ def serverRequests():
 def buttonRequests(pin):
     base_url = 'http://192.168.137.1'
     if(station.isconnected()):
-        if not openIn.value():
-             res = requests.get(base_url+'/schedule/permissions/check/9/openIn')
-             if res.status_code == 200:
-                status = res.json()
-                print(status)
-                if(status==0):
-                     unlockDoor()
-                     sleep(0.1)
-                elif(status==2):
-                    noPermission()
+        try:
+            if not openIn.value():
+                 res = requests.get(base_url+'/schedule/permissions/check/9/openIn')
+                 if res.status_code == 200:
+                    status = res.json()
+                    print(status)
+                    if(status==0):
+                         unlockDoor()
+                         sleep(0.1)
+                    elif(status==2):
+                        noPermission()
+                    else:
+                        serverError()
+                 else:
+                    serverError()
+            if not closeIn.value():
+                res = requests.get(base_url+'/schedule/permissions/check/9/closeIn')
+                if res.status_code == 200:
+                    status = res.json()
+                    print(status)
+                    if(status==1):
+                        lockDoor()
+                        sleep(0.1)
+                    elif(status==2):
+                        noPermission()
+                        sleep(0.1)
+                    else:
+                        serverError()
                 else:
                     serverError()
-             else:
-                serverError()
-        if not closeIn.value():
-            res = requests.get(base_url+'/schedule/permissions/check/9/closeIn')
-            if res.status_code == 200:
-                status = res.json()
-                print(status)
-                if(status==1):
-                    lockDoor()
-                    sleep(0.1)
-                elif(status==2):
-                    noPermission()
-                    sleep(0.1)
+            if not openOut.value():     # if pressed the push_button
+                 res = requests.get(base_url+'/schedule/permissions/check/9/openOut')
+                 if res.status_code == 200:
+                    status = res.json()
+                    print(status)
+                    if(status==0):
+                         unlockDoor()
+                         sleep(0.1)
+                    elif(status==2):
+                        noPermission()
+                    else:
+                        serverError()
+                 else:
+                    serverError()
+            if not closeOut.value():
+                res = requests.get(base_url+'/schedule/permissions/check/9/closeOut')
+                if res.status_code == 200:
+                    print(res.json())
+                    status = res.json()
+                    print(status)
+                    if(status==1):
+                        lockDoor()
+                        sleep(0.1)
+                    elif(status==2):
+                        noPermission()
+                        sleep(0.1)
+                    else:
+                        serverError()
                 else:
                     serverError()
-            else:
-                serverError()
-        if not openOut.value():     # if pressed the push_button
-             res = requests.get(base_url+'/schedule/permissions/check/9/openOut')
-             if res.status_code == 200:
-                status = res.json()
-                print(status)
-                if(status==0):
-                     unlockDoor()
-                     sleep(0.1)
-                elif(status==2):
-                    noPermission()
-                else:
-                    serverError()
-             else:
-                serverError()
-        if not closeOut.value():
-            res = requests.get(base_url+'/schedule/permissions/check/9/closeOut')
-            if res.status_code == 200:
-                print(res.json())
-                status = res.json()
-                print(status)
-                if(status==1):
-                    lockDoor()
-                    sleep(0.1)
-                elif(status==2):
-                    noPermission()
-                    sleep(0.1)
-                else:
-                    serverError()
-            else:
-                serverError()
+        except Exception as e:
+            serverError()                
     else:
-        serverError()            
+       serverError()            
 def main():
     base_url = 'http://192.168.137.1'
     try:
@@ -185,7 +189,7 @@ def main():
         else:
             serverError()
     except Exception as e:
-        serverError(relay_pin_value)
+        serverError()
     openOut.irq(trigger=Pin.IRQ_FALLING, handler=buttonRequests)
     closeOut.irq(trigger=Pin.IRQ_FALLING, handler=buttonRequests)
     openIn.irq(trigger=Pin.IRQ_FALLING, handler=buttonRequests)
