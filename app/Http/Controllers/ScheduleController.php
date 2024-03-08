@@ -257,7 +257,8 @@ return redirect()->back()->with($notification);
         $door_status  = DoorStatus::select('status')
                                     ->where('door_id', $door_id)
                                     ->first(); 
-                                                
+        $door_status= $door_status['status'];
+        // dd($door_status)  ;                                     
         if($button_requests===null||empty($button_requests)){
             
             $response_status = 2; 
@@ -268,11 +269,13 @@ return redirect()->back()->with($notification);
                                                      ->first();
         //dd($button_request_counters);
         if($action === 'openOut'){
-            if($button_requests['open_out']=== 'no'|| $button_requests['open_out_fre']<= $button_request_counters['open_out']){
+            if($door_status==='Unlocked'){
+                $response_status = 0;
+            }
+           else if($button_requests['open_out']=== 'no'|| $button_requests['open_out_fre']<= $button_request_counters['open_out']){
                
                  $response_status = 2;
             }
-          
             else{
             DB::beginTransaction();
             try{
@@ -297,11 +300,12 @@ return redirect()->back()->with($notification);
                         }
          }
         if($action === 'openIn'){
-
-            if($button_requests['open_in'] === 'no'||$button_requests['open_in_fre']<= $button_request_counters['open_in']){
+            if($door_status==='Unlocked'){
+                $response_status = 0;
+            }
+            else if($button_requests['open_in'] === 'no'||$button_requests['open_in_fre']<= $button_request_counters['open_in']){
                 $response_status = 2; 
             }
-          
             else{
              DB::beginTransaction();
              try{
@@ -329,7 +333,10 @@ return redirect()->back()->with($notification);
             }
         
         if($action === 'closeOut'){
-            if($button_requests['close_out']==='no'|| $button_requests['close_out_fre']<= $button_request_counters['close_out']){
+            if($door_status=== 'Locked'){
+                $response_status = 1;
+            }
+            else if($button_requests['close_out']==='no'|| $button_requests['close_out_fre']<= $button_request_counters['close_out']){
                 $response_status = 2; 
             }
             else{
@@ -359,7 +366,10 @@ return redirect()->back()->with($notification);
             }
         
         if($action === 'closeIn'){
-            if($button_requests['close_in']=== 'no'|| $button_requests['close_in_fre']<= $button_request_counters['close_in']){
+            if($door_status === 'Locked'){
+                $response_status = 1;
+            }
+            else if($button_requests['close_in']=== 'no'|| $button_requests['close_in_fre']<= $button_request_counters['close_in']){
             //    $this->doorStatus(null);
                $response_status = 2;
             }

@@ -86,7 +86,6 @@ else{
             'message' => 'Ooops!!!, End date must be less than your assigned end date '
         );     
     }
-
    else{
    
   DB::beginTransaction();
