@@ -13,7 +13,7 @@
 <form name="register-form" id="register-form" method="post" action="{{ url('/make/schedule/' . $encoded_permission_id) }}">
   
     <fieldset>
-      <legend>Active The Door Buttons Access To {{$unit['premises_name'] . ', ' . $unit['unit_name']}} </legend>
+      <legend>Active The Door Buttons Access To <b class="text-uppercase">{{$unit['premises_name'] . ', ' . $unit['unit_name']}} </b></legend>
       <p>Welcome to my schedule, this will activate the respective door buttons at given times.</p>
 
       <hr>

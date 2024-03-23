@@ -17,6 +17,8 @@ return [
     */
 
     'name' => env('APP_NAME', 'Unikey'),
+     'usersDomain' => env('USERS_DOMAIN', 'unikey.odero.ke'),
+     'adminDomain' => env('ADMIN_DOMAIN', 'admin.unikey.odero.ke'),
 
     /*
     |--------------------------------------------------------------------------
@@ -28,8 +30,8 @@ return [
     | services the application utilizes. Set this in your ".env" file.
     |
     */
-
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'develop'),
+    // 'env' => env('APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -170,7 +172,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
-        Stevebauman\Location\LocationServiceProvider::class,
+        Nwidart\Modules\LaravelModulesServiceProvider::class,
+
         
        
 

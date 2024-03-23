@@ -243,6 +243,11 @@ return redirect()->back()->with($notification);
         ->where('door_id', $door_id)
         ->first();
         $ip_address = $ip_details['ip_address'];
+        if($ip_details['door_ip_status']==='Offline'){
+            DoorIp::where('id', $ip_details['id'])
+                    ->update([
+                        'door_ip_status' => 'Online']);
+        }
         if($ip_address != $clientIp){
             DoorIp::where('id',$ip_details['id'])
             ->update(['ip_address'=>$clientIp]);

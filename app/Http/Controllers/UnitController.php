@@ -55,6 +55,7 @@ class UnitController extends Controller
             'doors' => $unit_details['doors']
         ]);
         
+        
         for ($i = 0; $i < $unit_details['doors']; $i++) {
             $door_name_variable = 'door_name_' . $i;
             $door_names = $unit_details[$door_name_variable];
@@ -122,10 +123,11 @@ class UnitController extends Controller
        
         $unit_id= base64_decode($unit_id);
          $my_units = Door::leftjoin("door_statuses","door_statuses.door_id","=","doors.id")
+                            ->leftJoin('door_ips','door_ips.door_id','=','doors.id')
                             ->where('doors.unit_id',$unit_id)
-                            ->select('doors.*','door_statuses.status')
+                            ->select('doors.*','door_statuses.status','door_ips.door_ip_status')
                             ->get();
-        // dd($my_units);
+         //dd($my_units);
          return DataTables::of($my_units)->make(true);
          
          
@@ -149,13 +151,13 @@ class UnitController extends Controller
         $userLatitude= base64_decode($userLatitude);
         $userLongitude= base64_decode($userLongitude);
        //dd($door_id,$permission_id, $status, $userLatitude, $userLongitude);
-       $units=Door::where('id', $door_id)
+         $units=Door::where('id', $door_id)
                     ->select('unit_id')->first();
-    $unit_id =$units->unit_id;
-    $ip_address = DoorIp::select('ip_address')
+        $unit_id =$units->unit_id;
+        $door_ip = DoorIp::select('*')
                         ->where('door_id', $door_id)
                         ->first();
-         $ip_address =$ip_address->ip_address ;
+         $ip_address = $door_ip->ip_address ;
           $unit = Unit::where('id', $unit_id)->first(); 
           $unitLat = $unit->latitude; // Room's latitude
           $unitLon = $unit->longitude; // Room's longitude
@@ -170,13 +172,13 @@ class UnitController extends Controller
          
       
       //dd($distanceMeters, $unitLat,'user latitude:', $userLatitude,  $unitLon,'user long:', $userLongitude);
-     if($distanceMeters >500){
-        $notification = array(
-            'alertType' => 'error',
-            'message' => 'Oooops!! You are too far to perfrm this action kindly enable door access via button'
-                  );
-     }
-     else{
+    //  if($distanceMeters >500){
+    //     $notification = array(
+    //         'alertType' => 'error',
+    //         'message' => 'Oooops!! You are too far to perfrm this action kindly enable door access via button'
+    //               );
+    //  }
+    //  else{
         $permissioner_permissions = MyPermission::leftjoin('permissions','my_permissions.permission_group_id','=','permissions.permission_group_id')
                                                 -> where('my_permissions.id', $permission_id)
                                                  ->first();
@@ -188,148 +190,183 @@ class UnitController extends Controller
                                                                 
                                                                 ->first();
       
-      
-     
-       if($status==='Locked') {
-        $permissioner_permissions_count= $permissioner_permissions_counters['open'];
-       // dd($permissioner_permissions_count);
-       if( $permissioner_permissions['open']==='no'){
-        $notification = array(
-            'alertType' => 'error',
-            'message' => 'Ooops!!!, You are not allowed to open this door'
-        );   
-    }
-   else if($permissioner_permissions_count >= $permissioner_permissions['open_fre']){
-        $notification = array(
-        'alertType' => 'error',
-        'message' => 'Ooops!!!, You have exhausted your open permissions on this door' 
-        );       
-        }
-    else if($permissioner_permission_start_date->gt(Carbon::now())){
-        $notification = array(
-             'alertType' => 'error',
-             'message' => 'Ooops!!!, You are not allowed to open this door at this time'
-         );     
-    }
+            if($door_ip['door_ip_status']==='Inactive'){
+                $notification = array(
+                    'alertType' => 'error',
+                    'message' => 'Ooops!!!, The door lock is not fully configured!'
+                    );   
+            }else{
+                $ch = curl_init($ip_address);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $data = curl_exec($ch);
+                $health = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                if (!$health) {
+                    if($door_ip['door_ip_status']==='Online'){
 
-    else if($permissioner_permission_end_date->lt(Carbon::now())){
-        $notification = array(
-            'alertType' => 'error',
-            'message' => 'Ooops!!!, Your priviledge to open this door expired'
-        );     
-    }
-    else{
-        DB::beginTransaction();
-        try{
-         DoorStatus::where('door_id', $door_id)
-                    ->update(['status'=>'Unlocked',
-                    'status_setter'=>Auth::id(),
-                ]);
-        MyPermissionCounter::where('my_permission_id' ,$permission_id)
-                            ->where('door_id', $door_id)
-                            ->update([
-                                'open' => $permissioner_permissions_count + 1,
-                               
-                            ]);
-        
-                           
-            DoorStatusSetter::create([
-                          'door_id'=> $door_id,
-                          'status' => 'Unlocked',
-                          'user_id'=> Auth::id()
-            ]) ;
-           
-            $url = 'http://'.$ip_address.'/?led_2_on';
-            
-        $response = Http::get($url);
-       // dd($response);
-            DB::commit();
-           // dd($response);
-            $notification = array(
-                'alertType' => 'success',
-                'message' => 'Door unlocked successfully'
-            );
-        }
-        catch (\Exception $e) {
-           DB::rollback();
-          $notification =
-        array(
-          'alertType' => 'error',
-          'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'  );
-} 
-    }
-}
-if($status==='Unlocked') {
-    $permissioner_permissions_count= $permissioner_permissions_counters['close'];
-   if( $permissioner_permissions['close']==='no'){
-    $notification = array(
-        'alertType' => 'error',
-        'message' => 'Ooops!!!, You are not allowed to lock this door'
-    );   
-}
-else if($permissioner_permissions_count >= $permissioner_permissions['close_fre']){
-    $notification = array(
-    'alertType' => 'error',
-    'message' => 'Ooops!!!, You have exhausted your lock permissions on this door' 
-    );       
-    }
-else if($permissioner_permission_start_date->gt(Carbon::now())){
-    $notification = array(
-         'alertType' => 'error',
-         'message' => 'Ooops!!!, You are not allowed to lock this door at this time'
-     );     
-}
-
-else if($permissioner_permission_end_date->lt(Carbon::now())){
-    $notification = array(
-        'alertType' => 'error',
-        'message' => 'Ooops!!!, Your priviledge to lock this door expired'
-    );     
-}
-else{
-    DB::beginTransaction();
-    try{
-     DoorStatus::where('door_id', $door_id)
-                ->update(['status'=>'Locked',
-                'status_setter'=>Auth::id(),
-            ]);
-    MyPermissionCounter::where('my_permission_id' ,$permission_id)
-                        ->where('door_id', $door_id)
+                        DoorIp::where('id',$door_ip['id'])
                         ->update([
-                            'close' => $permissioner_permissions_count + 1,
-                        ]);
-    
-                       
-        DoorStatusSetter::create([
-                      'door_id'=> $door_id,
-                      'status' => 'Lock',
-                      'user_id'=> Auth::id()
-         ]) ;
-        // $ip_address= (new GlobalController)->getIp($door_id);
-        // //$baseurl=json_decode($baseurl);
-        // $ip_address = trim($ip_address, '"'); // Remove surrounding quotes if present
-        $url = 'http://'.$ip_address.'/?led_2_off';
-        
-        $response = Http::get($url);
-        
-        //dd($response);
-        DB::commit();
-        $notification = array(
-            'alertType' => 'success',
-            'message' => 'Door locked successfully'
-        );
-    }
-    catch (\Exception $e) {
-       DB::rollback();
-      $notification = array(
-      'alertType' => 'error',
-      'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
-            );
-} 
-}
-}
-}
+                            'door_ip_status' => 'Offline']);
+                        //  $json = json_encode(['health' => $health, 'status' => '0']);
+                // return $json;
+                        }
+                        $notification = array(
+                            'alertType' => 'error',
+                            'message' => 'Ooops!!!, The door lock is offline kindly conduct your adminstrator for assistance'
+                            ); 
+                }
+                else {
+                    if($door_ip['door_ip_status']==='Offline'){
+                        DoorIp::where('id',$door_ip['id'])
+                                ->update([
+                                    'door_ip_status' => 'Online']);
+                        // $json = json_encode(['health' => $health, 'status' => '1']);
+                    // return $json;
+                    }
+                
+            
+                if($status==='Locked') {
+                    $permissioner_permissions_count= $permissioner_permissions_counters['open'];
+                // dd($permissioner_permissions_count);
+                        if( $permissioner_permissions['open']==='no'){
+                            $notification = array(
+                                'alertType' => 'error',
+                                'message' => 'Ooops!!!, You are not allowed to open this door'
+                            );   
+                        }
+                    else if($permissioner_permissions_count >= $permissioner_permissions['open_fre']){
+                            $notification = array(
+                            'alertType' => 'error',
+                            'message' => 'Ooops!!!, You have exhausted your open permissions on this door' 
+                            );       
+                            }
+                        else if($permissioner_permission_start_date->gt(Carbon::now())){
+                            $notification = array(
+                                'alertType' => 'error',
+                                'message' => 'Ooops!!!, You are not allowed to open this door at this time'
+                            );     
+                        }
 
+                        else if($permissioner_permission_end_date->lt(Carbon::now())){
+                            $notification = array(
+                                'alertType' => 'error',
+                                'message' => 'Ooops!!!, Your priviledge to open this door expired'
+                            );     
+                        }
+                        else{
+                            DB::beginTransaction();
+                            try{
+                            DoorStatus::where('door_id', $door_id)
+                                        ->update(['status'=>'Unlocked',
+                                        'status_setter'=>Auth::id(),
+                                    ]);
+                            MyPermissionCounter::where('my_permission_id' ,$permission_id)
+                                                ->where('door_id', $door_id)
+                                                ->update([
+                                                    'open' => $permissioner_permissions_count + 1,
+                                                
+                                                ]);
+                            
+                                            
+                                DoorStatusSetter::create([
+                                            'door_id'=> $door_id,
+                                            'status' => 'Unlocked',
+                                            'user_id'=> Auth::id()
+                                ]) ;
+                            
+                                $url = 'http://'.$ip_address.'/?led_2_on';
+                                
+                            $response = Http::get($url);
+                        // dd($response);
+                                DB::commit();
+                            // dd($response);
+                                $notification = array(
+                                    'alertType' => 'success',
+                                    'message' => 'Door unlocked successfully'
+                                );
+                            }
+                            catch (\Exception $e) {
+                            DB::rollback();
+                            $notification =
+                            array(
+                            'alertType' => 'error',
+                            'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'  );
+                    } 
+                }
+                        }
+                if($status==='Unlocked') {
+                        $permissioner_permissions_count= $permissioner_permissions_counters['close'];
+                    if( $permissioner_permissions['close']==='no'){
+                        $notification = array(
+                            'alertType' => 'error',
+                            'message' => 'Ooops!!!, You are not allowed to lock this door'
+                        );   
+                    }
+                    else if($permissioner_permissions_count >= $permissioner_permissions['close_fre']){
+                        $notification = array(
+                        'alertType' => 'error',
+                        'message' => 'Ooops!!!, You have exhausted your lock permissions on this door' 
+                        );       
+                        }
+                    else if($permissioner_permission_start_date->gt(Carbon::now())){
+                        $notification = array(
+                            'alertType' => 'error',
+                            'message' => 'Ooops!!!, You are not allowed to lock this door at this time'
+                        );     
+                    }
+
+                    else if($permissioner_permission_end_date->lt(Carbon::now())){
+                        $notification = array(
+                            'alertType' => 'error',
+                            'message' => 'Ooops!!!, Your priviledge to lock this door expired'
+                        );     
+                    }
+                    else{
+                        DB::beginTransaction();
+                        try{
+                        DoorStatus::where('door_id', $door_id)
+                                    ->update(['status'=>'Locked',
+                                    'status_setter'=>Auth::id(),
+                                ]);
+                        MyPermissionCounter::where('my_permission_id' ,$permission_id)
+                                            ->where('door_id', $door_id)
+                                            ->update([
+                                                'close' => $permissioner_permissions_count + 1,
+                                            ]);
+                        
+                                        
+                            DoorStatusSetter::create([
+                                        'door_id'=> $door_id,
+                                        'status' => 'Lock',
+                                        'user_id'=> Auth::id()
+                            ]) ;
+                            // $ip_address= (new GlobalController)->getIp($door_id);
+                            // //$baseurl=json_decode($baseurl);
+                            // $ip_address = trim($ip_address, '"'); // Remove surrounding quotes if present
+                            $url = 'http://'.$ip_address.'/?led_2_off';
+                            
+                            $response = Http::get($url);
+                            
+                            //dd($response);
+                        DB::commit();
+                            $notification = array(
+                                'alertType' => 'success',
+                                'message' => 'Door locked successfully'
+                            );
+                        }
+                        catch (\Exception $e) {
+                        DB::rollback();
+                        $notification = array(
+                        'alertType' => 'error',
+                        'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
+                                );
+                    } 
+            }
+                        }
+            }
+             }
 return response()->json($notification); 
     
 }

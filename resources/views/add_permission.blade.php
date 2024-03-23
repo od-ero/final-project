@@ -16,7 +16,7 @@
   
     <fieldset>
   
-   <legend>Give Access Priviledges To {{$unit['premises_name'] . ', ' . $unit['unit_name']}} </legend>
+   <legend>Give Access Priviledges To <b class="text-uppercase"> {{$unit['premises_name'] . ', ' . $unit['unit_name']}}</b> </legend>
     <p>Please Fill In This Form To Assign Access Priviledges.</p>
 
    

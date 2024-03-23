@@ -23,13 +23,12 @@
 
 
 
-   <script>
-     @stack('jquery-scripts')
-   </script>
+   
     <script>
        
 
-        @if (Session::has('message'))
+       var message = "{{ Session::get('message') }}";
+    if (message) {
             var type = "{{ Session::get('alert-type', 'info') }}"
             switch (type) {
                 case 'info':
@@ -63,6 +62,5 @@
                     audio.play();
 
                     break;
-            }
-        @endif
+            }}
     </script>

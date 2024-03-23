@@ -1,0 +1,1 @@
+<div class=""></div><?php /**PATH C:\xampp\htdocs\LaravelAPI\Modules/Adminstration\resources/views/layouts/partials/sidebar.blade.php ENDPATH**/ ?>

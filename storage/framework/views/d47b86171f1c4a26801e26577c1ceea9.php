@@ -23,13 +23,12 @@
 
 
 
-   <script>
-     <?php echo $__env->yieldPushContent('jquery-scripts'); ?>
-   </script>
+   
     <script>
        
 
-        <?php if(Session::has('message')): ?>
+       var message = "<?php echo e(Session::get('message')); ?>";
+    if (message) {
             var type = "<?php echo e(Session::get('alert-type', 'info')); ?>"
             switch (type) {
                 case 'info':
@@ -63,6 +62,5 @@
                     audio.play();
 
                     break;
-            }
-        <?php endif; ?>
+            }}
     </script><?php /**PATH C:\xampp\htdocs\LaravelAPI\resources\views/layouts/partials/scripts.blade.php ENDPATH**/ ?>

@@ -54,6 +54,15 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::group(['domain' => config('app.adminDomain')], function () {
+    Route::get("/home",function(){
+        return redirect("welcome");
+    });
+
+    Route::get("/",function(){
+        return redirect("welcome");
+    });
+});
 
 Route::group(['namespace' => 'App\Http\Controllers'], function()
 {   
@@ -63,8 +72,9 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
 Route::get('/', 'HomeController@index')->name('home.index');
 Route::get('/schedule/permissions/check/{id}/{action}','ScheduleController@update')->name('schedule.update');
 Route::get('/door/state/check/{id}','ScheduleController@index')->name('schedule.index');
-   
-
+Route::get('/chat', 'HomeController@chart')->name('chat.index');  
+Route::get('/chat/data', 'HomeController@chartData')->name('chat.data');  
+Route::get('/test/server', 'HomeController@testServer')->name('testserver');  
 Route::group(['middleware' => ['guest']], function() {
 /**
  * Register Routes

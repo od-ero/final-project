@@ -41,6 +41,12 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+// $app->configure('modules');
+// $app->bind('path.public', function() {
+//     return __DIR__ . 'public/';
+//    });
+// $app->register(\Nwidart\Modules\LumenModulesServiceProvider::class);
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application

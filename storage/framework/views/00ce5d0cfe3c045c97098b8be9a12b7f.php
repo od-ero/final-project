@@ -10,7 +10,7 @@
 <?php $__env->startSection('content'); ?>
    
 <?php if(auth()->guard()->check()): ?>      
-<p>Welcome to <?php echo e($unit['premises_name'] . ', ' . $unit['unit_name']); ?> </p>
+<p>Welcome to <b class="text-uppercase"> <?php echo e($unit['premises_name'] . ', ' . $unit['unit_name']); ?></b> </p>
 <?php $unit_id = base64_encode($unit['id']); ?>
 
 <input type="text" id="encoded_permission_id" value="<?php echo e($encoded_permission_id); ?>" hidden>
@@ -61,9 +61,9 @@
    
    <tr>
         <th style="width:5%">ID</th>
-        
         <th>Door</th>
         <th>Status</th>
+        <th>State</th>
         <th>Action</th>
     </tr>
 
@@ -102,6 +102,22 @@ $(function () {
             {
                 data: 'door_name',
                 name: 'door_name',
+            },
+            {
+                data: 'door_ip_status',
+                name: 'door_ip_status',
+                render: function (data, type, row, meta) {
+                var color = '';
+                if (data === 'Online') {
+                    color = '14A44D';
+                } else if (data === 'Offline') {
+                    color = 'DC4C64';
+                }else if (data === 'Inactive') {
+                    color = '3B71CA';
+                }
+                else {color= '000000';}
+                return '<div style="color: #' + color + '; font-size:14px;font-weight:900;padding: 4px; border-radius: 4px;width:50%; text-align: center;">' + data + '</div>';
+                }
             },
             {
                 data: 'status',
@@ -144,8 +160,8 @@ $(document).on('click', '#units .btn', function() {
    // redirectToAction(row_id, encoded_permission_id, status);
 });
 async function redirectToAction(row_id, encoded_permission_id, status) {
-    let latitude;
-    let longitude;
+    let latitude= 555;
+    let longitude= -43;
     let loadingToast;
 
     try {
@@ -157,17 +173,17 @@ async function redirectToAction(row_id, encoded_permission_id, status) {
         });
 
         // Get user's geolocation
-        if ("geolocation" in navigator) {
-            const position = await new Promise((resolve, reject) => {
-                navigator.geolocation.getCurrentPosition(resolve, reject);
-            });
-            latitude = position.coords.latitude;
-            longitude = position.coords.longitude;
-            console.log("Latitude: " + latitude);
-            console.log("Longitude: " + longitude);
-        } else {
-            throw new Error("Geolocation is not supported by your browser");
-        }
+       // if ("geolocation" in navigator) {
+           // const position = await new Promise((resolve, reject) => {
+              //  navigator.geolocation.getCurrentPosition(resolve, reject);
+          //  });
+           // latitude = position.coords.latitude;
+           // longitude = position.coords.longitude;
+          //  console.log("Latitude: " + latitude);
+          //  console.log("Longitude: " + longitude);
+       // } else {
+          //  throw new Error("Geolocation is not supported by your browser");
+       // }
 
         // Construct action URL
         const actionURL = '/home/myunits/action/' + btoa(row_id) + '/' + encoded_permission_id + '/' + btoa(status) + '/' + btoa(latitude) + '/' + btoa(longitude);
@@ -182,7 +198,7 @@ async function redirectToAction(row_id, encoded_permission_id, status) {
             toastr[data.alertType](data.message);
             setTimeout(() => {
                 location.reload();
-            }, 500);
+            }, 5000);
         } else {
             throw new Error("Unknown alert type in response data");
         }

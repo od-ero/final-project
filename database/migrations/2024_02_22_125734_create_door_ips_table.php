@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('ip_address')->nullable()->unique();
             $table->integer('door_id')->unsigned();
             $table->foreign('door_id')->references('id')->on('doors');
+            $table->string('door_ip_status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

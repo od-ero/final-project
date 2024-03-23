@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/adminstration",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Adminstration\\": "",
+            "Modules\\Adminstration\\App\\": "app/",
+            "Modules\\Adminstration\\Database\\Factories\\": "database/factories/",
+            "Modules\\Adminstration\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Adminstration\\Tests\\": "tests/"
+        }
+    }
+}

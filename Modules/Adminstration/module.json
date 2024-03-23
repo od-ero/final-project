@@ -1,0 +1,11 @@
+{
+    "name": "Adminstration",
+    "alias": "adminstration",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Adminstration\\App\\Providers\\AdminstrationServiceProvider"
+    ],
+    "files": []
+}

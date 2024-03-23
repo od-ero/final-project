@@ -11,7 +11,7 @@
    
 @auth     
 <div class="d-flex justify-content-between align-items-center">
-    <p>Welcome to {{$unit['premises_name'] . ', ' . $unit['unit_name']}} Ip addresses </p>
+    <p>Welcome to <b class="text-uppercase">{{$unit['premises_name'] . ', ' . $unit['unit_name']}}</b> Ip addresses </p>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
         Add IP Address
     </button>
@@ -60,6 +60,7 @@
         <th style="width:5%">ID</th>
         
         <th>Door</th>
+        <th>Online State</th>
         <th>Ip Addres</th>
         <th>Action</th>
     </tr>
@@ -92,6 +93,22 @@ $(function () {
             {
                 data: 'door_name',
                 name: 'door_name',
+            },
+            {
+                data: 'door_ip_status',
+                name: 'door_ip_status',
+                render: function (data, type, row, meta) {
+                var color = '';
+                if (data === 'Online') {
+                    color = '14A44D';
+                } else if (data === 'Offline') {
+                    color = 'DC4C64';
+                }else if (data === 'Inactive') {
+                    color = '3B71CA';
+                }
+                else {color= '000000';}
+                return '<div style="color: #' + color + '; font-size:14px;font-weight:900;padding: 4px; border-radius: 4px;width:50%; text-align: center;">' + data + '</div>';
+                }
             },
             {
                 data: 'ip_address',
