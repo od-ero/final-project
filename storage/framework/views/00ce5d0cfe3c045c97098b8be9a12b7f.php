@@ -9,7 +9,8 @@
 
 <?php $__env->startSection('content'); ?>
    
-<?php if(auth()->guard()->check()): ?>      
+<?php if(auth()->guard()->check()): ?>    
+
 <p>Welcome to <b class="text-uppercase"> <?php echo e($unit['premises_name'] . ', ' . $unit['unit_name']); ?></b> </p>
 <?php $unit_id = base64_encode($unit['id']); ?>
 
@@ -109,9 +110,9 @@ $(function () {
                 render: function (data, type, row, meta) {
                 var color = '';
                 if (data === 'Online') {
-                    color = '14A44D';
+                    color = '04AA6D';
                 } else if (data === 'Offline') {
-                    color = 'DC4C64';
+                    color = 'dc3545';
                 }else if (data === 'Inactive') {
                     color = '3B71CA';
                 }

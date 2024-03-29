@@ -15,14 +15,26 @@
   
 
     <!-- Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet"/>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 
+<!-- Toastr CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet">
+
+<!-- DataTables CSS -->
+<link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.css" rel="stylesheet">
+
+<!-- Your custom CSS -->
+<link href="{!! url('assets/css/admin.css') !!}" rel="stylesheet" type="text/css">
     {{-- Vite CSS --}}
     {{-- {{ module_vite('build-adminstration', 'resources/assets/sass/app.scss') }} --}}
 </head>
 
-<body>
+<body class="sb-nav-fixed">
 @section('scripts')
     @include('adminstration::layouts.partials.scripts')
 @show
@@ -60,3 +72,22 @@
     {{-- Vite JS --}}
     {{-- {{ module_vite('build-adminstration', 'resources/assets/js/app.js') }} --}}
 </body>
+<script>
+   window.addEventListener('DOMContentLoaded', event => {
+
+// Toggle the side navigation
+const sidebarToggle = document.body.querySelector('#sidebarToggle');
+if (sidebarToggle) {
+    // Uncomment Below to persist sidebar toggle between refreshes
+    // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+    //     document.body.classList.toggle('sb-sidenav-toggled');
+    // }
+    sidebarToggle.addEventListener('click', event => {
+        event.preventDefault();
+        document.body.classList.toggle('sb-sidenav-toggled');
+        localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+    });
+}
+
+}); 
+</script>

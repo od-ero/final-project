@@ -8,13 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Unit;
 use App\Models\Door;
+use App\Models\User;
 class AdminstrationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
-    {
+    {// return view('adminstration::test');
         return view('adminstration::index');
     }
 
@@ -35,7 +36,11 @@ class AdminstrationController extends Controller
     }
 
     public function chart(){
-        return view('adminstration::home.index');  
+        $unitsCount = Unit::count();
+        $usersCount = User::count();
+        
+        return view('adminstration::home.index',['total_units'=>$unitsCount, 'total_users'=>$unitsCount,]);
+        //return view('adminstration::home.index');  
     }
     public function chartData(){
         $units= Unit::leftJoin('doors','doors.unit_id','=','units.id')

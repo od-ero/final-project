@@ -9,22 +9,34 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-<body>
-<div class="col-md-3">
-										<div class="panel panel-default">
-											<div class="panel-body bk-primary text-light">
-												<div class="stat-panel text-center">
-
-													<div class="stat-panel-number h1 "><?php 1?></div>
-													<div class="stat-panel-title text-uppercase">Reg Users</div>
-												</div>
-											</div>
-											<a href="reg-users.php" class="block-anchor panel-footer">Full Detail <i class="fa fa-arrow-right"></i></a>
-										</div>
-									</div>
-<div id="chartContainer" style="width: 50%;  " class="pull-rigth"></div>
-
-</body>
+<div class="container">
+  <div class="row">
+    <!-- First card -->
+    <div class="col-md-5">
+      <div class="card bg-danger text-center m-3" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Total Rooms</h5>
+          <h1 class="card-text"><?php echo e($total_units); ?></h1>
+          <a href="/rooms/index" class="block-anchor panel-footer text-center text-white">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
+        </div>
+      </div>
+    <!-- </div>
+     Second card 
+    <div class="col-md-5"> -->
+      <div class="card bg-success text-center m-3" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title ">Total Registered Users</h5>
+          <h1 class="card-text "><?php echo e($total_users); ?></h1>
+          <a href="/users/index" class="block-anchor panel-footer text-center text-white">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+    <!-- Chart container -->
+    <div class="col-md-7">
+      <div id="chartContainer" style="width: 100%;"></div>
+    </div>
+  </div>
+</div>
 <script>
 window.onload = function () {
     // Function to fetch data from Laravel backend
@@ -99,8 +111,9 @@ window.onload = function () {
 
     // Call the function to fetch data when the window loads
     fetchData();
-}
+}  
+
 </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('adminstration::layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\LaravelAPI\Modules/Adminstration\resources/views/home/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('adminstration::layouts.admin_master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\LaravelAPI\Modules/Adminstration\resources/views/home/index.blade.php ENDPATH**/ ?>
