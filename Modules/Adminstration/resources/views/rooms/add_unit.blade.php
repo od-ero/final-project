@@ -16,10 +16,10 @@ Add A Room
                         <div class="row justify-content-center">
                             <div class="col-lg-7">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Add A Rooom</h3></div>
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Add A Room</h3></div>
                                     <div class="card-body">
                                     <!-- id="add_unit" onsubmit="return validateForm()"  method="post" action="{{url('/rooms/create')}}" -->
-                                        <form name="add_unit" id="add_unit" onsubmit="return validateForm()"  method="post" action="{{url('/rooms/create')}}" >
+                                        <form name="add_unit" id="add_unit" onsubmit="return validateForm()" method="post" action="{{url('/rooms/create')}}" >
                                         <input class="form-control" type="hidden" name="_token" value="{{ csrf_token() }}" />
                                         <input  class="form-controlt" id="owner_id" type="hidden"  name="owner_id">
                                         <div class="row mb-3">
@@ -92,7 +92,7 @@ Add A Room
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-check mb-3">
-                                                        <input class="form-check-input" id="validateCheckbox" type="checkbox" onchange="toggleValidation()" required/>
+                                                        <input class="form-check-input" id="validateCheckbox" type="checkbox" onclick="loadToast()" onchange="toggleValidation()" required/>
                                                         <label class="form-check-label" for="validateCheckbox">Kindly Check The Box To Enter the Doors Names</label>
                                                     </div>
                                                 </div>

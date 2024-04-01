@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('door_schedules', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('unit_id')->unsigned();
+            $table->foreign('unit_id')->references('id')->on('units');
             $table->date('start_date')->default(date("Y-m-d"));
             $table->date('end_date')->default(date("Y-m-d"));
             $table->integer('user_id')->unsigned();

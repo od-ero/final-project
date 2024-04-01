@@ -109,8 +109,8 @@
                     </div>
                 </nav>
             </div>
-                
-                    <?php echo $__env->make('adminstration::layouts.partials.scripts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    
+            <?php echo $__env->make('adminstration::layouts.partials.scripts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 
             <div id="layoutSidenav_content" class="bg-primary">
                 <main>

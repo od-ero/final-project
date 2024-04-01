@@ -34,6 +34,9 @@ Route::group(['middleware' => 'web','domain' => config('app.adminDomain')], func
     Route::match(['GET','POST'],'/rooms/doors/edit/blade/{id}','RoomsController@doors_edit_blade')->name('room.door_edit_blade');
     Route::match(['GET','POST'],'/rooms/doors/edit','RoomsController@doors_edit')->name('room.door_edit');
     Route::get('/rooms/doors/{id}', 'RoomsController@doors')->name('rooms.doors');
+    Route::get('/rooms/details/update/{id}', 'RoomsController@roomUpdate')->name('rooms.roomUpdate');
+    Route::post('/rooms/details/actions/update', 'RoomsController@roomUpdateAction')->name('rooms.roomUpdateAction'); 
+    Route::get('/rooms/destroy/{id}', 'RoomsController@destroy')->name('rooms.destroy');
 
     //users
     Route::get('/users/index', 'usersController@index')->name('users.index');

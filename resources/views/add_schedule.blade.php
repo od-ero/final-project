@@ -18,6 +18,7 @@
 
       <hr>
       <input class="userInput" type="hidden" name="_token" value="{{ csrf_token() }}" />
+      <input class="userInput" type="hidden" name="unit_id" value="{{$unit['id']}}" />
       <label for="door"><i>Select the doors to be affected by the permissions</i></label>
 
       <div class="userCheck userInput">

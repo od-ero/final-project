@@ -29,17 +29,61 @@ class RoomsController extends Controller
                         ->select('units.*', 'users.fname', 'users.lname')
                         ->orderBy('units.premises_name', 'asc')
                         ->get();
-
-    // $url="https://maps.googleapis.com/maps/api/geocode/json?latlng=-0.3974645,36.9648429&sensor=true&key=".env('GOOGLE_MAPS_API_KEY');
-    // $dd=file_get_contents($url);
-    // $dd=json_decode($dd);
-    //Http::get($url);
         return view('adminstration::rooms.index',['rooms'=> $rooms]);
     }
-    
+    public function roomUpdate($unit_id){
+       $unit_id = base64_decode($unit_id);
+            {$room_detail = Unit::leftjoin('users','units.owner_id','users.id')
+                            ->select('units.*',  'users.fname', 'users.lname','users.phone',)
+                            ->where('units.id',$unit_id)
+                            ->first();
+        return view('adminstration::rooms.edit_room',['room_detail'=> $room_detail]);}
+       
+                }
+            
     /**
      * Show the form for creating a new resource.
      */
+    public function roomUpdateAction(Request $request){
+            $unit_details = $request->all();
+            DB::beginTransaction();
+            try{
+                $url="https://maps.googleapis.com/maps/api/geocode/json?latlng=".$unit_details['latitude'].','.$unit_details['longitude']."&sensor=true&key=".env('GOOGLE_MAPS_API_KEY');
+                $dd=file_get_contents($url);
+                $dd=json_decode($dd);
+                $google_pin_location= $dd->results[0]->formatted_address;
+            $units =Unit::where('id',$unit_details['unit_id'])
+                          ->update([
+                            'unit_name' => $unit_details['unit_name'],
+                            'owner_id' =>   $unit_details['owner_id'],
+                            'premises_name' => $unit_details['premises_name'],
+                            'longitude'    =>  $unit_details['longitude'],
+                            'latitude'  =>$unit_details['latitude'],
+                            'google_location'  =>$google_pin_location,
+                                            ]); 
+                
+                    DB::commit();
+                $notification = array(
+                    'message'    => 'Room details updated succesful',
+                    'alert-type' => 'success',
+                );
+                
+                
+                    
+                
+                    }    
+                    
+                    catch (\Exception $e) {
+                        DB::rollback();
+                        $notification = array(
+                            'message'    => $e,
+                            //'Ooops!! an error occurred while processing your request.',
+                            'alert-type' => 'error',
+                );
+                    } 
+                    return redirect()->route('rooms.index')->with($notification);
+                   
+                }
     public function create(Request $request)
     {  
         $unit_details = $request->all();
@@ -47,12 +91,17 @@ class RoomsController extends Controller
        //dd($unit_details);
         DB::beginTransaction();
         try{
+            $url="https://maps.googleapis.com/maps/api/geocode/json?latlng=".$unit_details['latitude'].','.$unit_details['longitude']."&sensor=true&key=".env('GOOGLE_MAPS_API_KEY');
+            $dd=file_get_contents($url);
+            $dd=json_decode($dd);
+            $google_pin_location= $dd->results[0]->formatted_address;
         $units =Unit::create([
             'unit_name' => $unit_details['unit_name'],
             'owner_id' =>   $unit_details['owner_id'],
             'premises_name' => $unit_details['premises_name'],
             'longitude'    =>  $unit_details['longitude'],
             'latitude'  =>$unit_details['latitude'],
+            'google_location'  =>$google_pin_location,
             'doors' => $unit_details['doors']
         ]);
         $my_permissions =MyPermission::create([
@@ -216,8 +265,36 @@ class RoomsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
-    {
-        //
-    }
-}
+    public function destroy($unit_id)
+    {   DB::beginTransaction();
+        try{
+        $unit_id= base64_decode($unit_id);
+        Door::leftjoin('door_ips','doors.id','=','door_ips.door_id')
+            -> leftjoin('door_statuses','doors.id','=','door_statuses.door_id')
+             ->where('doors.unit_id',$unit_id)
+             ->delete();
+        Unit::where('id',$unit_id)
+            ->delete();
+        MyPermission::leftjoin('my_permission_doors','my_permission_doors.my_permission_id','=','my_permissions.id')
+                    ->where('unit_id',$unit_id)
+                    ->where('end_date','>',Carbon::now())
+                    ->delete();
+                    
+                    DB::commit();
+                    $notification = array(
+                        'alert-type' => 'success',
+                        'message' => 'Unit has been successfully deleted');
+                }
+       
+                catch (\Exception $e) {
+                      DB::rollback();
+                      $notification = array(
+                         'alert-type' => 'error',
+                         'message' => 'Oooops!! an error occurred please try again later'
+                      );
+                   } 
+                   return redirect()->back()->with($notification);
+              
+              }
+             
+ }            

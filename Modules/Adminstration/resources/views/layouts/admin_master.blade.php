@@ -109,8 +109,8 @@
                     </div>
                 </nav>
             </div>
-                
-                    @include('adminstration::layouts.partials.scripts')
+    
+            @include('adminstration::layouts.partials.scripts')
                 
             <div id="layoutSidenav_content" class="bg-primary">
                 <main>

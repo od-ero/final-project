@@ -137,7 +137,7 @@ $schedule_create= DoorSchedule::create([
     'end_date' =>  $schedules['end_date'],
     'user_id' =>  Auth::id(),
     'door_schedule_permission_id' =>  $door_schedule_id,
-   
+   'unit_id' => $schedules['unit_id'],
 ]);
 
 foreach ($schedules as $door_name_ => $door_id) {

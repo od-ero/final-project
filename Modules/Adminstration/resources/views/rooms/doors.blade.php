@@ -58,7 +58,7 @@
                                             <td>{{$door['door_ip_status']}}</td>
                                             <td>{{$door['ip_address']}}</td>
                                             <td>
-                                            <a href="/rooms/doors/edit/blade/{{base64_encode($door['door_id'])}}" class="btn btn-success btn-lg" tabindex="-1" role="button">Edit</a>
+                                            <a href="/rooms/doors/edit/blade/{{base64_encode($door['door_id'])}}" class="btn btn-primary btn-lg" tabindex="-1" role="button">Edit</a>
                                             </td>
                                             
                                         </tr>

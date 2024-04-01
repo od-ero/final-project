@@ -24,17 +24,14 @@
 <script type="text/javascript" src="https://cdn.canvasjs.com/jquery.canvasjs.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
-   
 <script>
-       
-
        var message = "{{ Session::get('message') }}";
     if (message) {
             var type = "{{ Session::get('alert-type', 'info') }}"
             switch (type) {
                 case 'info':
 
-                    toastr.options.timeOut = 10000;
+                    toastr.options.timeOut = 300000;
                     toastr.info("{{ Session::get('message') }}");
                     var audio = new Audio('audio.mp3');
                     audio.play();

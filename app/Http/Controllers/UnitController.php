@@ -23,14 +23,7 @@ class UnitController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($door_id)
-    {$ip_address= (new GlobalController)->getIp($door_id);
-        $response = Http::get('http://'+$ip_address+'/?led_2_on');
-        $response = Http::get('192.168.137.135/?led_2_on'); 
-        dd($response);
-       
-        return response()->json($response);
-    }
+ 
     public function create(Request $request)
     {   if ($request->isMethod('get')) {
         

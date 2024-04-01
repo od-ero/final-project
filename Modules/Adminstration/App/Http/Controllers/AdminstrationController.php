@@ -117,18 +117,18 @@ class AdminstrationController extends Controller
                 }
                  }
                  $notification = array(
-                    'alert-type' => 'success',
+                    'alertType' => 'success',
                     'message' => 'Devices health statuses scanned and Updated successfully'
                           );
                 }
                 catch (\Exception $e) {
                   $notification = array(
-                  'alert-type' => 'error',
+                  'alertType' => 'error',
                   'message' => 'Oooops!! an error occurred please try again later'
                         );
      } 
-        
-        return redirect()->back()->with($notification);
+     return response()->json($notification);
+        //return redirect()->back()->with($notification);
 }
     public function create()
     {

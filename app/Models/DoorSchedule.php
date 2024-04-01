@@ -17,6 +17,7 @@ class DoorSchedule extends Model
         'start_date',
         'end_date',
         'user_id',
+        'unit_id',
         'door_schedule_permission_id',
     ];
 }

@@ -17,6 +17,7 @@ class Unit extends Model
         'premises_name',
         'longitude',
         'latitude',
+        'google_location',
         'doors',
     ];
 }

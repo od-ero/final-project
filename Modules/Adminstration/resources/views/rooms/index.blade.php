@@ -9,7 +9,24 @@
 
 @section('content')
 <div class="container">
-
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+      Are You Sure you want to delete this Room? 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id="backendRequestButton"  class="btn btn-danger btn-lg">Yes</button>
+        <a href="/rooms/destroy" class="btn btn-primary btn-lg" tabindex="-1" role="button">Yes</a>
+      </div>
+    </div>
+  </div>
+</div>
                     <div class="container-fluid px-4">
                         <h2 class="mt-4 text-white">Rooms</h2>
                         <ol class="breadcrumb mb-4">
@@ -33,39 +50,50 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th>Google Pin</th>
                                             <th>Premise Name</th>
                                             <th>Unit Name</th>
                                             <th>Owner</th>
-                                            <th>No Of Doors</th>
-                                            <th>View</th>
+                                            <th>Doors</th>
+                                            <th>Latitude</th>
+                                            <th>Longitude</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                        <th>#</th>
+                                            <th>#</th>
+                                            <th>Google Pin</th>
                                             <th>Premise Name</th>
                                             <th>Unit Name</th>
                                             <th>Owner</th>
-                                            <th>No Of Doors</th>
-                                            <th>View</th>
+                                            <th>Doors</th>
+                                            <th>Latitude</th>
+                                            <th>Longitude</th>
+                                            <th>Action</th>
                                         </tr>
                                     </tfoot>
                                     @foreach($rooms as $room )
                                         <tr>
                                             <td>{{$loop->iteration}}</td>
+                                            <td>{{$room['google_location']}}</td>
                                             <td>{{$room['premises_name']}}</td>
                                             <td>{{$room['unit_name']}}</td>
                                             <td>{{$room['fname'] . ' ' . $room['lname']}}</td>
                                             <td>{{$room['doors']}}</td>
+                                            <td>{{$room['latitude']}}</td>
+                                            <td>{{$room['longitude']}}</td>
                                             <td class="float-end">  
                                                 <div class="btn-group dropend">
                                                     <a href="/rooms/doors/{{base64_encode($room['id'])}}" class="btn btn-primary btn-lg" tabindex="-1" role="button">View</a>
                                                     <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                                         <span class="visually-hidden">Toggle Dropright</span> More
                                                     </button>
-                                                    <ul class="dropdown-menu">
-                                                       <li>rrr</li>
-                                                       <li>xxx</li>
+                                                    <ul class="dropdown-menu"><div class="m-2 text-center">
+                                            
+                                                       <li class="mb-2"><a href="/rooms/details/update/{{base64_encode($room['id'])}}" class="btn btn-primary" role="button">Update</a></li>
+                                                       <li><button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</button>
+                                            </div></li>
                                                     </ul>
                                                 </div>
                                             </td>
