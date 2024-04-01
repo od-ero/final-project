@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
     {
 
         // $schedule->command('inspire')->hourly();
-        $schedule->command('app:check-doors-states')->everyFiveMinutes()->sendOutputTo('NUL');
+        $schedule->command('app:check-doors-states')->everyMinute();
     }
 
     /**

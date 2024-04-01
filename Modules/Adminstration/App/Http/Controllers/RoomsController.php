@@ -6,9 +6,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Unit;
 use App\Models\Door;
+use App\Models\DoorIp;
 use App\Models\User;
+use App\Models\DoorStatus;
+use App\Models\MyPermission;
+use App\Models\MyPermissionCounter;
+use App\Models\MyPermissionDoor;
+use Carbon\Carbon;
 use DB;
 use DataTables;
 use Illuminate\Support\Facades\Http;
@@ -23,27 +30,18 @@ class RoomsController extends Controller
                         ->orderBy('units.premises_name', 'asc')
                         ->get();
 
-    $url="https://maps.googleapis.com/maps/api/geocode/json?latlng=-0.3974645,36.9648429&sensor=true&key=".env('GOOGLE_MAPS_API_KEY');
-    $dd=file_get_contents($url);
-    $dd=json_decode($dd);
-dd($dd->results);
+    // $url="https://maps.googleapis.com/maps/api/geocode/json?latlng=-0.3974645,36.9648429&sensor=true&key=".env('GOOGLE_MAPS_API_KEY');
+    // $dd=file_get_contents($url);
+    // $dd=json_decode($dd);
     //Http::get($url);
         return view('adminstration::rooms.index',['rooms'=> $rooms]);
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
-    {   if($request->isMethod('get')) {
-        
-             $users= User::all();
-             return view('adminstration::rooms.add_my_unit' , [
-            'users'=>  $users
-              ]);
-       
-    } 
-    else{
+    {  
         $unit_details = $request->all();
        
        //dd($unit_details);
@@ -57,17 +55,53 @@ dd($dd->results);
             'latitude'  =>$unit_details['latitude'],
             'doors' => $unit_details['doors']
         ]);
-        
+        $my_permissions =MyPermission::create([
+            'user_id' => $unit_details['owner_id'],
+           // 'door_id' => $permission['door_id'],
+            'permission_group_id' => 1000,
+            'permissioner_id' => 1001 ,
+             'unit_id'       =>  $units['id'],
+            'start_date' => Carbon::now() ,
+            'end_date' =>  Carbon::now()->copy()->endOfYear(),
+            //'end_date' =>  Carbon::parse($permissions['end_date'])->toW3cString(),
+        ]);
         
         for ($i = 0; $i < $unit_details['doors']; $i++) {
             $door_name_variable = 'door_name_' . $i;
             $door_names = $unit_details[$door_name_variable];
         //dd($unit_details);
-            $units =Door::create([
+            $door =Door::create([
                 'door_name' => $door_names,
                 'unit_id' => $units['id'],
-               
             ]);
+
+            DoorIp::create([
+                'door_id' =>  $door['id'],
+                'door_ip_status' => 'Inactive',
+            ]);
+
+            MyPermissionCounter::create([
+                'my_permission_id' => $my_permissions['id'],
+                'door_id'  => $door['id'],
+                'give_permission' => 0,
+                'open' => 0,
+                'close' => 0,
+                'schedule' =>0,
+                ]);
+            MyPermissionDoor::create(
+                    [
+                        'my_permission_id' => $my_permissions['id'],
+                        'door_id' => $door['id'],
+                    
+                    ]);
+            DoorStatus::create(
+                [   
+                    'door_id' => $door['id'],
+                    'status' => 'Unlocked',
+                    'status_setter' => '1001',
+                
+                ]);        
+                
         }
     
     DB::commit();
@@ -83,30 +117,28 @@ dd($dd->results);
        
      catch (\Exception $e) {
         DB::rollback();
-        $notification = array(
-            'message'    => 'Ooops!! an error occurred while processing your request.',
-            'alert-type' => 'error',
-);
-    } 
+        $notification =array(
+                            'message'    => 'Ooops!! an error occurred while processing your request.',
+                            'alert-type' => 'error',
+                );
+        } 
+    //return response()->json($notification);
     return redirect()->back()->with($notification);
-}
-       
+   
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
-    {
-        //
-    }
+   
 
     /**
      * Show the specified resource.
      */
-    public function show($id)
-    {
-        return view('adminstration::show');
+    public function show()
+    {  
+         
+        return view('adminstration::rooms.add_unit');
     }
 
     /**
@@ -116,13 +148,69 @@ dd($dd->results);
     {
         return view('adminstration::edit');
     }
-
+    Public function doors( $unit_id){
+        $unit_id= base64_decode($unit_id);
+        $doors = Door::LeftJoin('door_ips','doors.id','=','door_ips.door_id')
+                     ->select('door_ips.*','doors.door_name')
+                     ->where('doors.unit_id', $unit_id)
+                     ->get();
+                return view('adminstration::rooms.doors',['doors'=> $doors]);      
+    }
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        //
+    public function doors_edit_blade($door_id){
+        $door_id= base64_decode($door_id);
+        $door_details = Door::LeftJoin('door_ips','doors.id','=','door_ips.door_id')
+        ->select('door_ips.*','doors.door_name')
+        ->where('doors.id', $door_id)
+        ->first();
+        
+        return view('adminstration::rooms.door_edit',['door_details'=>$door_details,
+                            //    'encoded_permission_id'=> $encoded_permission_id
+                        ]);
+    }
+     public function doors_edit(Request $request){
+
+        $ip_details = $request-> all();
+        $unit_id = Door::select('unit_id')
+                        ->where('id', $ip_details['door_id'])
+                        ->first();
+        $unit_id= $unit_id['unit_id'];
+        DB::beginTransaction();
+        try{
+             $update_ip= Door::leftJoin('door_ips','doors.id','=','door_ips.door_id')
+                            ->where('door_id', $ip_details['door_id'])
+                            ->update([
+                                'door_name'=>  $ip_details['door_name'],
+                                'ip_address'=>  $ip_details['ip_address'],
+                                'door_ip_status'=>  $ip_details['door_ip_status'],
+                                ]);
+            DB::commit();
+            $notification = array(
+            'message'    => 'Door details updated are succesful',
+            'alert-type' => 'success',
+        ); }
+                    
+                    catch (\Exception $e) {
+                    DB::rollback();
+                    if ($e->getCode() == '23000' && strpos($e->getMessage(), 'Duplicate entry') !== false) {
+                        $notification =array(
+                                    'message'    => 'Ooops!! The Ip Address Already Exists',
+                                    'alert-type' => 'error',
+                                         );
+                    } else {
+                        $notification =array(
+                            'message'    => 'Ooops!! an error occurred while processing your request.',
+                            'alert-type' => 'error',
+                );
+                    }
+                   
+        } 
+       
+        return redirect()->route('rooms.doors', ['id' => base64_encode($unit_id)])->with($notification);
+    
+    
     }
 
     /**

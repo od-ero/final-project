@@ -1,17 +1,17 @@
 @extends('adminstration::layouts.admin_master')
 @section('subtitle')
-   Add A Unit
+  Users
 @endsection
 
 @section('contentheader_title')
-    Add A Unit
+   Users
 @endsection
 
 @section('content')
 <div class="container">
 
                     <div class="container-fluid px-4">
-                        <h2 class="mt-4">Users</h2>
+                        <h2 class="mt-4 text-white">Users</h2>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="/welcome">Dashboard</a></li>
                             <li class="breadcrumb-item active">Users</li>
@@ -32,7 +32,7 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                        <th>ID</th>
+                                        <th>#</th>
                                             <th>First Name</th>
                                             <th>Last Name</th>
                                             <th>Phone Number</th>
@@ -42,7 +42,7 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                        <th>ID</th>
+                                        <th>#</th>
                                             <th>First Name</th>
                                             <th>Last Name</th>
                                             <th>Phone Number</th>

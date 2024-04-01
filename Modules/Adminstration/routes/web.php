@@ -15,21 +15,30 @@ use Modules\Adminstration\App\Http\Controllers\AdminstrationController;
 */
 
 Route::prefix('admin1')->group(function () {
-    Route::get('adminstration/index','AdminstrationController@index')->name('adminstration.index');
+   // Route::get('adminstration/index','AdminstrationController@index')->name('adminstration.index');
 });
 //,'namespace' => 'Modules\Adminstration\Http\Controllers'
 Route::group(['middleware' => 'web','domain' => config('app.adminDomain')], function () {
     //Route::resource('adminstration', AdminstrationController::class)->names('adminstration');
    
     //adminstration
-    Route::get('adminstration/index','AdminstrationController@index')->name('adminstration.index');
-    Route::get('/welcome', 'AdminstrationController@chart')->name('chat.index'); 
-    Route::get('/welcome/data', 'AdminstrationController@chartData')->name('chat.data'); 
-
+    
+    Route::get('/welcome', 'AdminstrationController@index')->name('adminstration.index'); 
+    Route::get('/welcome/data', 'AdminstrationController@indexData')->name('adminstration.index_data'); 
+    Route::get('/welcome/devices/health', 'AdminstrationController@devicesHealth')->name('adminstration.devices_health');
+    
     //rooms
     Route::get('/rooms/index', 'RoomsController@index')->name('rooms.index');
-    Route::match(['GET','POST'],'/rooms/create','RoomsController@create')->name('room.create');
+    Route::post('/rooms/create','RoomsController@create')->name('room.create');
+    Route::get('/rooms/show','RoomsController@show')->name('room.show');
+    Route::match(['GET','POST'],'/rooms/doors/edit/blade/{id}','RoomsController@doors_edit_blade')->name('room.door_edit_blade');
+    Route::match(['GET','POST'],'/rooms/doors/edit','RoomsController@doors_edit')->name('room.door_edit');
+    Route::get('/rooms/doors/{id}', 'RoomsController@doors')->name('rooms.doors');
 
     //users
     Route::get('/users/index', 'usersController@index')->name('users.index');
+    Route::get('/admin/user/search', 'usersController@search')->name('users.search');
+
+    //permissions
+    Route::get('/permissions/show/{id}', 'PermissionsController@show')->name('permissions.show');
 });

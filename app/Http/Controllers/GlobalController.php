@@ -32,7 +32,6 @@ public function index_data(Request $request, $unit_id){
                      ->select('door_ips.*','doors.door_name')
                      ->where('doors.unit_id', $unit_id)
                      ->get();
-                    // dd($door_ips);
         return DataTables::of( $door_ips)->make(true);
     }
 public function create(Request $request){

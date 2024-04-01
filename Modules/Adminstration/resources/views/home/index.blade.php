@@ -10,6 +10,24 @@
 
 @section('content')
 <div class="container">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+      Are You Sure you want to scan for devices health? 
+     <br> It will take around {{$totalTime}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="/welcome/devices/health" class="btn btn-primary btn-lg" tabindex="-1" role="button">Yes</a>
+      </div>
+    </div>
+  </div>
+</div>
   <div class="row">
     <!-- First card -->
     <div class="col-md-5">
@@ -30,10 +48,14 @@
           <a href="/users/index" class="block-anchor panel-footer text-center text-white">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
         </div>
       </div>
+
+      <div class="m-3" style="width: 18rem;">
+        <button class="btn btn-outline-light btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal">Scan Devices Health </button>
+      </div>
     </div>
     <!-- Chart container -->
     <div class="col-md-7">
-      <div id="chartContainer" style="width: 100%;"></div>
+      <div id="chartContainer" class="m-3"></div>
     </div>
   </div>
 </div>
@@ -95,7 +117,7 @@ window.onload = function () {
                         showInLegend: true,
                         name: "Devices Inactive",
                         color:"#3B71CA",
-                        //indexLabel: "$#total",
+                       // indexLabel: "$#total",
                         axisYType: "secondary",
                         dataPoints: dataPointsInactive
                     }]

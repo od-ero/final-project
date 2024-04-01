@@ -19,7 +19,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="unlockModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-success">
@@ -31,12 +31,35 @@
       <div class="modal-body">
 
         <!-- Replace '...' with the content you want in the modal body -->
-        <h2>Are you sure you want to perform this operation?</h2>
+        <span>Are you sure you want to Unlock this door ?</span>
       </div>
       <div class="modal-footer ">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         <!-- onclick="redirectToAction(row_id, encoded_permission_id, status)" -->
         <button  class="btn btn-success" onclick="redirectToAction(row_id, encoded_permission_id, status)">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="lockModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h5 class="modal-title bg-danger" id="exampleModalLongTitle"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Replace '...' with the content you want in the modal body -->
+        <span>Are you sure you want to Lock this door?</span>
+      </div>
+      <div class="modal-footer ">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <!-- onclick="redirectToAction(row_id, encoded_permission_id, status)" -->
+        <button  class="btn btn-danger" onclick="redirectToAction(row_id, encoded_permission_id, status)">Yes</button>
       </div>
     </div>
   </div>
@@ -131,15 +154,23 @@ $(function () {
     var initialStatus = row.status;
     var row_id = row.id;
     var encoded_permission_id= document.getElementById("encoded_permission_id").value;
-    var buttonColor = (initialStatus === 'Locked') ? '#04AA6D' : 'red';
+    var buttonColor = (initialStatus === 'Locked') ? 'btn-success' : 'btn-danger';
     var buttonText = (initialStatus === 'Locked') ? 'Unlock' : 'Lock';
 
     // ...
 
     // Modal button with data-rowid attribute
-    return '<button class="btn" style="background-color: ' + buttonColor + '; color: white;" data-toggle="modal" data-target="#exampleModalCenter" data-rowid="' + row_id + '" data-status="' + initialStatus + '" data-encoded_permission_id="' + encoded_permission_id + '">'
-    + buttonText + 
-    '</button>';
+    return `<button 
+                        class="btn ${buttonColor}" 
+                        data-toggle="modal"
+                        data-target="${initialStatus === 'Locked' ? '#unlockModal' : '#lockModal'}" 
+                        data-rowid="${row_id}" 
+                        data-status="${initialStatus}"
+                        data-encoded_permission_id="${encoded_permission_id}"
+                    >
+                        ${buttonText}
+                    </button>`;
+
 }
 
 

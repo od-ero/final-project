@@ -14,6 +14,6 @@ class DoorIp extends Model
     protected $fillable = [
         'door_id',
         'ip_address',
-       ' door_ip_status',
+        'door_ip_status',
     ];
 }

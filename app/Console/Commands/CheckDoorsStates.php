@@ -28,7 +28,7 @@ class CheckDoorsStates extends Command
     {
         //
         $door_ips= DoorIp::select('*')
-                         ->where('door_ip_status','!=','Inactive')
+                        ->whereNot('door_ip_status', 'Inactive')
                          ->get();
     foreach  ($door_ips as $door_ip)
     {
@@ -65,7 +65,7 @@ class CheckDoorsStates extends Command
             }
         }
       // return 'done';
-       $this->info( $door_ips);
+       $this->info('done');
 
         }
     }

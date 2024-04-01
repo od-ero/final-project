@@ -6,10 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Unikey Admin -<?php echo $__env->yieldContent('subtitle'); ?></title>
+        <title>Admin Unikey-<?php echo $__env->yieldContent('subtitle'); ?></title>
          <link rel="icon" href="<?php echo e(asset('images/unikey.png')); ?>" type="image/x-icon">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet"/>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
         <link href="/assets/css/admin.css" rel="stylesheet"/>
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
@@ -58,7 +57,7 @@
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="/rooms/index">View rooms</a>
-                                    <a class="nav-link" href="/rooms/create">Add A Room</a>
+                                    <a class="nav-link" href="/rooms/show">Add A Room</a>
                                 </nav>
                             </div>
                             
@@ -110,19 +109,20 @@
                     </div>
                 </nav>
             </div>
-            <div id="layoutSidenav_content" class="">
+                
+                    <?php echo $__env->make('adminstration::layouts.partials.scripts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                
+            <div id="layoutSidenav_content" class="bg-primary">
                 <main>
                     <?php echo $__env->yieldContent('content'); ?> 
                 </main>
+                <?php echo $__env->make('adminstration::layouts.partials.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             </div>
            
         </div>
-        <?php echo $__env->make('adminstration::layouts.partials.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <?php $__env->startSection('scripts'); ?>
-             <?php echo $__env->make('adminstration::layouts.partials.scripts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-        <?php echo $__env->yieldSection(); ?>
+       
    <script>
     window.addEventListener('DOMContentLoaded', event => {
 

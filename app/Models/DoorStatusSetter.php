@@ -16,5 +16,7 @@ class DoorStatusSetter extends Model
         'status',
         'user_id',
         'count',
+        'my_permission_id',
+        'door_schedule_id',
     ];
 }

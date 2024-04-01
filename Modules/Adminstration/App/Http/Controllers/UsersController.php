@@ -19,7 +19,31 @@ class UsersController extends Controller
 
             return view('adminstration::users.index',['users'=> $users]);
     }
-
+    public function search(Request $request)
+    {
+        // Get the search terms from the request
+        $name = $request->input('term1');
+        $phone = $request->input('term2');
+    
+        // Perform your search logic
+        $results = User::query()
+                  ->where('fname', 'LIKE', "%{$name}%")
+                  ->orWhere('lname', 'LIKE', "%{$name}%")
+                  ->where('phone', 'LIKE', "%{$phone}%")
+                  ->get();
+                 // dd($results);
+        // Process the results
+        $formattedResults = $results->map(function ($result) {
+            $displayName = $result->fname . ' ' . $result->lname;
+            
+            return [
+                'id' => $result->id,
+                'displayPhone' => $result->phone,
+                'displayName' => $displayName,
+            ];
+        });
+        return response()->json($formattedResults);
+    }
     /**
      * Show the form for creating a new resource.
      */

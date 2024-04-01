@@ -27,9 +27,14 @@ class ScheduleController extends Controller
     {
         //
         $clientIp= $request->ip();
-        $ip_details = DoorIp::select('ip_address')
+        $ip_details = DoorIp::select('*')
         ->where('door_id', $door_id)
         ->first();
+        if($ip_details['door_ip_status']==='Offline'){
+            DoorIp::where('id', $ip_details['id'])
+                    ->update([
+                        'door_ip_status' => 'Online']);
+        }
         $ip_address = $ip_details['ip_address'] ;
         if($ip_address != $clientIp){
             DoorIp::where('door_id', $door_id)
@@ -46,36 +51,7 @@ class ScheduleController extends Controller
         }
     }
 
-    public function doorStatus($status){
-            if($status===true) {
-                    $pinURL = "http://192.168.137.43/?led_2_on";}
-            else if($status===false){
-                $pinURL = "http://192.168.137.43/?led_2_off";
-            }
-            else if($status===null){
-                $pinURL = "http://192.168.137.43/?led_2_auth";
-            }
-            // Initialize cURL session
-            $ch = curl_init();
-
-            // Set cURL options
-            curl_setopt($ch, CURLOPT_URL, $pinURL);  // Set the URL
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Return the response as a string
-
-            // Execute cURL request
-            $response = curl_exec($ch);
-
-            // Check for errors
-            if($response === false) {
-                echo 'Curl error: ' . curl_error($ch);
-            } else {
-                // Output the response
-                echo $response;
-            }
-
-            // Close cURL session
-            curl_close($ch);
-    }
+   
 
     /**
      * Store a newly created resource in storage.
@@ -254,7 +230,7 @@ return redirect()->back()->with($notification);
         }
         $button_requests = DoorSchedule::leftJoin('door_schedule_permissions', 'door_schedules.door_schedule_permission_id', '=', 'door_schedule_permissions.id')
                                         ->leftJoin('door_schedule_doors', 'door_schedules.id', '=', 'door_schedule_doors.door_schedule_id')
-                                        ->select('door_schedule_permissions.*', 'door_schedule_doors.id as door_schedule_door_id')
+                                        ->select('door_schedule_permissions.*', 'door_schedule_doors.id as door_schedule_door_id', 'door_schedules.id as door_schedule_id')
                                         ->where('door_schedule_doors.door_id', $door_id)
                                         ->where('door_schedules.end_date', '>', Carbon::now())
                                         ->orderBy('door_schedules.created_at', 'desc')
@@ -293,7 +269,8 @@ return redirect()->back()->with($notification);
               DoorStatusSetter::create([
                 'door_id'=> $door_id,
                 'status' => 'Unlocked',
-                'user_id'=> 1000
+                'user_id'=> 1000,
+                'door_schedule_id'=>$button_requests['door_schedule_id'],
                 ]) ;
                 DB::commit();
                 $response_status = 0;
@@ -323,7 +300,8 @@ return redirect()->back()->with($notification);
               DoorStatusSetter::create([
                 'door_id'=> $door_id,
                 'status' => 'Unlocked',
-                'user_id'=> 1000
+                'user_id'=> 1000,
+                'door_schedule_id'=>$button_requests['door_schedule_id']
                 ]) ;
                 
                 DB::commit();
@@ -357,7 +335,8 @@ return redirect()->back()->with($notification);
                   DoorStatusSetter::create([
                     'door_id'=> $door_id,
                     'status' => 'Locked',
-                    'user_id'=> 1000
+                    'user_id'=> 1000,
+                    'door_schedule_id'=>$button_requests['door_schedule_id']
                     ]) ;
                    
                     DB::commit();
@@ -390,7 +369,8 @@ return redirect()->back()->with($notification);
                   DoorStatusSetter::create([
                     'door_id'=> $door_id,
                     'status' => 'Locked',
-                    'user_id'=> 1000
+                    'user_id'=> 1000,
+                    'door_schedule_id'=>$button_requests['door_schedule_id'],
                     ]) ;
 
                     DB::commit();

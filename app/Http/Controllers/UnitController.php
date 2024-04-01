@@ -273,6 +273,7 @@ class UnitController extends Controller
                                 DoorStatusSetter::create([
                                             'door_id'=> $door_id,
                                             'status' => 'Unlocked',
+                                            'my_permission_id' => $permission_id,
                                             'user_id'=> Auth::id()
                                 ]) ;
                             

@@ -1,17 +1,17 @@
 @extends('adminstration::layouts.admin_master')
 @section('subtitle')
-   Add A Unit
+   Rooms
 @endsection
 
 @section('contentheader_title')
-    Add A Unit
+   Rooms
 @endsection
 
 @section('content')
 <div class="container">
 
                     <div class="container-fluid px-4">
-                        <h2 class="mt-4">Roooms</h2>
+                        <h2 class="mt-4 text-white">Rooms</h2>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="/welcome">Dashboard</a></li>
                             <li class="breadcrumb-item active">Rooms</li>
@@ -32,7 +32,7 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>#</th>
                                             <th>Premise Name</th>
                                             <th>Unit Name</th>
                                             <th>Owner</th>
@@ -42,7 +42,7 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                        <th>ID</th>
+                                        <th>#</th>
                                             <th>Premise Name</th>
                                             <th>Unit Name</th>
                                             <th>Owner</th>
@@ -59,10 +59,8 @@
                                             <td>{{$room['doors']}}</td>
                                             <td class="float-end">  
                                                 <div class="btn-group dropend">
-                                                    <button type="button" class="btn btn-success">
-                                                        View
-                                                    </button>
-                                                    <button type="button" class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <a href="/rooms/doors/{{base64_encode($room['id'])}}" class="btn btn-primary btn-lg" tabindex="-1" role="button">View</a>
+                                                    <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                                         <span class="visually-hidden">Toggle Dropright</span> More
                                                     </button>
                                                     <ul class="dropdown-menu">

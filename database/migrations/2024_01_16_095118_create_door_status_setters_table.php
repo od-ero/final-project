@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('count')->nullable();
+            $table->string('door_schedule_id')->nullable();
+            $table->string('my_permission_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
