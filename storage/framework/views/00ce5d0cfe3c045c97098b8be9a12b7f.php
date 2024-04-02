@@ -241,7 +241,7 @@ async function redirectToAction(row_id, encoded_permission_id, status) {
             closeButton: true,
             positionClass: 'toast-top-full-width'
         });
-        console.error(error);
+        console.error('Ooops!! An error ocurred please conduct your adminstrator for assistance');
     }
 
     // Close modal

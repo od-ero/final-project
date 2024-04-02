@@ -36,7 +36,7 @@ Route::group(['middleware' => 'web','domain' => config('app.adminDomain')], func
     Route::get('/rooms/doors/{id}', 'RoomsController@doors')->name('rooms.doors');
     Route::get('/rooms/details/update/{id}', 'RoomsController@roomUpdate')->name('rooms.roomUpdate');
     Route::post('/rooms/details/actions/update', 'RoomsController@roomUpdateAction')->name('rooms.roomUpdateAction'); 
-    Route::get('/rooms/destroy/{id}', 'RoomsController@destroy')->name('rooms.destroy');
+    Route::post('/rooms/destroy', 'RoomsController@destroy')->name('rooms.destroy');
 
     //users
     Route::get('/users/index', 'usersController@index')->name('users.index');

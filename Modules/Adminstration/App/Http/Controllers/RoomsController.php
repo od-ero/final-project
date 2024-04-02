@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Unit;
 use App\Models\Door;
 use App\Models\DoorIp;
+use App\Models\DoorScheduleDoor;
+use App\Models\DoorSchedule;
 use App\Models\User;
 use App\Models\DoorStatus;
 use App\Models\MyPermission;
@@ -265,34 +267,61 @@ class RoomsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($unit_id)
-    {   DB::beginTransaction();
+    public function destroy(Request $request)
+   {  $unit_id = $request->all();
+        $unit_id=$unit_id['unit_id'];
+     DB::beginTransaction();
         try{
-        $unit_id= base64_decode($unit_id);
-        Door::leftjoin('door_ips','doors.id','=','door_ips.door_id')
-            -> leftjoin('door_statuses','doors.id','=','door_statuses.door_id')
-             ->where('doors.unit_id',$unit_id)
-             ->delete();
-        Unit::where('id',$unit_id)
-            ->delete();
-        MyPermission::leftjoin('my_permission_doors','my_permission_doors.my_permission_id','=','my_permissions.id')
-                    ->where('unit_id',$unit_id)
-                    ->where('end_date','>',Carbon::now())
-                    ->delete();
+
+         $active_permissions =  MyPermission::where('my_permissions.unit_id', $unit_id)
+                        ->where('my_permissions.end_date', '>', Carbon::now())
+                        ->get();
+         foreach($active_permissions as $active_permission) {
+                    MyPermissionDoor::where('my_permission_id',$active_permission['id'])
+                                                    ->delete();
+               
+                     MyPermission::where('id','=',$active_permission['id'])
+                                    ->delete();
+         }              
+            $active_schedules = DoorSchedule::where('door_schedules.unit_id', $unit_id)
+                                            ->where('door_schedules.end_date', '>', Carbon::now())
+                                            ->get();
+                foreach($active_schedules as $active_schedule){
                     
-                    DB::commit();
-                    $notification = array(
-                        'alert-type' => 'success',
-                        'message' => 'Unit has been successfully deleted');
+                        DoorScheduleDoor::where('door_schedule_id',$active_schedule['id'])
+                                        ->delete();
+                        DoorSchedule::where('id',$active_schedule['id'])
+                                        ->delete();                    
                 }
+
+            $doors=  Door::where('doors.unit_id', $unit_id)
+                            ->get();
+                    foreach($doors as $door){
+                           DoorIp::where('door_id',$door['id'])
+                                            ->delete();
+                            DoorStatus::where('door_id',$door['id'])
+                                            ->delete();
+                                            $door=Door::where('id',$door['id'])
+                                            ->delete();
+                    }           
+                Unit::where('id', $unit_id)
+                    ->delete();
+
+                DB::commit();
+            $notification = array(
+                'alert-type' => 'success',
+                'message' => 'Unit has been successfully deleted');
+        }
        
                 catch (\Exception $e) {
                       DB::rollback();
-                      $notification = array(
+                      $notification = $e;
+                      array(
                          'alert-type' => 'error',
                          'message' => 'Oooops!! an error occurred please try again later'
                       );
                    } 
+                  
                    return redirect()->back()->with($notification);
               
               }

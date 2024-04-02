@@ -18,11 +18,15 @@
       </div>
       <div class="modal-body text-center">
       Are You Sure you want to delete this Room? 
+      <form id="deleteForm" action="/rooms/destroy" method="POST">
+                    @csrf
+                    <input type="hidden" name="unit_id" id="unitIdInput">
+                </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button id="backendRequestButton"  class="btn btn-danger btn-lg">Yes</button>
-        <a href="/rooms/destroy" class="btn btn-primary btn-lg" tabindex="-1" role="button">Yes</a>
+        <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteForm').submit()">Delete g</button>
+
       </div>
     </div>
   </div>
@@ -92,8 +96,11 @@
                                                     <ul class="dropdown-menu"><div class="m-2 text-center">
                                             
                                                        <li class="mb-2"><a href="/rooms/details/update/{{base64_encode($room['id'])}}" class="btn btn-primary" role="button">Update</a></li>
-                                                       <li><button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</button>
-                                            </div></li>
+                                                       <li>
+                                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUnitId('{{ $room->id}}')">Delete</button>
+
+                                                        </li>
+                                               
                                                     </ul>
                                                 </div>
                                             </td>
@@ -117,5 +124,10 @@
                 }
             });
 
+            </script>
+            <script>
+                function setUnitId(unitId) {
+                    document.getElementById('unitIdInput').value = unitId;
+                }
             </script>
             @endsection
