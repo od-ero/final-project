@@ -103,6 +103,7 @@ Add A Room
                                             </div>
                                             <div class="mt-4 mb-0 text-center">
                                             <button type="submit" class="btn btn-primary"> Create</button>
+                                            <a href="<?php echo e(URL::previous()); ?>" class="btn btn-secondary">Cancel</a>
                                             </div>
                                         </form>
                                     </div>

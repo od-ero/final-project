@@ -344,8 +344,77 @@ public function create(Request $request){
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
-    }
+      $permission_id= $request->all();
+      $permission_id=$permission_id['permission_id'];
+      DB::beginTransaction();
+      try{
+         $x=MyPermissionDoor::where('my_permission_id',$permission_id)
+                     ->delete();
+                    // dd($x);
+       $d= MyPermission::where('id','=',$permission_id)
+                    ->delete();
+
+            DB::commit();
+
+         $notification =array(
+                    'alert-type' => 'success',
+                    'message' => 'Permission deleted successfully'
+                            );            
+    } 
+    catch (\Exception $e) {
+    DB::rollback();
+    $notification = 
+    array(
+    'alert-type' => 'error',
+    'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
+            );
+} 
+return redirect()->back()->with($notification);
+
+
+}
+
+public function PermissionGroupdestroy(Request $request)
+    {
+      $permission_group_id= $request->all();
+      $permission_group_id=$permission_group_id['permission_id'];
+      DB::beginTransaction();
+      try{
+         $x=Permission::where('permission_group_id',$permission_group_id)
+                     ->delete();
+                    // dd($x);
+       $d= PermissionGroup::where('id',$permission_group_id)
+                    ->delete();
+
+            DB::commit();
+
+         $notification =array(
+                    'alert-type' => 'success',
+                    'message' => 'Permission deleted successfully'
+                            );            
+    } 
+    catch (\Exception $e) {
+    DB::rollback();
+    $notification = 
+    array(
+    'alert-type' => 'error',
+    'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
+            );
+} 
+return redirect()->back()->with($notification);
+
+
+}
+public function permissionGroups($encoded_permission_id){
+    return view('permissions.permissionGroups',['encoded_permission_id'=>$encoded_permission_id]);
+}   
+public function permissionGroupsData(){
+    $myPermissionGroups= PermissionGroup::leftjoin('permissions','permissions.permission_group_id','=','permission_groups.id')
+                                           -> where('permission_groups.creator_id',Auth::id())
+                                           -> get();
+    return DataTables::of($myPermissionGroups)->make(true); 
+}   
+
 }

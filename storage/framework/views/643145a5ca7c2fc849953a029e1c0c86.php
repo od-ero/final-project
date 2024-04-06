@@ -48,6 +48,7 @@ Update Door
                                             
                                             <div class="mt-4 mb-0 text-center">
                                             <button type="submit" class="btn btn-primary"> Update</button>
+                                            <a href="<?php echo e(URL::previous()); ?>" class="btn btn-secondary">Cancel</a>
                                             </div>
                                         </form>
                                     </div>

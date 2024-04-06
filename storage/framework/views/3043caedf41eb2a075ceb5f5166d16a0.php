@@ -25,7 +25,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteForm').submit()">Delete g</button>
+        <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteForm').submit()">Delete</button>
 
       </div>
     </div>

@@ -127,9 +127,24 @@
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        Start Bootstrap
-                    </div>
+ @if(isset($nav_unit_id))
+    <div>
+        @php
+         $nav_unit = App\Models\Unit::where('id', $nav_unit_id)
+                                                            ->select('*')
+                                                              ->first();
+         @endphp
+
+        <div class="small text-uppercase">Logged in :</div>
+        
+          <div class="text-uppercase">{{$nav_unit['unit_name'] .',  '.  $nav_unit['premises_name']}}</div> 
+    </div>
+@else
+    <div>
+   
+         Not in a Room
+    </div>
+@endif
                 </nav>
             </div>
     

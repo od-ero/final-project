@@ -108,7 +108,11 @@ Route::post('/add/creates/permission','PermissionController@create')->name('perm
 Route::get('/permissions/guests/permission/{id}','PermissionController@myPermissions')->name('permissions.myPermissions');
 Route::get('/permissions/guests/permission/data/{id}','PermissionController@myPermissionsData')->name('permissions.myPermissions_data');
 Route::match(['GET','POST'],'/permissions/edit/guests/permissions/{id}/{selectId}', 'PermissionController@editMyPermissions')->name('permissions.editMyPermissions');
+Route::post('/permissions/selected/destroy','PermissionController@destroy')->name('permissons.destroy');
+Route::get('/permissions/permission/groups/get/{id}','PermissionController@permissionGroups')->name('permissons.permissionGroups');
 
+Route::post('/permissions/groups/destroy','PermissionController@PermissionGroupdestroy')->name('permissons.PermissionGroupdestroy');
+Route::get('/permissions/groups/data','PermissionController@permissionGroupsData')->name('permissons.permissionGroupsData');
 Route::match(['GET','update','POST'], '/make/schedule/{id}','ScheduleController@store')->name('schedule.store');
 Route::match(['GET','update','POST'], '/user/search','UsersController@search')->name('search');
 Route::get('/ajax/search','UsersController@index');

@@ -28,7 +28,7 @@
 <div class="container">
 
                     <div class="container-fluid px-4">
-                        <h2 class="mt-4 text-white">Door Action Logs</h2>
+                        <h2 class="mt-4 text-white text-capitalize"><?php echo e($door_name); ?> Door Action Logs</h2>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="/welcome">Dashboard</a></li>
                             <li class="breadcrumb-item active">Users</li>

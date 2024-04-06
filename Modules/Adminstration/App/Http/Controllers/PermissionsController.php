@@ -42,6 +42,7 @@ class PermissionsController extends Controller
     {  $door_id = base64_decode($door_id);
         //dd($door_id);
         $unit_id= Door::where('id',$door_id)->pluck('unit_id');
+        $door_name= Door::where('id',$door_id)->value('door_name');
         $door_logs = DoorStatusSetter::leftJoin('my_permissions', 'my_permissions.id', '=', 'door_status_setters.my_permission_id')
                                     ->leftJoin('door_schedules', 'door_schedules.id', '=', 'door_status_setters.door_schedule_id')
                                     ->leftJoin('users', 'door_status_setters.user_id', '=', 'users.id')
@@ -73,7 +74,7 @@ class PermissionsController extends Controller
                                             'permissioner_lname' => $permissioner_lname,
                                         ];
                                     });
-        return view('adminstration::permissions.door_logs',['door_logs'=>$door_logs, 'nav_unit_id'=>$unit_id]);
+        return view('adminstration::permissions.door_logs',['door_logs'=>$door_logs, 'door_name'=>$door_name, 'nav_unit_id'=>$unit_id]);
     }
 
     /**

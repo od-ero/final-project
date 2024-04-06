@@ -27,9 +27,9 @@
       </div>
       <div class="modal-body text-center">
       Are You Sure you want to revoke this Permission? 
-      <form id="deleteForm" action="/rooms/destroy" method="POST">
+      <form id="deleteForm" action="/permissions/selected/destroy" method="POST">
                     <?php echo csrf_field(); ?>
-                    <input type="hidden" name="unit_id" id="unitIdInput">
+                    <input type="hidden" name="permission_id" id="unitIdInput">
                 </form>
       </div>
       <div class="modal-footer">
@@ -135,7 +135,7 @@
                                     <div class="m-2 text-center">
                                         <li class="mb-2"><a href="${updateUrl}" class="btn btn-success" role="button">Update</a></li>
                                         <li>
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUnitId(${row_id})">Delete</button>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUnitId(${row_id})">Revoke</button>
                                         </li>
                                     </div>
                                 </ul>
@@ -150,8 +150,8 @@
     });
 </script>
 <script>
-    function setUnitId(unitId) {
-        document.getElementById('unitIdInput').value = unitId;
+    function setUnitId(permissionId) {
+        document.getElementById('unitIdInput').value = permissionId;
     }
 </script>
 

@@ -11,10 +11,10 @@
 <div class="container">
 
                     <div class="container-fluid px-4">
-                        <h2 class="mt-4 text-white">Devices</h2>
+                        <h2 class="mt-4 text-white">Doors</h2>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="/welcome">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Users</li>
+                            <li class="breadcrumb-item active">doors</li>
                         </ol>
                         <!-- <div class="card mb-4">
                              <div class="card-body">

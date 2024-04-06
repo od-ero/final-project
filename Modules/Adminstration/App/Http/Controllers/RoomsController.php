@@ -301,8 +301,8 @@ class RoomsController extends Controller
                                             ->delete();
                             DoorStatus::where('door_id',$door['id'])
                                             ->delete();
-                                            $door=Door::where('id',$door['id'])
-                                            ->delete();
+                    Door::where('id',$door['id'])
+                                        ->delete();
                     }           
                 Unit::where('id', $unit_id)
                     ->delete();
