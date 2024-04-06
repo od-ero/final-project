@@ -1,10 +1,10 @@
 @extends('adminstration::layouts.admin_master')
 @section('subtitle')
-Update Rooms
+Update Door
 @endsection
 
 @section('contentheader_title')
-   Update Rooms
+   Update Door
 @endsection
 
 @section('content')

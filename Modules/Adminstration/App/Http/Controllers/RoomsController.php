@@ -39,7 +39,7 @@ class RoomsController extends Controller
                             ->select('units.*',  'users.fname', 'users.lname','users.phone',)
                             ->where('units.id',$unit_id)
                             ->first();
-        return view('adminstration::rooms.edit_room',['room_detail'=> $room_detail]);}
+        return view('adminstration::rooms.edit_room',['room_detail'=> $room_detail, 'nav_unit_id'=>$unit_id]);}
        
                 }
             
@@ -199,13 +199,13 @@ class RoomsController extends Controller
     {
         return view('adminstration::edit');
     }
-    Public function doors( $unit_id){
+    Public function doors($unit_id){
         $unit_id= base64_decode($unit_id);
         $doors = Door::LeftJoin('door_ips','doors.id','=','door_ips.door_id')
                      ->select('door_ips.*','doors.door_name')
                      ->where('doors.unit_id', $unit_id)
                      ->get();
-                return view('adminstration::rooms.doors',['doors'=> $doors]);      
+                return view('adminstration::rooms.doors',['doors'=> $doors, 'nav_unit_id'=>$unit_id]);      
     }
     /**
      * Update the specified resource in storage.
@@ -213,13 +213,13 @@ class RoomsController extends Controller
     public function doors_edit_blade($door_id){
         $door_id= base64_decode($door_id);
         $door_details = Door::LeftJoin('door_ips','doors.id','=','door_ips.door_id')
-        ->select('door_ips.*','doors.door_name')
+        ->select('door_ips.*','doors.unit_id','doors.door_name')
         ->where('doors.id', $door_id)
         ->first();
         
         return view('adminstration::rooms.door_edit',['door_details'=>$door_details,
-                            //    'encoded_permission_id'=> $encoded_permission_id
-                        ]);
+                                        'nav_unit_id'=>$door_details['unit_id']
+                                                        ]);
     }
      public function doors_edit(Request $request){
 
@@ -316,11 +316,11 @@ class RoomsController extends Controller
                 catch (\Exception $e) {
                       DB::rollback();
                       $notification = $e;
-                      array(
+                     array(
                          'alert-type' => 'error',
                          'message' => 'Oooops!! an error occurred please try again later'
                       );
-                   } 
+                   }  
                   
                    return redirect()->back()->with($notification);
               

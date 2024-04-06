@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use Sentinel;
+use DataTables;
 use DB;
 use App\Models\Permission;
 use App\Models\MyPermission;
@@ -18,8 +18,7 @@ use App\Models\MyPermissionCounter;
 use App\Models\MyPermissionDoor;
 use Carbon\Carbon;
 
-
-
+use function Laravel\Prompts\select;
 
 class PermissionController extends Controller
 {
@@ -235,11 +234,113 @@ public function create(Request $request){
     /**
      * Update the specified resource in storage.
      */
-    public function update( string $id)
-    {
-        //
+    public function update( string $encoded_permission_id)
+    {//
     }
 
+    public function myPermissions($encoded_permission_id)
+    {
+        return view('permissions.myPermissions',['encoded_permission_id'=> $encoded_permission_id]);
+    }
+    public function myPermissionsData($encoded_permission_id)
+    {
+        $permission_id=base64_decode($encoded_permission_id);
+        $unit_id=MyPermission::select('unit_id')
+                            ->where('id', $permission_id)
+                            ->first();
+        //dd($permission_id);
+        if($unit_id){
+            $unit_id= $unit_id['unit_id'];
+            $my_permissions= MyPermission::leftJoin('permission_groups','my_permissions.permission_group_id','=','permission_groups.id')
+                                    ->leftJoin('users','users.id','=','my_permissions.user_id')
+                                    ->select('my_permissions.*','permission_groups.name','users.fname','users.lname')
+                                    //->where('my_permissions.permissioner_id',Auth::id())
+                                    //->where('my_permissions.unit_id',$unit_id)
+                                    //->where('my_permissions.end_date','>',Carbon::now())
+                                    ->get();
+        }else{
+            $my_permissions=[];
+        }
+        
+                                    
+        return DataTables::of($my_permissions)->make(true);                           
+    }
+
+    public function editMyPermissions(Request $request, $encoded_permission_id, $encoded_selected_permission_id){
+        $selected_permission_id=base64_decode($encoded_selected_permission_id);
+        if($request->isMethod('get')){
+
+            $selected_permission= MyPermission::leftJoin('permission_groups','permission_groups.id','=','my_permissions.permission_group_id')
+                                             ->leftJoin('users','users.id','=','my_permissions.user_id')
+                                            ->where('my_permissions.id',$selected_permission_id)
+                                            ->select('my_permissions.*','permission_groups.name as permission_group_name','users.fname','users.lname','users.phone')
+                                            ->first();
+                            
+            $selectedDoors = MyPermissionDoor::where('my_permission_id', $selected_permission_id)
+                                            ->pluck('door_id') 
+                                            ->toArray();
+            $unit =Unit::where('id',$selected_permission['unit_id'])
+                        ->select('*')
+                        ->first();
+            $doors=Door::where('unit_id', $selected_permission['unit_id'])
+                        ->select('*')
+                        ->get();
+             $permission_groups= PermissionGroup::where('creator_id',Auth::id())
+                                                ->select('*')
+                                                ->get();
+            return view('permissions.editMyPermissions',['selected_permission'=>$selected_permission, 
+                                                        'selectedDoors'=>$selectedDoors,
+                                                        'checked_doors'=>$selectedDoors,
+                                                        'doors'=>$doors,
+                                                        'unit' =>$unit,
+                                                        'permission_groups'=>$permission_groups,
+                                                        'encoded_permission_id'=>$encoded_permission_id]);
+        }else{
+            $permissions=$request->all();
+            DB::beginTransaction();
+             try{
+                    $my_permissions =MyPermission::where('id',$encoded_selected_permission_id)
+                                                ->update([
+                                                        'user_id' => $permissions['user_id'],
+                                                        'permission_group_id' => $permissions['permission_group_id'],
+                                                        'permissioner_id' =>  Auth::id(),
+                                                        'start_date' => $permissions['start_date'] ,
+                                                        'end_date' =>  $permissions['end_date'],
+                                                    ]);
+                    MyPermissionDoor::where('my_permission_id',$encoded_selected_permission_id)
+                                    ->delete();
+                                                    
+                    foreach ($permissions as $door_name_ => $door_id) {
+                        if (strpos($door_name_, 'door_id_') !== false) {
+                        
+                                    MyPermissionDoor::create(
+                                        [
+                                            'my_permission_id' =>$encoded_selected_permission_id,
+                                            'door_id' => $door_id,
+                                        
+                                        ]);
+                            }                    
+                        }
+
+                        DB::commit();
+                                    $notification = array(
+                                        'alert-type' => 'success',
+                                        'message' => 'Permission updated successfully'
+                                    );
+                        }
+                        catch (\Exception $e) {
+                        DB::rollback();
+                        $notification = 
+                        array(
+                        'alert-type' => 'error',
+                        'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
+                                );
+                    } 
+                    return redirect()->route('permissions.myPermissions', ['id' => $encoded_permission_id])->with($notification);
+
+                    
+            }
+        }
     /**
      * Remove the specified resource from storage.
      */

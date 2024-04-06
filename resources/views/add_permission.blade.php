@@ -169,7 +169,8 @@
     <hr>
 
     <div class="text-center">
-  <button type="submit" class="btn btn-success mx-3">Give Priviledges</button><button type="submit" class="btn btn-primary mx-3">Cancel</button>
+  <button type="submit" class="btn btn-success mx-3">Give Priviledges</button>
+  <a href="/permissions/guests/permission/{{$encoded_permission_id}}" class="btn btn-secondary">Cancel</a>
     </div>
 
 

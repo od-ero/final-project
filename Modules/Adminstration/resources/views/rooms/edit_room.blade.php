@@ -101,7 +101,6 @@ Add A Room
       // Get the values from the input fields
       var searchTerm1 = $('#name').val();
       var searchTerm2 = $('#phone').val();
-console.log('button clicked');
       // Call the search method in the controller using Ajax
       $.ajax({
         type: 'GET',
@@ -121,24 +120,18 @@ console.log('button clicked');
     var selectedDisplayName = $(this).text();
     var displayPhone = $(this).data('phone'); // Correct variable name
 
-    // Update input fields with the selected values
+    
     $('#name').val(selectedDisplayName);
     $('#owner_id').val(selectedValue);
-
-    // Use the correct variable name here
     $('#phone').val(displayPhone);
-
-    // Clear the search results dropdown
     $('#searchResults').empty();
 });
     function displaySearchResults(results) {
-   // console.log(results); // Log the results to the console
-
+   
     var $searchResults = $('#searchResults');
     $searchResults.empty();
 
     if (results.length > 0) {
-      console.log(results);
         results.forEach(function(result) {
             // Append list item directly without creating a jQuery object
             $searchResults.append('<li class="dropdown-item search-item" data-id="' + result.id + '" data-phone="' + result.displayPhone + '">' + result.displayName + '</li>');
@@ -146,7 +139,7 @@ console.log('button clicked');
         });
         $searchResults.show();  // Show the dropdown if there are results
     } else {
-      $searchResults.append('<li class="dropdown-item">Ooopss!! Dis not match any user</li>');  // Hide the dropdown if there are no results
+      $searchResults.append('<li class="dropdown-item">Ooopss!! Did not match any user</li>');  // Hide the dropdown if there are no results
     }
 }
 

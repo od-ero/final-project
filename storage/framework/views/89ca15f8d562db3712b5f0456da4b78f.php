@@ -9,6 +9,9 @@
         <title>Admin Unikey-<?php echo $__env->yieldContent('subtitle'); ?></title>
          <link rel="icon" href="<?php echo e(asset('images/unikey.png')); ?>" type="image/x-icon">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet"/>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- Toastr CSS -->
+       
         <link href="/assets/css/admin.css" rel="stylesheet"/>
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
@@ -60,7 +63,27 @@
                                     <a class="nav-link" href="/rooms/show">Add A Room</a>
                                 </nav>
                             </div>
-                            
+                            <?php if(isset($nav_unit_id)): ?>
+                                <?php
+                                $nav_unit_doors = App\Models\Door::where('unit_id', $nav_unit_id)
+                                                            ->select('*')
+                                                              ->get();
+                                ?>
+
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDoors" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-history"></i></div>
+                                Door Action Logs
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseDoors" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                 <?php $__currentLoopData = $nav_unit_doors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $nav_unit_door): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <a class="nav-link" href="/permissions/show/<?php echo e(base64_encode($nav_unit_door['id'])); ?>"><?php echo e($nav_unit_door['door_name']); ?></a>   
+                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+                                </nav>
+                            </div>
+                            <?php endif; ?>
+
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                                 Pages
@@ -120,28 +143,28 @@
             </div>
            
         </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-       
-   <script>
-    window.addEventListener('DOMContentLoaded', event => {
+        
+        <script>
+        window.addEventListener('DOMContentLoaded', event => {
 
-// Toggle the side navigation
-const sidebarToggle = document.body.querySelector('#sidebarToggle');
-if (sidebarToggle) {
-    // Uncomment Below to persist sidebar toggle between refreshes
-    // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-    //     document.body.classList.toggle('sb-sidenav-toggled');
-    // }
-    sidebarToggle.addEventListener('click', event => {
-        event.preventDefault();
-        document.body.classList.toggle('sb-sidenav-toggled');
-        localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
-    });
-}
+        // Toggle the side navigation
+        const sidebarToggle = document.body.querySelector('#sidebarToggle');
+        if (sidebarToggle) {
+            // Uncomment Below to persist sidebar toggle between refreshes
+            // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+            //     document.body.classList.toggle('sb-sidenav-toggled');
+            // }
+            sidebarToggle.addEventListener('click', event => {
+                event.preventDefault();
+                document.body.classList.toggle('sb-sidenav-toggled');
+                localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+            });
+        }
 
-});
-    </script>
+        });
+</script>
     </body>
 </html>
 <?php /**PATH C:\xampp\htdocs\LaravelAPI\Modules/Adminstration\resources/views/layouts/admin_master.blade.php ENDPATH**/ ?>

@@ -25,7 +25,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteForm').submit()">Delete g</button>
+        <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteForm').submit()">Delete</button>
 
       </div>
     </div>
@@ -38,16 +38,16 @@
                             <li class="breadcrumb-item active">Rooms</li>
                         </ol>
                         <div class="card mb-4">
-                            <div class="card-body">
+                            <!-- <div class="card-body">
                                 DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
                                 <a target="_blank" href="https://datatables.net/">official DataTables documentation</a>
                                 .
-                            </div>
+                            </div> -->
                         </div>
                         <div class="card mb-4">
                             <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                DataTable Example
+                                <i class="fas fa-house-medical me-1"></i>
+                               Rooms
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">

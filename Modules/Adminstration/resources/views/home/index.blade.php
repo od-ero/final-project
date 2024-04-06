@@ -85,10 +85,10 @@ window.onload = function () {
                     animationEnabled: true,
                     theme: "light2",
                     title:{
-                        text: "Rooms and Device Status"
+                        text: "Doors and Device Status"
                     },
                     axisY2: {
-                        prefix: "Room:",
+                        prefix: "Door:",
                         lineThickness: 0                
                     },
                     toolTip: {

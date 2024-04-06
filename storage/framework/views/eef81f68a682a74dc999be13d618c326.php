@@ -114,30 +114,31 @@
               <a class="nav-link active px-2 text-white" aria-current="page" href="/">Home</a>
             </li> -->
             <?php if(isset($encoded_permission_id)): ?>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link px-2 text-white" href="/add/permissions/<?php echo e($encoded_permission_id); ?>">Give Permission</a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a class="nav-link px-2 text-white" href="/make/schedule/<?php echo e($encoded_permission_id); ?>">Activate Button Access</a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link px-2 text-white" href="/get/unit/ipAddresses/<?php echo e($encoded_permission_id); ?>">Ip Addresses</a>
-            </li>
-            <?php endif; ?>
-             <!-- <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
+            </li> -->
+            
+             <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Access Permissions
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">My Permissions</a></li>
+                <li><a class="dropdown-item" href="/permissions/guests/permission/<?php echo e($encoded_permission_id); ?>">Guest Permissions</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><a class="dropdown-item" href="/add/permissions/<?php echo e($encoded_permission_id); ?>">Give Permissions</a></li>
               </ul>
-            </li>  -->
-            <li class="nav-item">
+            </li> 
+             <?php endif; ?>
+            <!-- <li class="nav-item">
               <a href="/units/create" class="nav-link px-2 text-white">Add A Room</a>
-            </li>
+            </li> -->
           </ul>
           <div class="text-end">
           <a href="<?php echo e(route('logout.perform')); ?>" class="btn btn-outline-danger ">Logout</a>
