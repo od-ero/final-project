@@ -23,7 +23,7 @@
     <hr>
     
     <input class="userInput" type="hidden" name="_token" value="{{ csrf_token() }}" />
-    <input  class="userInput" id="owner_id" type="hidden"  name="user_id">
+    <input  class="userInput" id="owner_id" type="hidden"  name="user_id" value="{{$selected_permission['user_id']}}">
     <label for="fname"><b>User</b></label>
     <p><i>
       Kindly enter either of the Users name and and phone number and search to select the user
@@ -83,7 +83,7 @@
     <hr>
 
     <div class="text-center">
-  <button type="submit" class="btn btn-success mx-3">Edit Priviledges</button>
+  <button type="submit" class="btn btn-success mx-3">Edit Permission</button>
   <a href="{{ URL::previous() }}" class="btn btn-secondary">Cancel</a>
     </div>
 

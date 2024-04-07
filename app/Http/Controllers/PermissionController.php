@@ -199,37 +199,6 @@ public function create(Request $request){
     /**
      * Display the specified resource.
      */
-    public function show(Request $request,)// add unit
-    {
-        $my_units_details = $request->all();
-        DB::beginTransaction();
-        try{
-        $my_units =MyUnit::create([
-            'user_id' => $my_units_details['user_id'],
-            'unit_id' =>  $my_units_details['unit_id'],
-            'role_id' =>   $my_units_details['role_id'],
-            'start_date' =>  $my_units_details['start_date'],
-            'end_date' =>  $my_units_details['end_date'],
-            'permissioner_id' => Auth::id(),
-        ]);
-        DB::commit();
-      $notification = array(
-        'message'    => 'Priviledges assigned successfully',
-        'alert-type' => 'success',
-);
-} 
-
-        
-   // }
-   catch (\Exception $e) {
-        DB::rollback();
-           $notification = array(
-            'alert-type' => 'error',
-            'message' => 'Oooops!! an error occurred please try again later'
-        );
-    } 
-    return redirect()->back()->with($notification);
-    }
 
     /**
      * Update the specified resource in storage.
@@ -273,12 +242,12 @@ public function create(Request $request){
             $selected_permission= MyPermission::leftJoin('permission_groups','permission_groups.id','=','my_permissions.permission_group_id')
                                              ->leftJoin('users','users.id','=','my_permissions.user_id')
                                             ->where('my_permissions.id',$selected_permission_id)
-                                            ->select('my_permissions.*','permission_groups.name as permission_group_name','users.fname','users.lname','users.phone')
+                                            ->select('my_permissions.*','permission_groups.name as permission_group_name','users.fname','users.lname','users.phone','users.id as user_id')
                                             ->first();
                             
             $selectedDoors = MyPermissionDoor::where('my_permission_id', $selected_permission_id)
                                             ->pluck('door_id') 
-                                            ->toArray();
+                                            ->toArray(); 
             $unit =Unit::where('id',$selected_permission['unit_id'])
                         ->select('*')
                         ->first();
@@ -297,9 +266,10 @@ public function create(Request $request){
                                                         'encoded_permission_id'=>$encoded_permission_id]);
         }else{
             $permissions=$request->all();
+           // dd($permissions);
             DB::beginTransaction();
              try{
-                    $my_permissions =MyPermission::where('id',$encoded_selected_permission_id)
+                    $my_permissions =MyPermission::where('id',$selected_permission_id)
                                                 ->update([
                                                         'user_id' => $permissions['user_id'],
                                                         'permission_group_id' => $permissions['permission_group_id'],
@@ -307,7 +277,7 @@ public function create(Request $request){
                                                         'start_date' => $permissions['start_date'] ,
                                                         'end_date' =>  $permissions['end_date'],
                                                     ]);
-                    MyPermissionDoor::where('my_permission_id',$encoded_selected_permission_id)
+                    MyPermissionDoor::where('my_permission_id',$selected_permission_id)
                                     ->delete();
                                                     
                     foreach ($permissions as $door_name_ => $door_id) {
@@ -315,7 +285,7 @@ public function create(Request $request){
                         
                                     MyPermissionDoor::create(
                                         [
-                                            'my_permission_id' =>$encoded_selected_permission_id,
+                                            'my_permission_id' =>$selected_permission_id,
                                             'door_id' => $door_id,
                                         
                                         ]);
@@ -329,11 +299,11 @@ public function create(Request $request){
                                     );
                         }
                         catch (\Exception $e) {
-                        DB::rollback();
-                        $notification = 
-                        array(
-                        'alert-type' => 'error',
-                        'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
+                            DB::rollback();
+                                $notification = 
+                                array(
+                                'alert-type' => 'error',
+                                'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
                                 );
                     } 
                     return redirect()->route('permissions.myPermissions', ['id' => $encoded_permission_id])->with($notification);
@@ -350,10 +320,10 @@ public function create(Request $request){
       $permission_id=$permission_id['permission_id'];
       DB::beginTransaction();
       try{
-         $x=MyPermissionDoor::where('my_permission_id',$permission_id)
+         MyPermissionDoor::where('my_permission_id',$permission_id)
                      ->delete();
                     // dd($x);
-       $d= MyPermission::where('id','=',$permission_id)
+        MyPermission::where('id','=',$permission_id)
                     ->delete();
 
             DB::commit();
@@ -382,10 +352,10 @@ public function PermissionGroupdestroy(Request $request)
       $permission_group_id=$permission_group_id['permission_id'];
       DB::beginTransaction();
       try{
-         $x=Permission::where('permission_group_id',$permission_group_id)
+         Permission::where('permission_group_id',$permission_group_id)
                      ->delete();
                     // dd($x);
-       $d= PermissionGroup::where('id',$permission_group_id)
+       PermissionGroup::where('id',$permission_group_id)
                     ->delete();
 
             DB::commit();
@@ -413,8 +383,109 @@ public function permissionGroups($encoded_permission_id){
 public function permissionGroupsData(){
     $myPermissionGroups= PermissionGroup::leftjoin('permissions','permissions.permission_group_id','=','permission_groups.id')
                                            -> where('permission_groups.creator_id',Auth::id())
+                                           ->orderBy('permission_groups.name','asc')
                                            -> get();
     return DataTables::of($myPermissionGroups)->make(true); 
 }   
+public function addPermissionGroup(Request $request ,$encoded_permission_id)
+{
+    //$permission_group_id=base64_decode($encoded_permission_id);
+    if($request->isMethod('get')){ 
+        return view('permissions.addPermissionGroup',['encoded_permission_id'=>$encoded_permission_id]);
+    }
+    else{
+        $permissions= $request->all();
+        DB::beginTransaction();
+        try{
+                      $permission_group =PermissionGroup::create([
+                          'name' => $permissions['permission_group_name'],
+                          'creator_id' =>  Auth::id(),
+                      ]);
+                  // foreach ( $permissions as  $permission)  {
+                     
+                      Permission::create([
+                          'permission_group_id' => $permission_group['id'],
+                          'give_permission' =>  $permissions['give_permission'],
+                          'open' =>  $permissions['open'],
+                          'close' =>  $permissions['close'],
+                      'schedule' =>  $permissions['schedule'],
+                      'give_permission_fre' =>  $permissions['give_permission_fre'],
+                      'open_fre' =>  $permissions['open_fre'],
+                      'close_fre' =>  $permissions['close_fre'],
+                      'schedule_fre' =>  $permissions['schedule_fre']
+                      ]);
+                     
+            DB::commit();
 
+            $notification =array(
+                        'alert-type' => 'success',
+                        'message' => 'Permission group created successfully'
+                                );            
+        } 
+        catch (\Exception $e) {
+        DB::rollback();
+        $notification = 
+        array(
+        'alert-type' => 'error',
+        'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
+                );
+    } 
+    return redirect()->back()->with($notification);
+        }
+    }
+
+
+public function editPermissionGroup(Request $request ,$encoded_permission_id, $encoded_permission_group_id){
+   $permission_group_id=base64_decode($encoded_permission_group_id);
+    if($request->isMethod('get')){
+
+        $permissionGroup= PermissionGroup::leftjoin('permissions','permissions.permission_group_id','=','permission_groups.id')
+                                    -> where('permission_groups.id',$permission_group_id)
+                                    ->select('permissions.*','permission_groups.name',)
+                                    ->first();
+        return view('permissions.editPermissionGroup',['encoded_permission_id'=>$encoded_permission_id,
+                                                     'permissionGroup'=>$permissionGroup,
+                                                    'encoded_permission_group_id'=>$encoded_permission_group_id
+                        ]);
+    }else{
+        $permissions=$request->all();
+        DB::beginTransaction();
+      try{
+        PermissionGroup::where('id',$permission_group_id)
+                                           ->update([
+                                                    'name' => $permissions['permission_group_name'],
+                                                    'creator_id' =>  Auth::id(),
+                                                ]);
+    
+       
+       Permission::where('permission_group_id',$permission_group_id)
+                                       ->update([
+                                            'permission_group_id' => $permission_group_id,
+                                            'give_permission' =>  $permissions['give_permission'],
+                                            'open' =>  $permissions['open'],
+                                            'close' =>  $permissions['close'],
+                                        'schedule' =>  $permissions['schedule'],
+                                        'give_permission_fre' =>  $permissions['give_permission_fre'],
+                                        'open_fre' =>  $permissions['open_fre'],
+                                        'close_fre' =>  $permissions['close_fre'],
+                                        'schedule_fre' =>  $permissions['schedule_fre']
+                                        ]);
+                    DB::commit();
+
+                    $notification =array(
+                                'alert-type' => 'success',
+                                'message' => 'Permission group updated successfully'
+                                        );            
+                } 
+                catch (\Exception $e) {
+                DB::rollback();
+                $notification = 
+                array(
+                'alert-type' => 'error',
+                'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
+                        );
+            } 
+            return redirect()->route('permissons.permissionGroups', ['id' => $encoded_permission_id])->with($notification);                              
+    }
+}
 }

@@ -1,6 +1,7 @@
 <?php $__env->startSection('subtitle'); ?>
 Login
 <?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('content'); ?>
     <form method="post" action="<?php echo e(route('login.perform')); ?>">
         
@@ -32,7 +33,7 @@ Login
             <input type="checkbox" name="remember" value="1">
         </div>
 
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+        <button class="w-100 btn btn-lg btn-success" type="submit">Login</button>
         <div class="form-group mb-3">
         <br> <p>Don't have an account? <a href="register">Register</p>
         </div>
@@ -43,4 +44,4 @@ Login
     </form>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.auth-master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\LaravelAPI\resources\views/auth/login.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app-master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\LaravelAPI\resources\views/auth/login.blade.php ENDPATH**/ ?>

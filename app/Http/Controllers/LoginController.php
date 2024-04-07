@@ -26,12 +26,23 @@ class LoginController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function login(LoginRequest $request)
-    {
-        $credentials = $request->getCredentials();
+    {    
+        if($request->isMethod('get')){
+            return view('auth.login');   
+    }else{
 
+    
+        $credentials = $request->getCredentials();
+///dd($credentials);
         if(!Auth::validate($credentials)):
+            $notification= array(
+                'alert-type' => 'error',
+                'message' => 'Oooops!! These credentials do not match our records.'
+                        );
             return redirect()->to('login')
-                ->withErrors(trans('auth.failed'));
+                 ->with($notification);
+           // return back()->response()->json($notification);
+               // return redirect()->route('login.show')->with($notification);   
         endif;
 
         $user = Auth::getProvider()->retrieveByCredentials($credentials);
@@ -39,6 +50,7 @@ class LoginController extends Controller
         Auth::login($user);
 
         return $this->authenticated($request, $user);
+    }
     }
 
     /**

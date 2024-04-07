@@ -171,7 +171,7 @@
 
     <div class="text-center">
   <button type="submit" class="btn btn-success mx-3">Give Priviledges</button>
-  <a href="/permissions/guests/permission/<?php echo e($encoded_permission_id); ?>" class="btn btn-secondary">Cancel</a>
+  <a href="<?php echo e(URL::previous()); ?>" class="btn btn-secondary">Cancel</a>
     </div>
 
 

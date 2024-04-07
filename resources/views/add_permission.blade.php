@@ -10,10 +10,9 @@
 @section('content')
    
      
-<form name="add_permission" id="add_permission" method="post" action="{{ url('add/permissions/' .$encoded_permission_id) }}">
+<form name="add_permission" id="add_permission" method="post" action="{{ url('/add/permissions/' .$encoded_permission_id) }}">
 
 
-  
     <fieldset>
   
    <legend>Give Access Priviledges To <b class="text-uppercase"> {{$unit['premises_name'] . ', ' . $unit['unit_name']}}</b> </legend>

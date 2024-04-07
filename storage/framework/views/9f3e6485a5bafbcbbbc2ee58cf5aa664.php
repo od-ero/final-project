@@ -45,7 +45,7 @@
             <div class="col">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <legend>My Permissions Groups</legend>
-                        <a href="/add/permissions/<?php echo e($encoded_permission_id); ?>" class="btn btn-outline-success block mx-3">Add Permission Group</a>
+                        <a href="/groups/me/create/permissions/<?php echo e($encoded_permission_id); ?>" class="btn btn-outline-success block mx-3">Add Permission Group</a>
                         <a href="/add/permissions/<?php echo e($encoded_permission_id); ?>" class="btn btn-outline-success block">Give Permission</a>
                     </div>
             </div>
@@ -120,8 +120,8 @@
                     var encoded_permission_id= document.getElementById("encoded_permission_id").value;
                     // Construct the URLs using row_id
                     var viewUrl = '/permissions/edit/mypermissions/' + btoa(row_id);
-                    var updateUrl = '/permissions/edit/guests/permissions/' + encoded_permission_id + '/' + btoa(row_id);
-
+                    var updateUrl = '/groups/me/permissions/update/' + encoded_permission_id + '/' + btoa(row_id);
+                    
                     // Return the HTML content with URLs including row_id
                     return `<div class="btn-group dropend">
                                 <a href="${viewUrl}" class="btn btn-success btn-lg" tabindex="-1" role="button">View</a>

@@ -103,12 +103,26 @@
                 {
                     data: 'start_date',
                     name: 'start_date',
+                    render: function (data, type, row) {
+                        // Parse the date using Carbon
+                        var formattedDate = moment(data).format('ddd, MMM DD, YYYY h:mm A');
+                        
+                        // Return the formatted date as a link
+                        return  formattedDate;
+                    }
                     
                 }
                 ,
                 {
                     data: 'end_date',
                     name: 'end_date',
+                    render: function (data, type, row) {
+                        // Parse the date using Carbon
+                        var formattedDate = moment(data).format('ddd, MMM DD, YYYY h:mm A');
+                        
+                        // Return the formatted date as a link
+                        return   formattedDate;
+                    }
                     
                 },
                 {

@@ -6,8 +6,10 @@ Register
     <form method="post" action="<?php echo e(route('register.perform')); ?>">
 
         <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>" />
-        <img class="mb-4" src="<?php echo url('images/unikey.png'); ?>" alt="" width="72" height="57">
+       <div class="align-items-center ">
+       <img class=" mb-4" src="<?php echo url('images/unikey.png'); ?>" alt="" width="72" height="57">
         
+       </div>
         <h1 class="h3 mb-3 fw-normal">Register</h1>
         <div class="form-group form-floating mb-3">
             <input type="text" class="form-control" name="fname" value="<?php echo e(old('fname')); ?>" placeholder="First Name" required="required" autofocus>
@@ -54,7 +56,7 @@ Register
             <?php endif; ?>
         </div>
 
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>
+        <button class="w-100 btn btn-lg btn-success" type="submit">Register</button>
         <div class="form-group form-floating mb-3">
         <br>  <p>Already have an account?<a href="/login">login</a></p>
         </div>
@@ -65,4 +67,4 @@ Register
     </form>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.auth-master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\LaravelAPI\resources\views/auth/register.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app-master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\LaravelAPI\resources\views/auth/register.blade.php ENDPATH**/ ?>

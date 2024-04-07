@@ -1,4 +1,4 @@
- @extends('layouts.auth-master') 
+ @extends('layouts.app-master') 
 @section('subtitle')
 Register
 @endsection
@@ -6,8 +6,10 @@ Register
     <form method="post" action="{{ route('register.perform') }}">
 
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-        <img class="mb-4" src="{!! url('images/unikey.png') !!}" alt="" width="72" height="57">
+       <div class="align-items-center ">
+       <img class=" mb-4" src="{!! url('images/unikey.png') !!}" alt="" width="72" height="57">
         
+       </div>
         <h1 class="h3 mb-3 fw-normal">Register</h1>
         <div class="form-group form-floating mb-3">
             <input type="text" class="form-control" name="fname" value="{{ old('fname') }}" placeholder="First Name" required="required" autofocus>
@@ -54,7 +56,7 @@ Register
             @endif
         </div>
 
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>
+        <button class="w-100 btn btn-lg btn-success" type="submit">Register</button>
         <div class="form-group form-floating mb-3">
         <br>  <p>Already have an account?<a href="/login">login</a></p>
         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
+use DataTables;
 use App\Models\MyPermissionCounter;
 use App\Models\DoorSchedule;
 use App\Models\MyPermission;
@@ -388,6 +389,38 @@ return redirect()->back()->with($notification);
         return response()->json($response_status);
     }
 
+public function scheduleGroups($encoded_permission_id){
+    
+        return view('schedule.scheduleGroups',['encoded_permission_id'=>$encoded_permission_id]);
+  }
+  public function scheduleGroupsData(){
+   // dd('kkkk');
+        $schedulegroups= DoorSchedulePermission::where('user_id',Auth::id())
+                                                ->select('*')
+                                                ->get();
+            return DataTables::of($schedulegroups)->make(true);                                           
+
+  }
+
+  public function doorSchedulePermissions($encoded_permission_id){
+    
+   
+     $current_user_id= Auth::id();   
+     
+    return view('schedule.schedulePermissions',['current_user_id'=>$current_user_id,
+                                                'encoded_permission_id'=>$encoded_permission_id]);
+  }
+  public function doorSchedulePermissionsData($encoded_permission_id){
+    $permission_id= base64_decode($encoded_permission_id);
+    $unit_id= MyPermission::where('id',$permission_id)
+                            ->value('unit_id');
+    $doorSchedulePermissions= DoorSchedule::leftjoin('users','users.id','=','door_schedules.user_id')
+                                        ->select('door_schedules.*','users.fname','users.lname','users.id as user_id')
+                                        ->where('unit_id',0)
+                                       // ->where('unit_id',$unit_id)
+                                        ->get();  
+     return DataTables::of($doorSchedulePermissions)->make(true);
+  }
     /**
      * Remove the specified resource from storage.
      */

@@ -131,8 +131,8 @@
     <div>
         @php
          $nav_unit = App\Models\Unit::where('id', $nav_unit_id)
-                                                            ->select('*')
-                                                              ->first();
+                                    ->select('*')
+                                    ->first();
          @endphp
 
         <div class="small text-uppercase">Logged in :</div>

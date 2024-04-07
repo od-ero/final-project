@@ -114,14 +114,27 @@
             <!-- <li class="nav-item">
               <a class="nav-link px-2 text-white" href="/add/permissions/{{ $encoded_permission_id }}">Give Permission</a>
             </li> -->
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link px-2 text-white" href="/make/schedule/{{ $encoded_permission_id }}">Activate Button Access</a>
-            </li>
+            </li> -->
+           
             <!-- <li class="nav-item">
               <a class="nav-link px-2 text-white" href="/get/unit/ipAddresses/{{ $encoded_permission_id }}">Ip Addresses</a>
             </li> -->
             
              <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Button  Access 
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/schedule/groups/{{$encoded_permission_id}}">Schedule Groups</a></li>
+                <li><a class="dropdown-item" href="/units/schedule/permissions/{{$encoded_permission_id}}">Door Schedules</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/make/schedule/{{ $encoded_permission_id }}">Make A Schedule</a></li>
+              </ul>
+            </li> 
+
+            <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Access Permissions
               </a>

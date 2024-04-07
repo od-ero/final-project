@@ -1,7 +1,8 @@
-@extends('layouts.auth-master')
+@extends('layouts.app-master')
 @section('subtitle')
 Login
 @endsection
+
 @section('content')
     <form method="post" action="{{ route('login.perform') }}">
         
@@ -33,7 +34,7 @@ Login
             <input type="checkbox" name="remember" value="1">
         </div>
 
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+        <button class="w-100 btn btn-lg btn-success" type="submit">Login</button>
         <div class="form-group mb-3">
         <br> <p>Don't have an account? <a href="register">Register</p>
         </div>
