@@ -34,8 +34,8 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Door</th>
-                                            <th>Door Id</th>
                                             <th>Online State</th>
+                                            <th>Device Serial Number</th>
                                             <th>IP V4 Address</th>
                                             <th>Action</th>
                                         </tr>
@@ -44,8 +44,8 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Door</th>
-                                            <th>Door Id</th>
                                             <th>Online State</th>
+                                            <th>Device Serial Number</th>
                                             <th>IP V4 Address</th>
                                             <th>Action</th>
                                         </tr>
@@ -54,8 +54,8 @@
                                         <tr>
                                             <td>{{$loop->iteration}}</td>
                                             <td>{{$door['door_name']}}</td>
-                                            <td>{{$door['door_id']}}</td>
                                             <td>{{$door['door_ip_status']}}</td>
+                                            <td>{{$door['device_serial_number']}}</td>
                                             <td>{{$door['ip_address']}}</td>
                                             <td>
                                             <a href="/rooms/doors/edit/blade/{{base64_encode($door['door_id'])}}" class="btn btn-primary btn-lg" tabindex="-1" role="button">Edit</a>

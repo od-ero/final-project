@@ -10,10 +10,9 @@
 <?php $__env->startSection('content'); ?>
    
      
-<form name="add_permission" id="add_permission" method="post" action="<?php echo e(url('add/permissions/' .$encoded_permission_id)); ?>">
+<form name="add_permission" id="add_permission" method="post" action="<?php echo e(url('/add/permissions/' .$encoded_permission_id)); ?>">
 
 
-  
     <fieldset>
   
    <legend>Give Access Priviledges To <b class="text-uppercase"> <?php echo e($unit['premises_name'] . ', ' . $unit['unit_name']); ?></b> </legend>

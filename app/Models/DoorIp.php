@@ -15,5 +15,6 @@ class DoorIp extends Model
         'door_id',
         'ip_address',
         'door_ip_status',
+        'device_serial_number',
     ];
 }

@@ -132,7 +132,8 @@
 
       <hr>
     <div class="text-center">
-        <button type="submit" class="btn btn-success mb-3 mx-3">Give Privileges</button><button type="#" class="btn btn-primary mx-3">cancel</button>
+        <button type="submit" class="btn btn-success mb-3 mx-3">Give Privileges</button>
+        <a href="<?php echo e(URL::previous()); ?>" class="btn btn-secondary">Cancel</a>
     </div>
     </fieldset>
   

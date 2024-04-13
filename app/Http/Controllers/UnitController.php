@@ -334,6 +334,7 @@ class UnitController extends Controller
                             DoorStatusSetter::create([
                                         'door_id'=> $door_id,
                                         'status' => 'Lock',
+                                        'my_permission_id' => $permission_id,
                                         'user_id'=> Auth::id()
                             ]) ;
                             // $ip_address= (new GlobalController)->getIp($door_id);

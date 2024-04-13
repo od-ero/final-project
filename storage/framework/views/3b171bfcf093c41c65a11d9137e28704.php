@@ -34,8 +34,8 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Door</th>
-                                            <th>Door Id</th>
                                             <th>Online State</th>
+                                            <th>Device Serial Number</th>
                                             <th>IP V4 Address</th>
                                             <th>Action</th>
                                         </tr>
@@ -44,8 +44,8 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Door</th>
-                                            <th>Door Id</th>
                                             <th>Online State</th>
+                                            <th>Device Serial Number</th>
                                             <th>IP V4 Address</th>
                                             <th>Action</th>
                                         </tr>
@@ -54,8 +54,8 @@
                                         <tr>
                                             <td><?php echo e($loop->iteration); ?></td>
                                             <td><?php echo e($door['door_name']); ?></td>
-                                            <td><?php echo e($door['door_id']); ?></td>
                                             <td><?php echo e($door['door_ip_status']); ?></td>
+                                            <td><?php echo e($door['device_serial_number']); ?></td>
                                             <td><?php echo e($door['ip_address']); ?></td>
                                             <td>
                                             <a href="/rooms/doors/edit/blade/<?php echo e(base64_encode($door['door_id'])); ?>" class="btn btn-primary btn-lg" tabindex="-1" role="button">Edit</a>

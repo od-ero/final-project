@@ -120,7 +120,7 @@
                     var encoded_permission_id= document.getElementById("encoded_permission_id").value;
                     // Construct the URLs using row_id
                     var viewUrl = '/permissions/edit/mypermissions/' + btoa(row_id);
-                    var updateUrl = '/groups/me/permissions/update/' + encoded_permission_id + '/' + btoa(row_id);
+                    var updateUrl = '/update/groups/schedules/' + encoded_permission_id + '/' + btoa(row_id);
                     
                     // Return the HTML content with URLs including row_id
                     return `<div class="btn-group dropend">

@@ -24,12 +24,12 @@ class ScheduleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, $door_id)
+    public function index(Request $request, $device_serial_number)
     {
-        //
+        try{
         $clientIp= $request->ip();
         $ip_details = DoorIp::select('*')
-        ->where('door_id', $door_id)
+        ->where('device_serial_number', $device_serial_number)
         ->first();
         if($ip_details['door_ip_status']==='Offline'){
             DoorIp::where('id', $ip_details['id'])
@@ -38,11 +38,11 @@ class ScheduleController extends Controller
         }
         $ip_address = $ip_details['ip_address'] ;
         if($ip_address != $clientIp){
-            DoorIp::where('door_id', $door_id)
+            DoorIp::where('device_serial_number', $device_serial_number)
             ->update(['ip_address'=>$clientIp]);
         }
         $door_status = DoorStatus::select('status')
-                                ->where('door_id', $door_id)
+                                ->where('door_id', $ip_details['door_id'])
                                 ->first();
         if($door_status['status']==='Locked'){
             return response()->json(1);
@@ -50,6 +50,14 @@ class ScheduleController extends Controller
         else if($door_status['status']==='Unlocked'){
             return response()->json(0);
         }
+        else{
+            return response()->json('2');
+        }
+    }
+        catch (\Exception $e) {
+            return response()->json(2);
+         } 
+
     }
 
    
@@ -213,11 +221,11 @@ return redirect()->back()->with($notification);
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $door_id, $action)
+    public function update(Request $request, string $device_serial_number, $action)
     {
         $clientIp= $request->ip();
         $ip_details = DoorIp::select('*')
-        ->where('door_id', $door_id)
+        ->where('device_serial_number', $device_serial_number)
         ->first();
         $ip_address = $ip_details['ip_address'];
         if($ip_details['door_ip_status']==='Offline'){
@@ -232,12 +240,12 @@ return redirect()->back()->with($notification);
         $button_requests = DoorSchedule::leftJoin('door_schedule_permissions', 'door_schedules.door_schedule_permission_id', '=', 'door_schedule_permissions.id')
                                         ->leftJoin('door_schedule_doors', 'door_schedules.id', '=', 'door_schedule_doors.door_schedule_id')
                                         ->select('door_schedule_permissions.*', 'door_schedule_doors.id as door_schedule_door_id', 'door_schedules.id as door_schedule_id')
-                                        ->where('door_schedule_doors.door_id', $door_id)
+                                        ->where('door_schedule_doors.door_id', $ip_details['door_id'])
                                         ->where('door_schedules.end_date', '>', Carbon::now())
                                         ->orderBy('door_schedules.created_at', 'desc')
                                         ->first();
         $door_status  = DoorStatus::select('status')
-                                    ->where('door_id', $door_id)
+                                    ->where('door_id', $ip_details['door_id'])
                                     ->first(); 
         $door_status= $door_status['status'];
         // dd($door_status)  ;                                     
@@ -263,12 +271,12 @@ return redirect()->back()->with($notification);
             try{
               DoorScheduleCounter::where('door_schedule_door_id', $button_requests['door_schedule_door_id'])
                                         ->update(['open_out'=>$button_request_counters['open_out']+1,]);
-              DoorStatus::where('door_id', $door_id)
+              DoorStatus::where('door_id', $ip_details['door_id'])
                             ->update(['status'=>'Unlocked',
                             'status_setter'=>1000,
                  ]);
               DoorStatusSetter::create([
-                'door_id'=> $door_id,
+                'door_id'=> $ip_details['door_id'],
                 'status' => 'Unlocked',
                 'user_id'=> 1000,
                 'door_schedule_id'=>$button_requests['door_schedule_id'],
@@ -294,12 +302,12 @@ return redirect()->back()->with($notification);
              try{
               DoorScheduleCounter::where('door_schedule_door_id', $button_requests['door_schedule_door_id'])
                                         ->update(['open_in'=>$button_request_counters['open_in']+1,]);
-              DoorStatus::where('door_id', $door_id)
+              DoorStatus::where('door_id', $ip_details['door_id'])
                             ->update(['status'=>'Unlocked',
                             'status_setter'=>1000,
                  ]);
               DoorStatusSetter::create([
-                'door_id'=> $door_id,
+                'door_id'=> $ip_details['door_id'],
                 'status' => 'Unlocked',
                 'user_id'=> 1000,
                 'door_schedule_id'=>$button_requests['door_schedule_id']
@@ -329,12 +337,12 @@ return redirect()->back()->with($notification);
                   
                   DoorScheduleCounter::where('door_schedule_door_id', $button_requests['door_schedule_door_id'])
                                         ->update(['close_out'=>$button_request_counters['close_out']+1,]);
-                  DoorStatus::where('door_id', $door_id)
+                  DoorStatus::where('door_id', $ip_details['door_id'])
                                 ->update(['status'=>'Locked',
                                 'status_setter'=>1000,
                      ]);
                   DoorStatusSetter::create([
-                    'door_id'=> $door_id,
+                    'door_id'=> $ip_details['door_id'],
                     'status' => 'Locked',
                     'user_id'=> 1000,
                     'door_schedule_id'=>$button_requests['door_schedule_id']
@@ -363,12 +371,12 @@ return redirect()->back()->with($notification);
                 try{
                   DoorScheduleCounter::where('door_schedule_door_id', $button_requests['door_schedule_door_id'])
                                         ->update(['close_in'=>$button_request_counters['close_in']+1,]);
-                  DoorStatus::where('door_id', $door_id)
+                  DoorStatus::where('door_id', $ip_details['door_id'])
                                 ->update(['status'=>'Locked',
                                 'status_setter'=>1000,
                      ]);
                   DoorStatusSetter::create([
-                    'door_id'=> $door_id,
+                    'door_id'=> $ip_details['door_id'],
                     'status' => 'Locked',
                     'user_id'=> 1000,
                     'door_schedule_id'=>$button_requests['door_schedule_id'],
@@ -402,6 +410,54 @@ public function scheduleGroups($encoded_permission_id){
 
   }
 
+  public function editScheduleGroup(Request $request, $encoded_permission_id, $encoded_schedule_group_id){
+    $selected_schedule_id= base64_decode($encoded_schedule_group_id);
+   
+    if($request->isMethod('get')){
+       $schedule_group= DoorSchedulePermission::where('id',$selected_schedule_id)
+                                                ->select('*')
+                                                ->first();
+        return view('schedule.editScheduleGroup',['encoded_permission_id'=>$encoded_permission_id, 'schedule_group'=>$schedule_group]);
+    }else{
+        $schedules=$request->all();
+        DB::beginTransaction();
+        try{
+        $create_permissions =DoorSchedulePermission::where('id', $selected_schedule_id)
+                                                     -> update([
+                                                            'permission_name' => $schedules['permission_group_name'],
+                                                            'open_in' =>  $schedules['open_in'],
+                                                            'close_in' =>  $schedules['close_in'],
+                                                            'open_out' =>  $schedules['open_out'],
+                                                            'close_out' =>  $schedules['close_out'],
+                                                            'open_in_fre' =>  $schedules['open_in_fre'],
+                                                            'close_in_fre' =>  $schedules['close_in_fre'],
+                                                            'open_out_fre' =>  $schedules['open_out_fre'],
+                                                            'close_out_fre' =>  $schedules['close_out_fre'],
+                                                        //'user_id' =>  Auth::id(),
+                                                        ]);
+            DB::commit();
+            $notification = array(
+                'alert-type' => 'success',
+                'message' => 'Schedule Group Updated Successful');
+                
+                    
+                    
+            }
+                    
+                catch (\Exception $e) {
+                    DB::rollback();
+                    $notification = array(
+                        'alert-type' => 'error',
+                        'message' => 'Oooops!! an error occurred please try again later'
+                    );
+                    } 
+                    return redirect()->route('schedule.scheduleGroups',['id'=>$encoded_permission_id])->with($notification);
+            
+            }
+            
+    }
+  
+
   public function doorSchedulePermissions($encoded_permission_id){
     
    
@@ -416,10 +472,82 @@ public function scheduleGroups($encoded_permission_id){
                             ->value('unit_id');
     $doorSchedulePermissions= DoorSchedule::leftjoin('users','users.id','=','door_schedules.user_id')
                                         ->select('door_schedules.*','users.fname','users.lname','users.id as user_id')
-                                        ->where('unit_id',0)
-                                       // ->where('unit_id',$unit_id)
+                                        //->where('unit_id',0)
+                                        ->where('unit_id',$unit_id)
                                         ->get();  
      return DataTables::of($doorSchedulePermissions)->make(true);
+  }
+
+  public function editSchedule(Request $request, $encoded_permission_id, $encoded_schedule_id){
+    $schedule_id=base64_decode($encoded_schedule_id);
+    if($request->isMethod('get')){
+        $schedules=DoorSchedule::leftJoin('door_schedule_permissions','door_schedule_permissions.id','=','door_schedules.door_schedule_permission_id')
+                                ->where('door_schedules.id', $schedule_id)
+                                ->select('door_schedules.*','door_schedule_permissions.permission_name')
+                                ->first();
+         $doors=Door::where('unit_id',$schedules['unit_id'])   
+                        ->select('*')
+                        ->get();                    
+         $unit=Unit::where('id',$schedules['unit_id'])  
+                    ->select('*')
+                   -> first() ; 
+                   //dd($unit); 
+         $permission_groups  = DoorSchedulePermission::where('user_id',Auth::id())
+                                                        ->select('permission_name','id') 
+                                                        ->get(); 
+        $selectedDoors  = DoorScheduleDoor::where('door_schedule_id',$schedule_id) 
+                                            ->pluck('door_id') 
+                                            ->toArray();                                                                    
+        return view('schedule.editSchedule',['encoded_permission_id'=>$encoded_permission_id,
+                                                     'schedule'=>$schedules,
+                                                    'unit'=>$unit,
+                                                'doors'=>$doors,
+                                               'permission_groups'=> $permission_groups,
+                                             'selectedDoors'=>$selectedDoors]);
+    }else{
+        $schedules=$request->all();
+        DB::beginTransaction();
+        try{
+        $schedule_create= DoorSchedule::where('id',$schedule_id)
+                            ->update([
+                                'start_date' => $schedules['start_date'],
+                                'end_date' =>  $schedules['end_date'],
+                                'user_id' =>  Auth::id(),
+                                'door_schedule_permission_id' =>  $schedules['permission_group_id'],
+                           // 'unit_id' => $schedules['unit_id'],
+                            ]);
+
+        DoorScheduleDoor::where('door_schedule_id',$schedule_id)
+                ->delete();
+                                
+            foreach ($schedules as $door_name_ => $door_id) {
+                if (strpos($door_name_, 'door_id_') !== false) {
+                
+                    $door_schedule_door = DoorScheduleDoor::create(
+                        [
+                            'door_schedule_id' => $schedule_id,
+                            'door_id' => $door_id,
+                        ]);
+                }                    
+                        }
+
+                        DB::commit();
+                                    $notification = array(
+                                        'alert-type' => 'success',
+                                        'message' => 'Schedule updated successfully'
+                                    );
+                        }
+                        catch (\Exception $e) {
+                            DB::rollback();
+                                $notification = $e;
+                                // array(
+                                // 'alert-type' => 'error',
+                                // 'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
+                                // );
+                    } 
+                    return redirect()->route('schedule.doorSchedulePermissions', ['id' => $encoded_permission_id])->with($notification);
+
+    }
   }
     /**
      * Remove the specified resource from storage.

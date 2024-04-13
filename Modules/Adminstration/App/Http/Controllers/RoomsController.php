@@ -236,6 +236,7 @@ class RoomsController extends Controller
                                 'door_name'=>  $ip_details['door_name'],
                                 'ip_address'=>  $ip_details['ip_address'],
                                 'door_ip_status'=>  $ip_details['door_ip_status'],
+                                'device_serial_number'=>  $ip_details['device_serial_number'],
                                 ]);
             DB::commit();
             $notification = array(
@@ -247,7 +248,7 @@ class RoomsController extends Controller
                     DB::rollback();
                     if ($e->getCode() == '23000' && strpos($e->getMessage(), 'Duplicate entry') !== false) {
                         $notification =array(
-                                    'message'    => 'Ooops!! The Ip Address Already Exists',
+                                    'message'    => 'Ooops!! The Ip Address Or Serial Number Already Exists',
                                     'alert-type' => 'error',
                                          );
                     } else {

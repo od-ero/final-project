@@ -101,7 +101,7 @@ Route::get('/home/data', 'HomeController@index_data')->name('home.index.data');
 Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
 
 // PermissionController Routes
-Route::post('/add/permissions/{id}','PermissionController@store')->name('permissions.store');
+Route::match(['GET','POST'],'/add/permissions/{id}','PermissionController@store')->name('permissions.store');
 Route::post('/add/myunits','PermissionController@show')->name('permissions.show');
 Route::post('/add/creates/permission','PermissionController@create')->name('permissions.create');
 Route::get('/permissions/guests/permission/{id}','PermissionController@myPermissions')->name('permissions.myPermissions');
@@ -112,6 +112,7 @@ Route::get('/permissions/permission/groups/get/{id}','PermissionController@permi
 Route::match(['GET','POST'],'/groups/me/permissions/update/{id}/{selectId}', 'PermissionController@editPermissionGroup')->name('permissions.editPermissionGroup');
 Route::post('/permissions/groups/destroy','PermissionController@PermissionGroupdestroy')->name('permissions.PermissionGroupdestroy');
 Route::get('/permissions/groups/data','PermissionController@permissionGroupsData')->name('permissions.permissionGroupsData');
+Route::match(['GET','POST'],'/groups/me/create/permissions/{id}', 'PermissionController@addPermissionGroup')->name('permissions.addPermissionGroup');
 
 // ScheduleController Route
 Route::match(['GET','POST'], '/make/schedule/{id}','ScheduleController@store')->name('schedule.store');
@@ -119,6 +120,8 @@ Route::get('/schedule/groups/{id}','ScheduleController@scheduleGroups')->name('s
 Route::get('/data/user/schedule/groups','ScheduleController@scheduleGroupsData')->name('schedule.scheduleGroupsData');
 Route::get('/units/schedule/permissions/{id}','ScheduleController@doorSchedulePermissions')->name('schedule.doorSchedulePermissions');
 Route::get('/schedule/permissions/door/data/{id}','ScheduleController@doorSchedulePermissionsData')->name('schedule.doorSchedulePermissionsData');
+Route::match(['GET','POST'],'/update/groups/schedules/{id}/{sch}','ScheduleController@editScheduleGroup')->name('schedule.editScheduleGroup');
+Route::match(['GET','POST'],'/update/schedule/user/{id}/{sch}','ScheduleController@editSchedule')->name('schedule.editSchedule');
 // UnitController Routes
 Route::get('/home/myunits','UnitController@index')->name('units.index');
 Route::match(['GET','UPDATE','POST'],'/units/create','UnitController@create')->name('units.create');

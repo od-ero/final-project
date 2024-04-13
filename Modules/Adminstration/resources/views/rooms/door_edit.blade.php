@@ -31,6 +31,15 @@ Update Door
                                                
                                             </div>
                                             <div class="row mb-3">
+                                                
+                                                <div class="form-floating mb-3">
+                                            <input class="form-control" maxlength="8" name="device_serial_number" id="device_serial_number" type="text" value="{{$door_details['device_serial_number']}}" />
+                                                    <label for="inputFirstName" >Device Serial Number</label>
+                                                </div>
+                                            
+                                           
+                                        </div>
+                                            <div class="row mb-3">
                                                     <div class="form-floating mb-3">
                                                         <input class="form-control" id="ip_address" type="text" name="ip_address" value="{{$door_details['ip_address']}}" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" />
                                                         <label for="ip_address">IP V4 Address</label>

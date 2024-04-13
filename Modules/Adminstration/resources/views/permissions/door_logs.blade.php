@@ -81,34 +81,32 @@
                         </div>
                     </div>
 
-            <!-- <script>
-                window.addEventListener('DOMContentLoaded', event => {
-                // Simple-DataTables
-                // https://github.com/fiduswriter/Simple-DataTables/wiki
+                    <script>
+  window.addEventListener('DOMContentLoaded', event => {
+    const datatablesSimple = document.getElementById('datatablesSimple');
+    if (datatablesSimple) {
+      new simpleDatatables.DataTable(datatablesSimple,{
+        layout: {
+          topStart: {
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+          }
+        }
+      });
+    }
+  });
+</script>
 
-                const datatablesSimple = document.getElementById('datatablesSimple');
-                if (datatablesSimple) {
-                    new simpleDatatables.DataTable(datatablesSimple,{
-                        layout: {
-                            topStart: {
-                                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-                            }
+              
+              <!-- <script>
+                 new DataTable('#datatablesSimple', {
+                         layout: {
+                             topStart: {
+                                 buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                             }
                         }
                     });
-                }
-            });
-
-            </script> -->
+             </script> -->
             <!-- <script>
-                new DataTable('#datatablesSimple', {
-                        layout: {
-                            topStart: {
-                                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-                            }
-                        }
-                    });
-            </script> -->
-            <script>
         $(document).ready(function () {
     // Setup - add a text input to each footer cell
     $('#datatablesSimple thead tr')
@@ -218,5 +216,5 @@
     });
 });
 
-</script>
+</script> -->
             @endsection

@@ -259,7 +259,6 @@ public function create(Request $request){
                                                 ->get();
             return view('permissions.editMyPermissions',['selected_permission'=>$selected_permission, 
                                                         'selectedDoors'=>$selectedDoors,
-                                                        'checked_doors'=>$selectedDoors,
                                                         'doors'=>$doors,
                                                         'unit' =>$unit,
                                                         'permission_groups'=>$permission_groups,
