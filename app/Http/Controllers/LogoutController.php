@@ -18,7 +18,10 @@ class LogoutController extends Controller
         Session::flush();
         
         Auth::logout();
-
-        return redirect('/');
+        $notification = array(
+            'message'    => 'You Have Logged Out Succesful',
+            'alert-type' => 'success',
+        );
+        return redirect('/')->with($notification);
     }
 }

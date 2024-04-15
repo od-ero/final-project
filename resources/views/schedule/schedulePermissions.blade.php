@@ -163,9 +163,11 @@
 
             // Return the HTML content with URLs including row_id
             return `<div class="btn-group dropend">
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#viewScheduleModal" onclick="setUnitId(${row_id})">
-                        View
-                        </button>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#viewScheduleModal" data-row-id="s}">
+
+View
+
+</button>
                         <button type="button" class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropright</span> More
                         </button>
@@ -193,7 +195,27 @@
     }
 </script>
 
+<script>
+    $(document).ready(function() {
+  $('#viewScheduleModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var rowId = button.data('id'); // Get the row_id from the data attribute
 
+    $.ajax({
+      url: "/your/backend/route/" + rowId, // Replace with your actual route URL
+      type: "GET",
+      success: function(data) {
+        // Update the modal content with the retrieved data
+        $('#modalContent').html(data); // Replace with the ID of your modal content container
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.error("Error fetching data:", textStatus, errorThrown);
+        // Handle errors appropriately, e.g., display an error message to the user
+      }
+    });
+  });
+});
+</script>
 @endsection
         @endauth
     </div>

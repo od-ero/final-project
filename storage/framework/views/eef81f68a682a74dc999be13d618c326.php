@@ -95,12 +95,13 @@
       <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 d-none d-sm-block">
         <input type="text" class="form-control form-control-ligth  text-center" value="Unikey" readonly>
       </form>
+      <a href="/" class="btn btn-outline-secondary text-secondary me-2">
+          <span class ="fa-light fa-house"></span> Home
+        </a>
       <?php if(auth()->guard()->check()): ?>
       <?php echo e(auth()->user()->name); ?>
 
-       <a href="/" class="btn btn-outline-secondary text-secondary me-2">
-          <span class ="fa-light fa-house"></span> Home
-        </a>
+       
         <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button> 

@@ -21,8 +21,15 @@ Route::prefix('admin1')->group(function () {
 Route::group(['middleware' => 'web','domain' => config('app.adminDomain')], function () {
     //Route::resource('adminstration', AdminstrationController::class)->names('adminstration');
    
-    //adminstration
     
+    
+    Route::get('/admin/login', 'AuthController@show')->name('login.show');
+    Route::post('/admin/auth/login', 'AuthController@login')->name('adminLogin.perform');
+
+    Route::group(['middleware' => ['auth']], function() {
+    Route::get('/admin/flush', 'AuthController@logout')->name('adminLogin.Logout');
+
+    //adminstration
     Route::get('/welcome', 'AdminstrationController@index')->name('adminstration.index'); 
     Route::get('/welcome/data', 'AdminstrationController@indexData')->name('adminstration.index_data'); 
     Route::get('/welcome/devices/health', 'AdminstrationController@devicesHealth')->name('adminstration.devices_health');
@@ -44,4 +51,6 @@ Route::group(['middleware' => 'web','domain' => config('app.adminDomain')], func
 
     //permissions
     Route::get('/permissions/show/{id}', 'PermissionsController@show')->name('permissions.show');
+
+});
 });

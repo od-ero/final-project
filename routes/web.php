@@ -56,11 +56,11 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['domain' => config('app.adminDomain')], function () {
     Route::get("/home",function(){
-        return redirect("welcome");
+        return redirect("/welcome");
     });
 
     Route::get("/",function(){
-        return redirect("welcome");
+        return redirect("/admin/login");
     });
 });
 

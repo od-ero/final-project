@@ -91,7 +91,7 @@
         <input class="form-check-input" type="radio" name="schedule" id="schedule_no" value="no"  @if($permissionGroup['schedule']=='no') checked @endif>
       </div>
       <div class="form-floating">
-             <input type="text" class="form-control" name="schedule_fre"@if($permissionGroup['schedule']=='yes'){ value='{{$permissionGroup['schedule_fre']}}'
+             <input type="text" class="form-control" name="schedule_fre" @if($permissionGroup['schedule']=='yes'){ value='{{$permissionGroup['schedule_fre']}}'
  } @else value='0' @endif placeholder="Frequency" required="required" autofocus>
              <label for="schedule_fre">Frequency</label>
        </div>

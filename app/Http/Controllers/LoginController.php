@@ -27,11 +27,6 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request)
     {    
-        if($request->isMethod('get')){
-            return view('auth.login');   
-    }else{
-
-    
         $credentials = $request->getCredentials();
 ///dd($credentials);
         if(!Auth::validate($credentials)):
@@ -51,8 +46,7 @@ class LoginController extends Controller
 
         return $this->authenticated($request, $user);
     }
-    }
-
+   
     /**
      * Handle response after user authenticated
      * 

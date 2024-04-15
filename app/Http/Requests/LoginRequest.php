@@ -43,7 +43,6 @@ class LoginRequest extends FormRequest
         // logging users in with both (email and phone)
         // we have to check if the user has entered one or another
         $loginIdentifier = $this->get('login_identifier');
-
         if ($this->isEmail($loginIdentifier)) {
             return [
                 'email' => $loginIdentifier,

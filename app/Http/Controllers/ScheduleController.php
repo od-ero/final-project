@@ -472,8 +472,8 @@ public function scheduleGroups($encoded_permission_id){
                             ->value('unit_id');
     $doorSchedulePermissions= DoorSchedule::leftjoin('users','users.id','=','door_schedules.user_id')
                                         ->select('door_schedules.*','users.fname','users.lname','users.id as user_id')
-                                        //->where('unit_id',0)
-                                        ->where('unit_id',$unit_id)
+                                        ->where('unit_id',0)
+                                       // ->where('unit_id',$unit_id)
                                         ->get();  
      return DataTables::of($doorSchedulePermissions)->make(true);
   }
