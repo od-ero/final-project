@@ -54,14 +54,14 @@ class AuthController extends Controller
 
         $user = Auth::getProvider()->retrieveByCredentials($credentials);
 //dd($user->admin);
-        if($user->admin){
+        if($user->role_id!=1){
             Auth::login($user);
 
             return $this->authenticated($request, $user);}
             else{
                 $notification= array(
                     'alert-type' => 'error',
-                    'message' => 'Oooops!! Kindly login via this page.'
+                    'message' => 'Oooops!! Kindly login via the general page at '. env('USERS_DOMAIN')
                             );
                 return redirect()->to('/admin/login')
                      ->with($notification);

@@ -16,6 +16,7 @@
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
+        <?php if(auth()->guard()->check()): ?>
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="/welcome">Admin <?php echo e(ENV('APP_NAME')); ?></a>
@@ -41,6 +42,8 @@
                 </li>
             </ul>
         </nav>
+        <?php endif; ?>
+        <?php if(auth()->guard()->check()): ?>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
@@ -120,6 +123,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-users"></i>"></i></div>
                                Users
                             </a>
+                           
                             <!-- <a class="nav-link" href="/users/index">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Tables
@@ -147,7 +151,7 @@
 <?php endif; ?>
                 </nav>
             </div>
-
+<?php endif; ?>
 
             <?php echo $__env->make('adminstration::layouts.partials.scripts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 
@@ -159,8 +163,9 @@
                  <?php echo $__env->make('adminstration::layouts.partials.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <?php endif; ?>
             </div>
-           
+        <?php if(auth()->guard()->check()): ?>   
         </div>
+        <?php endif; ?>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         

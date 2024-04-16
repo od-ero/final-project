@@ -46,8 +46,9 @@ Route::group(['middleware' => 'web','domain' => config('app.adminDomain')], func
     Route::post('/rooms/destroy', 'RoomsController@destroy')->name('rooms.destroy');
 
     //users
-    Route::get('/users/index', 'usersController@index')->name('users.index');
-    Route::get('/admin/user/search', 'usersController@search')->name('users.search');
+    Route::get('/users/index', 'UsersController@index')->name('users.index');
+    Route::match(['GET','POST'],'/users/admins/show/{id}','UsersController@show')->name('users.show');
+    Route::get('/admin/user/search', 'UsersController@search')->name('users.search');
 
     //permissions
     Route::get('/permissions/show/{id}', 'PermissionsController@show')->name('permissions.show');

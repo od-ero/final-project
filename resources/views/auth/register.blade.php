@@ -6,6 +6,7 @@ Register
     <form method="post" action="{{ route('register.perform') }}">
 
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="role_id" value="1" />
        <div class="align-items-center ">
        <img class=" mb-4" src="{!! url('images/unikey.png') !!}" alt="" width="72" height="57">
         

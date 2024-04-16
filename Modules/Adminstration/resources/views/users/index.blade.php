@@ -8,8 +8,8 @@
 @endsection
 
 @section('content')
-<div class="container">
-
+        <div class="container">
+                
                     <div class="container-fluid px-4">
                         <h2 class="mt-4 text-white">Users</h2>
                         <ol class="breadcrumb mb-4">
@@ -37,7 +37,13 @@
                                             <th>Last Name</th>
                                             <th>Phone Number</th>
                                             <th>Email Address</th>
+                                            @if($user_role_id > 2)
+                                            <th>Role</th>
+                                            @endif
                                             <th>Joining Date</th>
+                                            @if($user_role_id > 2)
+                                            <th>Action</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -47,7 +53,13 @@
                                             <th>Last Name</th>
                                             <th>Phone Number</th>
                                             <th>Email Address</th>
+                                            @if($user_role_id > 2)
+                                            <th>Role</th>
+                                            @endif
                                             <th>Joining Date</th>
+                                            @if($user_role_id > 2)
+                                            <th>Action</th>
+                                            @endif
                                         </tr>
                                     </tfoot>
                                     @foreach($users as $user)
@@ -57,16 +69,22 @@
                                             <td>{{$user['lname']}}</td>
                                             <td>{{$user['phone']}}</td>
                                             <td>{{$user['email']}}</td>
+                                            @if($user_role_id > 2)
+                                            <td>{{$user['role_name']}}</td>
+                                            @endif
                                             <td >{{$user['created_at']}}</td>
+                                            @if($user_role_id > 2)
+                                            <td> <a href="/users/admins/show/{{base64_encode($user['id'])}}" class="btn btn-primary btn-lg" tabindex="-1" role="button">Update Role</a></td>
+                                            @endif
                                         </tr>
                                         
-                                     @endforeach
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-
+        </div>
             <script>
                 window.addEventListener('DOMContentLoaded', event => {
                 // Simple-DataTables
@@ -78,5 +96,10 @@
                 }
             });
 
+            </script>
+             <script>
+                function setUserId(userId) {
+                    document.getElementById('userIdInput').value = userId;
+                }
             </script>
             @endsection
