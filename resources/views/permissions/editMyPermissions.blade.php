@@ -28,7 +28,7 @@
     <p><i>
       Kindly enter either of the Users name and and phone number and search to select the user
     </i></p>
-   
+   {{dd($selected_permission)}}
     <div class="row userxxInput">
         <div class="col-5">
             <div class="form-floating mt-3 mb-3">

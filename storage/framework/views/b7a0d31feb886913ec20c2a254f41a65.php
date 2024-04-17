@@ -1,10 +1,10 @@
 
 <?php $__env->startSection('subtitle'); ?>
-Add A Room
+    Update A Room
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('contentheader_title'); ?>
-   Add A Room
+    Update A Room
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>

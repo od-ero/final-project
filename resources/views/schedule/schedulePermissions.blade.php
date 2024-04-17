@@ -30,11 +30,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
+        @isset($sshedule)
+          @foreach($doorSchedulecounters as $doorSchedulecounter)
+          {{$doorSchedulecounter->id}}
+          @endforeach
+          @endisset
       </div>
+     
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-success">Save changes</button>
       </div>
     </div>
   </div>
@@ -70,10 +75,11 @@
                     </div>
             </div>
         </div>
-   
-<input type="text" id="encoded_permission_id" value="{{$encoded_permission_id}}" hidden>
-
+ 
 <table class="table table-striped table-responsive" id="units">
+  
+<input type="text" id='encoded_permission_id' value='{{$encoded_permission_id}}' hidden>
+
 <thead>
       <tr>
         <th style="width:5%">ID</th>
@@ -85,137 +91,135 @@
  </thead>
 </table>
 <script type="text/javascript">
-    $(function () {
-        $('#units').DataTable({
-            processing: true,
-            serverSide: true,
-            paging: true,
-            ordering: true,
-            searching: true,
-            language: {
-                emptyTable: "No button activation schedules"
-            },
-            ajax: "/schedule/permissions/door/data/{{$encoded_permission_id}}",
-            columns: [
-               
-                {
-    data: 'id',
-    name: 'id',
-    render: function (data, type, row, meta) {
-                    var incrementedValue = meta.row + 1;
-                    return incrementedValue;
-                }
-    
-},
-{
-    data: null,
-    name: 'combined_name',
-    
-    render: function (data, type, row) {
-        var combinedName = row.fname + '  ' + row.lname;
-        var loggedInUserId = '{{ $current_user_id }}'; 
-
-        if (row.user_id == loggedInUserId) {
-            var combinedName = 'You';
-        } else {
-            var combinedName = row.fname + ' ' + row.lname;
-        }
-
-        return combinedName;
-    }
-    }
-    
-,  
-    {
-        data: 'start_date',
-        name: 'start_date',
-        render: function (data, type, row) {
-                        // Parse the date using Carbon
-                        var formattedDate = moment(data).format('ddd, MMM DD, YYYY h:mm A');
-                        
-                        // Return the formatted date as a link
-                        return formattedDate ;
-                    }
-        
-    }
-    ,
-    {
-        data: 'end_date',
-        name: 'end_date',
-        render: function (data, type, row) {
-                        // Parse the date using Carbon
-                        var formattedDate = moment(data).format('ddd, MMM DD, YYYY h:mm A');
-                        
-                        // Return the formatted date as a link
-                        return formattedDate ;
-                    }
-        
+$(function () {
+ 
+  $('#units').DataTable({
+    processing: true,
+    serverSide: true,
+    paging: true,
+    ordering: true,
+    searching: true,
+    language: {
+      emptyTable: "No button activation schedules"
     },
-    {
+    ajax: {
+      url: "/schedule/permissions/door/data/{{$encoded_permission_id}}",
+      type: "GET",
+      // data: function (d) {
+      //   d.encodedPermissionId = document.getElementById('encoded_permission_id').value;
+      //   // Pass additional data if needed
+      //   // d.customParam = 'value';
+      // }
+    },
+    columns: [
+      {
         data: 'id',
         name: 'id',
-        render: function(data, type, row) {
-            var row_id = row.id;
-            var encoded_permission_id= document.getElementById("encoded_permission_id").value;
-            // Construct the URLs using row_id
-            var viewUrl = '/permissions/edit/mypermissions/' + btoa(row_id);
-            var updateUrl = '/update/schedule/user/' + encoded_permission_id + '/' + btoa(row_id);
-
-            // Return the HTML content with URLs including row_id
-            return `<div class="btn-group dropend">
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#viewScheduleModal" data-row-id="s}">
-
-View
-
-</button>
-                        <button type="button" class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="visually-hidden">Toggle Dropright</span> More
-                        </button>
-                        <ul class="dropdown-menu">
-                            <div class="m-2 text-center">
-                                <li class="mb-2"><a href="${updateUrl}" class="btn btn-success" role="button">Update</a></li>
-                                <li>
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUnitId(${row_id})">Revoke</button>
-                                </li>
-                            </div>
-                        </ul>
-                    </div>`;
+        render: function (data, type, row, meta) {
+          var incrementedValue = meta.row + 1;
+          return incrementedValue;
         }
+      },
+      {
+        data: null,
+        name: 'combined_name',
+        render: function (data, type, row) {
+          var combinedName = row.fname + ' ' + row.lname;
+          var loggedInUserId = '{{ $current_user_id }}';
 
+          if (row.user_id == loggedInUserId) {
+            combinedName = 'You';
+          }
 
-            }
+          return combinedName;
+        }
+      },
+      {
+                    data: 'start_date',
+                    name: 'start_date',
+                      render: function (data, type, row) {
+                            // Parse the date using Carbon
+                            var formattedDate = moment(data).format('ddd, MMM DD, YYYY h:mm A');
+                            
+                            // Return the formatted date as a link
+                            return  formattedDate ;
+                        }
+                    
+                },
+                {
+                    data: 'end_date',
+                    name: 'end_date',
+                      render: function (data, type, row) {
+                          // Parse the date using Carbon
+                          var formattedDate = moment(data).format('ddd, MMM DD, YYYY h:mm A');
+                          
+                          // Return the formatted date as a link
+                          return  formattedDate ;
+                      }
+                } ,
+      {
+        data: 'id',
+        name: 'id',
+        render: function (data, type, row) {
+          var rowId = row.id;
+          var encodedPermissionId= document.getElementById("encoded_permission_id").value;
+          var viewUrl = '/doors/schedules/view/'+ encodedPermissionId + '/' + btoa(rowId);
+          var updateUrl = '/update/schedule/user/' + encodedPermissionId + '/' + btoa(rowId);
 
-            ]
-        });
+          // Construct HTML content with URLs using backticks (template literals)
+          return `
+            <div class="btn-group dropend">
+            <a href="${viewUrl}" class="btn btn-success" role="button">View</a>
+              
+              <button type="button" class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="visually-hidden">Toggle Dropright</span>
+                More
+              </button>
+              <ul class="dropdown-menu">
+                <div class="m-2 text-center">
+                  <li class="mb-2"><a href="${updateUrl}" class="btn btn-success" role="button">Update</a></li>
+                  <li>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUnitId(${rowId})">Revoke</button>
+                  </li>
+                </div>
+              </ul>
+            </div>
+          `;
+        }
+      }
+    ]
+  });
+
+  // Attach click event handler to all view buttons using a class selector
+  $('#units tbody').on('click', '.view-schedule-btn', function () {
+    var scheduleId = $(this).data('rowId');
+console.log(scheduleId);
+    // Fetch data from Laravel route using AJAX
+    $.ajax({
+      url: '/doors/schedules/view/' + scheduleId,
+      method: 'GET',
+      success: function (data) {
+      //console.log(html(data.html))
+        // Update modal content based on fetched data
+        $('#viewScheduleModal .modal-body').html(data.html);
+        $('#viewScheduleModal').modal('show'); // Show the modal
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error('Error fetching schedule data:', errorThrown);
+        // Handle errors appropriately
+      }
     });
+  });
+});
 </script>
+
 <script>
     function setUnitId(permissionId) {
         document.getElementById('unitIdInput').value = permissionId;
     }
 </script>
 
-<script>
-    $(document).ready(function() {
-  $('#viewScheduleModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var rowId = button.data('id'); // Get the row_id from the data attribute
 
-    $.ajax({
-      url: "/your/backend/route/" + rowId, // Replace with your actual route URL
-      type: "GET",
-      success: function(data) {
-        // Update the modal content with the retrieved data
-        $('#modalContent').html(data); // Replace with the ID of your modal content container
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        console.error("Error fetching data:", textStatus, errorThrown);
-        // Handle errors appropriately, e.g., display an error message to the user
-      }
-    });
-  });
-});
-</script>
 @endsection
         @endauth
     </div>

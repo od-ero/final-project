@@ -151,11 +151,11 @@ $(function () {
                 data: 'status',
                 name: 'status',
                 render: function (data, type, row) {
-    var initialStatus = row.status;
-    var row_id = row.id;
-    var encoded_permission_id= document.getElementById("encoded_permission_id").value;
-    var buttonColor = (initialStatus === 'Locked') ? 'btn-success' : 'btn-danger';
-    var buttonText = (initialStatus === 'Locked') ? 'Unlock' : 'Lock';
+                var initialStatus = row.status;
+                var row_id = row.id;
+                var encoded_permission_id= document.getElementById("encoded_permission_id").value;
+                var buttonColor = (initialStatus === 'Locked') ? 'btn-success' : 'btn-danger';
+                var buttonText = (initialStatus === 'Locked') ? 'Unlock' : 'Lock';
 
     // ...
 

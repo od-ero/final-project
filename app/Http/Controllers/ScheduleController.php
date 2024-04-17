@@ -77,7 +77,6 @@ class ScheduleController extends Controller
              $permission_groups=DoorSchedulePermission::where('user_id',Auth::id())
                                                        ->select('id','permission_name')
                                                         ->get();
-                                                      //  dd($permission_groups);
             return view('add_schedule' , [
                 'doors'=>  $doors,
                 'unit'=> $unit,
@@ -464,7 +463,8 @@ public function scheduleGroups($encoded_permission_id){
      $current_user_id= Auth::id();   
      
     return view('schedule.schedulePermissions',['current_user_id'=>$current_user_id,
-                                                'encoded_permission_id'=>$encoded_permission_id]);
+                                                'encoded_permission_id'=>$encoded_permission_id,
+                                                  ]);
   }
   public function doorSchedulePermissionsData($encoded_permission_id){
     $permission_id= base64_decode($encoded_permission_id);
@@ -472,8 +472,8 @@ public function scheduleGroups($encoded_permission_id){
                             ->value('unit_id');
     $doorSchedulePermissions= DoorSchedule::leftjoin('users','users.id','=','door_schedules.user_id')
                                         ->select('door_schedules.*','users.fname','users.lname','users.id as user_id')
-                                        ->where('unit_id',0)
-                                       // ->where('unit_id',$unit_id)
+                                        //->where('unit_id',0)
+                                       ->where('unit_id',$unit_id)
                                         ->get();  
      return DataTables::of($doorSchedulePermissions)->make(true);
   }
@@ -548,6 +548,23 @@ public function scheduleGroups($encoded_permission_id){
                     return redirect()->route('schedule.doorSchedulePermissions', ['id' => $encoded_permission_id])->with($notification);
 
     }
+  }
+    
+  public function viewSchedule($encoded_permission_id, $schedule_id){
+    $schedules=DoorSchedule::LeftJoin('door_schedule_permissions','door_schedule_permissions.id','=','door_schedules.door_schedule_permission_id') 
+                                ->where('door_schedules.id', 37)
+                                ->select('door_schedule_permissions.*')
+                                ->first();
+    $doorSchedulecounters = DoorScheduleDoor::leftJoin('door_schedule_counters','door_schedule_counters.door_schedule_door_id','=','door_schedule_doors.id')
+                                            ->LeftJoin('doors','doors.id','=','door_schedule_doors.door_id')
+                                            -> where('door_schedule_doors.door_schedule_id', 24) 
+                                            ->select('door_schedule_counters.*','doors.door_name') 
+                                            ->get();    
+     // dd($doorSchedulecounters)   ;                                   
+    return view('schedule.viewSchedule',['schedule'=>$schedules, 
+                                        'doorSchedulecounters'=>$doorSchedulecounters,
+                                        'encoded_permission_id'=>$encoded_permission_id,
+                                    ]);
   }
     /**
      * Remove the specified resource from storage.

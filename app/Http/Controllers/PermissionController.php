@@ -222,10 +222,11 @@ public function create(Request $request){
             $unit_id= $unit_id['unit_id'];
             $my_permissions= MyPermission::leftJoin('permission_groups','my_permissions.permission_group_id','=','permission_groups.id')
                                     ->leftJoin('users','users.id','=','my_permissions.user_id')
-                                    ->select('my_permissions.*','permission_groups.name','users.fname','users.lname')
+                                    ->leftJoin('users as permissioner','permissioner.id','=','my_permissions.permissioner_id')
+                                    ->select('my_permissions.*','permission_groups.name','users.fname','users.lname','permissioner.fname as pfname','permissioner.lname as plname')
                                     //->where('my_permissions.permissioner_id',Auth::id())
-                                    //->where('my_permissions.unit_id',$unit_id)
-                                    //->where('my_permissions.end_date','>',Carbon::now())
+                                    ->where('my_permissions.unit_id',$unit_id)
+                                    ->where('my_permissions.end_date','>',Carbon::now())
                                     ->get();
         }else{
             $my_permissions=[];
@@ -329,7 +330,7 @@ public function create(Request $request){
 
          $notification =array(
                     'alert-type' => 'success',
-                    'message' => 'Permission deleted successfully'
+                    'message' => 'Permission revoked successfully'
                             );            
     } 
     catch (\Exception $e) {

@@ -136,7 +136,7 @@
                     var row_id = row.id;
                     var encoded_permission_id= document.getElementById("encoded_permission_id").value;
                     // Construct the URLs using row_id
-                    var viewUrl = '/permissions/edit/mypermissions/' + btoa(row_id);
+                    var viewUrl = '/doors/permissions/view/'+ encoded_permission_id + '/' + btoa(row_id);
                     var updateUrl = '/permissions/edit/guests/permissions/' + encoded_permission_id + '/' + btoa(row_id);
 
                     // Return the HTML content with URLs including row_id
