@@ -52,8 +52,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
-      Are You Sure you want to revoke this Permission? 
-      <form id="deleteForm" action="/permissions/selected/destroy" method="POST">
+      Are You Sure you want to revoke this schedule? 
+      <form id="deleteForm" action="/doors/shedules/selected/destroy" method="POST">
                     @csrf
                     <input type="hidden" name="permission_id" id="unitIdInput">
                 </form>

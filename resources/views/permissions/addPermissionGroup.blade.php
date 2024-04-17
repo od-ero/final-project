@@ -40,7 +40,7 @@
          </div>
      
          <div class="form-floating ">
-             <input type="text" class="form-control" name="give_permission_fre" value="{{ old('give_permission_fre') }}" placeholder="Frequency" required="required" autofocus>
+             <input type="text" class="form-control" name="give_permission_fre" value="{{ old('give_permission_fre') }}" placeholder="Frequency" autofocus>
              <label for="give_permission_fre">Frequency</label>
          </div>
      </div>
@@ -56,7 +56,7 @@
         <input class="form-check-input" type="radio" name="open" id="open_no" value="no">
       </div>
       <div class="form-floating">
-             <input type="text" class="form-control" name="open_fre" value="{{ old('open_fre') }}" placeholder="Frequency" required="required" autofocus>
+             <input type="text" class="form-control" name="open_fre" value="{{ old('open_fre') }}" placeholder="Frequency"  autofocus>
              <label for="open_fre">Frequency</label>
          </div>
       </div>
@@ -72,12 +72,12 @@
         <input class="form-check-input" type="radio" name="close" id="close_no" value="no">
       </div>
       <div class="form-floating">
-             <input type="text" class="form-control" name="close_fre" value="{{ old('close_fre') }}" placeholder="Frequency" required="required" autofocus>
+             <input type="text" class="form-control" name="close_fre" value="{{ old('close_fre') }}" placeholder="Frequency"  autofocus>
              <label for="close_fre">Frequency</label>
          </div>
        </div>
      
-      <label for="schedule"><b>Schedule Button Access</b></label>
+      <label for="schedule"><b>Schedule</b></label>
       <div class="d-flex align-items-center userInput">
       <div class="form-check form-check-inline ">
            <label class="form-check-label" for="schedule_yes">Yes</label>
@@ -88,14 +88,14 @@
         <input class="form-check-input" type="radio" name="schedule" id="schedule_no" value="no">
       </div>
       <div class="form-floating">
-             <input type="text" class="form-control" name="schedule_fre" value="{{ old('schedule_fre') }}" placeholder="Frequency" required="required" autofocus>
+             <input type="text" class="form-control" name="schedule_fre" value="{{ old('schedule_fre') }}" placeholder="Frequency"  autofocus>
              <label for="schedule_fre">Frequency</label>
        </div>
       </div>
       <hr>
 
 <div class="text-center">
-<button type="submit" class="btn btn-success mx-3">Add Permission Group</button>
+<button type="submit" class="btn btn-success mx-3">Create Permission Group</button>
 <a href="{{ URL::previous() }}" class="btn btn-secondary">Cancel</a>
 </div>
 

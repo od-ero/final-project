@@ -114,7 +114,7 @@ Route::post('/permissions/groups/destroy','PermissionController@PermissionGroupd
 Route::get('/permissions/groups/data','PermissionController@permissionGroupsData')->name('permissions.permissionGroupsData');
 Route::match(['GET','POST'],'/groups/me/create/permissions/{id}', 'PermissionController@addPermissionGroup')->name('permissions.addPermissionGroup');
 Route::get('/doors/permissions/view/{id}/{sch}','PermissionController@viewPermission')->name('permission.viewPermission');
-
+Route::get('/mypermission/view/permissions/{id}/{sch}','PermissionController@viewPermission')->name('permission.viewPermission');
 // ScheduleController Route
 Route::match(['GET','POST'], '/make/schedule/{id}','ScheduleController@store')->name('schedule.store');
 Route::get('/schedule/groups/{id}','ScheduleController@scheduleGroups')->name('schedule.scheduleGroups');
@@ -122,8 +122,10 @@ Route::get('/data/user/schedule/groups','ScheduleController@scheduleGroupsData')
 Route::get('/units/schedule/permissions/{id}','ScheduleController@doorSchedulePermissions')->name('schedule.doorSchedulePermissions');
 Route::get('/schedule/permissions/door/data/{id}','ScheduleController@doorSchedulePermissionsData')->name('schedule.doorSchedulePermissionsData');
 Route::match(['GET','POST'],'/update/groups/schedules/{id}/{sch}','ScheduleController@editScheduleGroup')->name('schedule.editScheduleGroup');
+Route::match(['GET','POST'],'/add/group/schedule/user/{id}/','ScheduleController@addScheduleGroup')->name('schedule.addScheduleGroup');
 Route::match(['GET','POST'],'/update/schedule/user/{id}/{sch}','ScheduleController@editSchedule')->name('schedule.editSchedule');
 Route::get('/doors/schedules/view/{id}/{sch}','ScheduleController@viewSchedule')->name('schedule.viewSchedule');
+Route::post('/doors/shedules/selected/destroy','ScheduleController@destroy')->name('schedule.destroy');
 
 // UnitController Routes
 Route::get('/home/myunits','UnitController@index')->name('units.index');

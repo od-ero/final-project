@@ -92,7 +92,7 @@
     </div>
 
     <div class="form-floating ">
-        <input type="text" class="form-control" name="give_permission_fre" value="{{ old('give_permission_fre') }}" placeholder="Frequency" required="required" autofocus>
+        <input type="text" class="form-control" name="give_permission_fre" value="{{ old('give_permission_fre') }}" placeholder="Frequency"  autofocus>
         <label for="give_permission_fre">Frequency</label>
     </div>
 </div>
@@ -108,7 +108,7 @@
    <input class="form-check-input" type="radio" name="open" id="open_no" value="no">
  </div>
  <div class="form-floating">
-        <input type="text" class="form-control" name="open_fre" value="{{ old('open_fre') }}" placeholder="Frequency" required="required" autofocus>
+        <input type="text" class="form-control" name="open_fre" value="{{ old('open_fre') }}" placeholder="Frequency"  autofocus>
         <label for="open_fre">Frequency</label>
     </div>
  </div>
@@ -124,7 +124,7 @@
    <input class="form-check-input" type="radio" name="close" id="close_no" value="no">
  </div>
  <div class="form-floating">
-        <input type="text" class="form-control" name="close_fre" value="{{ old('close_fre') }}" placeholder="Frequency" required="required" autofocus>
+        <input type="text" class="form-control" name="close_fre" value="{{ old('close_fre') }}" placeholder="Frequency"  autofocus>
         <label for="close_fre">Frequency</label>
     </div>
   </div>
@@ -140,7 +140,7 @@
    <input class="form-check-input" type="radio" name="schedule" id="schedule_no" value="no">
  </div>
  <div class="form-floating">
-        <input type="text" class="form-control" name="schedule_fre" value="{{ old('schedule_fre') }}" placeholder="Frequency" required="required" autofocus>
+        <input type="text" class="form-control" name="schedule_fre" value="{{ old('schedule_fre') }}" placeholder="Frequency"  autofocus>
         <label for="schedule_fre">Frequency</label>
   </div>
  </div>

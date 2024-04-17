@@ -142,6 +142,8 @@
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/permissions/permission/groups/get/{{$encoded_permission_id}}">Permission Groups</a></li>
                 <li><a class="dropdown-item" href="/permissions/guests/permission/{{$encoded_permission_id}}">Guest Permissions</a></li>
+                
+                <li><a class="dropdown-item" href="/mypermission/view/permissions/{{$encoded_permission_id}}/{{$encoded_permission_id}}">My Permissions</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="/add/permissions/{{ $encoded_permission_id }}">Give Permissions</a></li>
               </ul>

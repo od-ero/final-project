@@ -45,7 +45,7 @@
             <div class="col">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <legend>My Schedule Groups</legend>
-                        <a href="/groups/me/create/permissions/{{$encoded_permission_id }}" class="btn btn-outline-success block mx-3">Add Permission Group</a>
+                        <a href="/add/group/schedule/user/{{$encoded_permission_id }}" class="btn btn-outline-success block mx-3">Add Schedule Group</a>
                         <a href="/make/schedule/{{ $encoded_permission_id }}" class="btn btn-outline-success block">Make Schedule</a>
                     </div>
             </div>
@@ -124,13 +124,13 @@
                     
                     // Return the HTML content with URLs including row_id
                     return `<div class="btn-group dropend">
-                                <a href="${viewUrl}" class="btn btn-success btn-lg" tabindex="-1" role="button">View</a>
+                                <a href="${updateUrl}" class="btn btn-success btn-lg" tabindex="-1" role="button">Update</a>
                                 <button type="button" class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                     <span class="visually-hidden">Toggle Dropright</span> More
                                 </button>
                                 <ul class="dropdown-menu">
                                     <div class="m-2 text-center">
-                                        <li class="mb-2"><a href="${updateUrl}" class="btn btn-success" role="button">Update</a></li>
+                                       
                                         <li>
                                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUnitId(${row_id})">Delete</button>
                                         </li>

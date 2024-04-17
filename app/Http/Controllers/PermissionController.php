@@ -57,7 +57,7 @@ else{
     $permissioner_permissions = MyPermission::leftjoin('permissions','my_permissions.permission_group_id','=','permissions.permission_group_id')
                                              -> where('my_permissions.id', $passed_permission_id)
                                             ->first();
-                                                        
+                                                     
     $permissions = $request->all();
 
     
@@ -71,6 +71,30 @@ else{
             'alert-type' => 'error',
             'message' => 'Ooops!!!, You are not allowed to give permissions'
         );   
+    }
+    else if($permissions['permission_group']==='create_new'){
+        if($permissions['give_permission']=='yes' && $permissions['give_permission_fre'===null]){
+            $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Ooops!!!, Kindly fill in give permission frequency'
+            );  
+        }else if($permissions['open']=='yes' && $permissions['open_fre'===null]){
+            $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Ooops!!!, Kindly fill in unlock frequency'
+            );  
+        }else if($permissions['close']=='yes' && $permissions['close_fre'===null]){
+            $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Ooops!!!, Kindly fill in lock frequency'
+            );  
+        }
+        else if($permissions['schedule']=='yes' && $permissions['schedule_fre'===null]){
+            $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Ooops!!!, Kindly fill in schedule frequency'
+            );  
+        }
     }
     else if($permissioner_permission_start_date->gt($start_date)){
         $notification = array(
@@ -102,11 +126,11 @@ else{
                     'give_permission' =>  $permissions['give_permission'],
                     'open' =>  $permissions['open'],
                     'close' =>  $permissions['close'],
-                'schedule' =>  $permissions['schedule'],
-                'give_permission_fre' =>  $permissions['give_permission_fre'],
-                'open_fre' =>  $permissions['open_fre'],
-                'close_fre' =>  $permissions['close_fre'],
-                'schedule_fre' =>  $permissions['schedule_fre']
+                    'schedule' =>  $permissions['schedule'],
+                    'give_permission_fre' => $permissions['give_permission'] == 'no' ? 0 : $permissions['give_permission_fre'],
+                    'open_fre' => $permissions['open'] == 'no' ? 0 : $permissions['open_fre'],
+                    'close_fre' => $permissions['close'] == 'no' ? 0 : $permissions['close_fre'],
+                    'schedule_fre' => $permissions['schedule'] == 'no' ? 0 : $permissions['schedule_fre']
                 ]);
                 $use_permission_group_id=  $permission_group['id'];
             }
@@ -214,19 +238,23 @@ public function create(Request $request){
     public function myPermissionsData($encoded_permission_id)
     {
         $permission_id=base64_decode($encoded_permission_id);
-        $unit_id=MyPermission::select('unit_id')
+        $current_permissions=MyPermission::select('*')
                             ->where('id', $permission_id)
                             ->first();
         //dd($permission_id);
-        if($unit_id){
-            $unit_id= $unit_id['unit_id'];
+        if($current_permissions){
+            $unit_id= $current_permissions['unit_id'];
+            $house_owner= myPermission::where('unit_id',$unit_id)
+                                        ->where('permissioner_id',1001)
+                                        ->value('user_id');
+        //$current_permissions=MyPermission::where('id',)                         
             $my_permissions= MyPermission::leftJoin('permission_groups','my_permissions.permission_group_id','=','permission_groups.id')
                                     ->leftJoin('users','users.id','=','my_permissions.user_id')
                                     ->leftJoin('users as permissioner','permissioner.id','=','my_permissions.permissioner_id')
                                     ->select('my_permissions.*','permission_groups.name','users.fname','users.lname','permissioner.fname as pfname','permissioner.lname as plname')
-                                    //->where('my_permissions.permissioner_id',Auth::id())
+                                    ->where('my_permissions.permissioner_id',Auth::id())
                                     ->where('my_permissions.unit_id',$unit_id)
-                                    ->where('my_permissions.end_date','>',Carbon::now())
+                                    ->where('my_permissions.end_date','>',Carbon::now()->subDay())
                                     ->get();
         }else{
             $my_permissions=[];
@@ -267,6 +295,33 @@ public function create(Request $request){
         }else{
             $permissions=$request->all();
            // dd($permissions);
+           
+           $permissioner_permissions = MyPermission::leftjoin('permissions','my_permissions.permission_group_id','=','permissions.permission_group_id')
+           -> where('my_permissions.id', $selected_permission_id)
+          ->first();
+            $start_date= Carbon::parse($permissions['start_date']);
+            $end_date= Carbon::parse($permissions['end_date']);
+            $permissioner_permission_end_date= Carbon::parse($permissioner_permissions['end_date']);
+            $permissioner_permission_start_date= Carbon::parse($permissioner_permissions['start_date']);
+            if( $permissioner_permissions['give_permission']==='no'){
+                $notification = array(
+                    'alert-type' => 'error',
+                    'message' => 'Ooops!!!, You are not allowed to give permissions'
+                );   
+            }else if($permissioner_permission_start_date->gt($start_date)){
+                $notification = array(
+                     'alert-type' => 'error',
+                     'message' => 'Ooops!!!, Start date must be greater than your assigned start date'
+                 );     
+            }
+        
+            else if($permissioner_permission_end_date->lt($end_date)){
+                $notification = array(
+                    'alert-type' => 'error',
+                    'message' => 'Ooops!!!, End date must be less than your assigned end date '
+                );     
+            }
+           else{
             DB::beginTransaction();
              try{
                     $my_permissions =MyPermission::where('id',$selected_permission_id)
@@ -305,7 +360,7 @@ public function create(Request $request){
                                 'alert-type' => 'error',
                                 'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
                                 );
-                    } 
+                    } }
                     return redirect()->route('permissions.myPermissions', ['id' => $encoded_permission_id])->with($notification);
 
                     
@@ -318,6 +373,7 @@ public function create(Request $request){
     {
       $permission_id= $request->all();
       $permission_id=$permission_id['permission_id'];
+     // dd($permission_id);
       DB::beginTransaction();
       try{
          MyPermissionDoor::where('my_permission_id',$permission_id)
@@ -362,7 +418,7 @@ public function PermissionGroupdestroy(Request $request)
 
          $notification =array(
                     'alert-type' => 'success',
-                    'message' => 'Permission deleted successfully'
+                    'message' => 'Permission revoked successfully'
                             );            
     } 
     catch (\Exception $e) {
@@ -395,6 +451,28 @@ public function addPermissionGroup(Request $request ,$encoded_permission_id)
     }
     else{
         $permissions= $request->all();
+        if($permissions['give_permission']=='yes' && $permissions['give_permission_fre'===null]){
+            $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Ooops!!!, Kindly fill in give permission frequency'
+            );  
+        }else if($permissions['open']=='yes' && $permissions['open_fre'===null]){
+            $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Ooops!!!, Kindly fill in unlock frequency'
+            );  
+        }else if($permissions['close']=='yes' && $permissions['close_fre'===null]){
+            $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Ooops!!!, Kindly fill in lock frequency'
+            );  
+        }
+        else if($permissions['schedule']=='yes' && $permissions['schedule_fre'===null]){
+            $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Ooops!!!, Kindly fill in schedule frequency'
+            );  
+        }else{
         DB::beginTransaction();
         try{
                       $permission_group =PermissionGroup::create([
@@ -403,17 +481,18 @@ public function addPermissionGroup(Request $request ,$encoded_permission_id)
                       ]);
                   // foreach ( $permissions as  $permission)  {
                      
-                      Permission::create([
-                          'permission_group_id' => $permission_group['id'],
-                          'give_permission' =>  $permissions['give_permission'],
-                          'open' =>  $permissions['open'],
-                          'close' =>  $permissions['close'],
-                      'schedule' =>  $permissions['schedule'],
-                      'give_permission_fre' =>  $permissions['give_permission_fre'],
-                      'open_fre' =>  $permissions['open_fre'],
-                      'close_fre' =>  $permissions['close_fre'],
-                      'schedule_fre' =>  $permissions['schedule_fre']
-                      ]);
+                    Permission::create([
+                        'permission_group_id' => $permission_group['id'],
+                        'give_permission' => $permissions['give_permission'],
+                        'open' => $permissions['open'],
+                        'close' => $permissions['close'],
+                        'schedule' => $permissions['schedule'],
+                        'give_permission_fre' => $permissions['give_permission'] == 'no' ? 0 : $permissions['give_permission_fre'],
+                        'open_fre' => $permissions['open'] == 'no' ? 0 : $permissions['open_fre'],
+                        'close_fre' => $permissions['close'] == 'no' ? 0 : $permissions['close_fre'],
+                        'schedule_fre' => $permissions['schedule'] == 'no' ? 0 : $permissions['schedule_fre']
+                    ]);
+                    
                      
             DB::commit();
 
@@ -429,7 +508,7 @@ public function addPermissionGroup(Request $request ,$encoded_permission_id)
         'alert-type' => 'error',
         'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
                 );
-    } 
+    } }
     return redirect()->back()->with($notification);
         }
     }
@@ -449,27 +528,49 @@ public function editPermissionGroup(Request $request ,$encoded_permission_id, $e
                         ]);
     }else{
         $permissions=$request->all();
+        if($permissions['give_permission']=='yes' && $permissions['give_permission_fre'===null]){
+            $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Ooops!!!, Kindly fill in give permission frequency'
+            );  
+        }else if($permissions['open']=='yes' && $permissions['open_fre'===null]){
+            $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Ooops!!!, Kindly fill in unlock frequency'
+            );  
+        }else if($permissions['close']=='yes' && $permissions['close_fre'===null]){
+            $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Ooops!!!, Kindly fill in lock frequency'
+            );  
+        }
+        else if($permissions['schedule']=='yes' && $permissions['schedule_fre'===null]){
+            $notification = array(
+                'alert-type' => 'error',
+                'message' => 'Ooops!!!, Kindly fill in schedule frequency'
+            );  
+        }else{
         DB::beginTransaction();
       try{
         PermissionGroup::where('id',$permission_group_id)
-                                           ->update([
-                                                    'name' => $permissions['permission_group_name'],
-                                                    'creator_id' =>  Auth::id(),
-                                                ]);
+                        ->update([
+                                'name' => $permissions['permission_group_name'],
+                                'creator_id' =>  Auth::id(),
+                            ]);
     
        
-       Permission::where('permission_group_id',$permission_group_id)
-                                       ->update([
-                                            'permission_group_id' => $permission_group_id,
-                                            'give_permission' =>  $permissions['give_permission'],
-                                            'open' =>  $permissions['open'],
-                                            'close' =>  $permissions['close'],
-                                        'schedule' =>  $permissions['schedule'],
-                                        'give_permission_fre' =>  $permissions['give_permission_fre'],
-                                        'open_fre' =>  $permissions['open_fre'],
-                                        'close_fre' =>  $permissions['close_fre'],
-                                        'schedule_fre' =>  $permissions['schedule_fre']
-                                        ]);
+        Permission::where('permission_group_id', $permission_group_id)
+                    ->update([
+                        'permission_group_id' => $permission_group_id,
+                        'give_permission' => $permissions['give_permission'],
+                        'open' => $permissions['open'],
+                        'close' => $permissions['close'],
+                        'schedule' => $permissions['schedule'],
+                        'give_permission_fre' => $permissions['give_permission'] == 'no' ? 0 : $permissions['give_permission_fre'],
+                        'open_fre' => $permissions['open'] == 'no' ? 0 : $permissions['open_fre'],
+                        'close_fre' => $permissions['close'] == 'no' ? 0 : $permissions['close_fre'],
+                        'schedule_fre' => $permissions['schedule'] == 'no' ? 0 : $permissions['schedule_fre']
+                    ]);
                     DB::commit();
 
                     $notification =array(
@@ -484,8 +585,24 @@ public function editPermissionGroup(Request $request ,$encoded_permission_id, $e
                 'alert-type' => 'error',
                 'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
                         );
-            } 
+            } }
             return redirect()->route('permissons.permissionGroups', ['id' => $encoded_permission_id])->with($notification);                              
     }
 }
+
+    public function viewPermission($encoded_permission_id, $encoded_selected_permission_id){
+        $permission_id = base64_decode($encoded_selected_permission_id);
+         $permission= MyPermission::LeftJoin('permission_groups','permission_groups.id','=','my_permissions.permission_group_id')
+                                    -> leftjoin('permissions','permissions.permission_group_id','=','permission_groups.id')
+                                    ->where('my_permissions.id',$permission_id)
+                                    ->select('permissions.*')
+                                    ->first();
+        $permissioncounters= MyPermissionCounter::leftJoin('doors','doors.id','=','my_permission_counters.door_id')
+                                                -> where('my_permission_counters.my_permission_id',$permission_id)
+                                                ->select('my_permission_counters.*','doors.door_name')
+                                                ->get();
+        return view('permissions.viewPermission',['permission'=>$permission,
+                                                    'myPermissionCounters'=>$permissioncounters,
+                                                    'encoded_permission_id'=>$encoded_permission_id]);
+    }
 }

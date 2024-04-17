@@ -145,6 +145,8 @@
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/permissions/permission/groups/get/<?php echo e($encoded_permission_id); ?>">Permission Groups</a></li>
                 <li><a class="dropdown-item" href="/permissions/guests/permission/<?php echo e($encoded_permission_id); ?>">Guest Permissions</a></li>
+                
+                <li><a class="dropdown-item" href="/mypermission/view/permissions/<?php echo e($encoded_permission_id); ?>/<?php echo e($encoded_permission_id); ?>">My Permissions</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="/add/permissions/<?php echo e($encoded_permission_id); ?>">Give Permissions</a></li>
               </ul>
