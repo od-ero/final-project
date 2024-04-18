@@ -23,6 +23,18 @@
     
     <input class="userInput" type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>" />
     <input  class="userInput" id="owner_id" type="hidden"  name="user_id">
+    <label for="door"><i>Select the the doors to be affected by the permissions</i></label>
+      <div class="userCheck userInput">
+          <?php $__currentLoopData = $doors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $door): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <div class="form-check">
+                  <label class="form-check-label" for="flexCheckDefault">
+                      <?php echo e($door->door_name); ?>
+
+                  </label>
+                  <input class="form-check-input" type="checkbox" name="door_id_<?php echo e($index + 1); ?>" value="<?php echo e($door->id); ?>" id="flexCheckDefault">
+              </div>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+      </div>
     <label for="fname"><b>User</b></label>
     <p><i>
       Kindly enter either of the Users name and and phone number and search to select the user
@@ -92,7 +104,7 @@
     </div>
 
     <div class="form-floating ">
-        <input type="text" class="form-control" name="give_permission_fre" value="<?php echo e(old('give_permission_fre')); ?>" placeholder="Frequency" required="required" autofocus>
+        <input type="text" class="form-control" name="give_permission_fre" value="<?php echo e(old('give_permission_fre')); ?>" placeholder="Frequency"  autofocus>
         <label for="give_permission_fre">Frequency</label>
     </div>
 </div>
@@ -108,7 +120,7 @@
    <input class="form-check-input" type="radio" name="open" id="open_no" value="no">
  </div>
  <div class="form-floating">
-        <input type="text" class="form-control" name="open_fre" value="<?php echo e(old('open_fre')); ?>" placeholder="Frequency" required="required" autofocus>
+        <input type="text" class="form-control" name="open_fre" value="<?php echo e(old('open_fre')); ?>" placeholder="Frequency"  autofocus>
         <label for="open_fre">Frequency</label>
     </div>
  </div>
@@ -124,7 +136,7 @@
    <input class="form-check-input" type="radio" name="close" id="close_no" value="no">
  </div>
  <div class="form-floating">
-        <input type="text" class="form-control" name="close_fre" value="<?php echo e(old('close_fre')); ?>" placeholder="Frequency" required="required" autofocus>
+        <input type="text" class="form-control" name="close_fre" value="<?php echo e(old('close_fre')); ?>" placeholder="Frequency"  autofocus>
         <label for="close_fre">Frequency</label>
     </div>
   </div>
@@ -140,25 +152,12 @@
    <input class="form-check-input" type="radio" name="schedule" id="schedule_no" value="no">
  </div>
  <div class="form-floating">
-        <input type="text" class="form-control" name="schedule_fre" value="<?php echo e(old('schedule_fre')); ?>" placeholder="Frequency" required="required" autofocus>
+        <input type="text" class="form-control" name="schedule_fre" value="<?php echo e(old('schedule_fre')); ?>" placeholder="Frequency"  autofocus>
         <label for="schedule_fre">Frequency</label>
   </div>
  </div>
   </div> 
  
-    
- <label for="door"><i>Select the the doors to be affected by the permissions</i></label>
-      <div class="userCheck userInput">
-          <?php $__currentLoopData = $doors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $door): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-              <div class="form-check">
-                  <label class="form-check-label" for="flexCheckDefault">
-                      <?php echo e($door->door_name); ?>
-
-                  </label>
-                  <input class="form-check-input" type="checkbox" name="door_id_<?php echo e($index + 1); ?>" value="<?php echo e($door->id); ?>" id="flexCheckDefault">
-              </div>
-          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-      </div>
       <label for="start_date"><b>Start Date</b></label>
     <input class="userInput" type="datetime-local" placeholder="Please Enter the check in time" name="start_date" id="start_date" required>
 

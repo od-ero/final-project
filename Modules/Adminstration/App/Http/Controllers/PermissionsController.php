@@ -59,6 +59,7 @@ class PermissionsController extends Controller
                                         'uS.lname as slname'
                                     )
                                     ->where('door_status_setters.door_id', $door_id)
+                                    ->orderBy('door_status_setters.created_at','desc')
                                     ->get()
                                     ->map(function ($log) {
                                         // Determine permissioner name based on which one has a value

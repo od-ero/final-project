@@ -164,14 +164,14 @@ class UnitController extends Controller
           // $distanceMeters now contains the distance between the user's live location and the room's location in meters
          
       
-      //dd($distanceMeters, $unitLat,'user latitude:', $userLatitude,  $unitLon,'user long:', $userLongitude);
-    //  if($distanceMeters >500){
-    //     $notification = array(
-    //         'alertType' => 'error',
-    //         'message' => 'Oooops!! You are too far to perfrm this action kindly enable door access via button'
-    //               );
-    //  }
-    //  else{
+     // dd($distanceMeters, $unitLat,'user latitude:', $userLatitude,  $unitLon,'user long:', $userLongitude);
+     if($distanceMeters >500){
+        $notification = array(
+            'alertType' => 'error',
+            'message' => 'Oooops!! You are too far to perfrm this action kindly enable door access via button'
+                  );
+     }
+     else{
         $permissioner_permissions = MyPermission::leftjoin('permissions','my_permissions.permission_group_id','=','permissions.permission_group_id')
                                                 -> where('my_permissions.id', $permission_id)
                                                  ->first();
@@ -202,8 +202,6 @@ class UnitController extends Controller
                         DoorIp::where('id',$door_ip['id'])
                         ->update([
                             'door_ip_status' => 'Offline']);
-                        //  $json = json_encode(['health' => $health, 'status' => '0']);
-                // return $json;
                         }
                         $notification = array(
                             'alertType' => 'error',
@@ -215,14 +213,13 @@ class UnitController extends Controller
                         DoorIp::where('id',$door_ip['id'])
                                 ->update([
                                     'door_ip_status' => 'Online']);
-                        // $json = json_encode(['health' => $health, 'status' => '1']);
-                    // return $json;
+                       
                     }
                 
             
                 if($status==='Locked') {
                     $permissioner_permissions_count= $permissioner_permissions_counters['open'];
-                // dd($permissioner_permissions_count);
+                
                         if( $permissioner_permissions['open']==='no'){
                             $notification = array(
                                 'alertType' => 'error',
@@ -273,9 +270,9 @@ class UnitController extends Controller
                                 $url = 'http://'.$ip_address.'/?led_2_on';
                                 
                             $response = Http::get($url);
-                        // dd($response);
+                        
                                 DB::commit();
-                            // dd($response);
+                            
                                 $notification = array(
                                     'alertType' => 'success',
                                     'message' => 'Door unlocked successfully'
@@ -337,14 +334,10 @@ class UnitController extends Controller
                                         'my_permission_id' => $permission_id,
                                         'user_id'=> Auth::id()
                             ]) ;
-                            // $ip_address= (new GlobalController)->getIp($door_id);
-                            // //$baseurl=json_decode($baseurl);
-                            // $ip_address = trim($ip_address, '"'); // Remove surrounding quotes if present
+                           
                             $url = 'http://'.$ip_address.'/?led_2_off';
                             
                             $response = Http::get($url);
-                            
-                            //dd($response);
                         DB::commit();
                             $notification = array(
                                 'alertType' => 'success',
@@ -361,7 +354,7 @@ class UnitController extends Controller
             }
                         }
             }
-             }
+             }}
 return response()->json($notification); 
     
 }

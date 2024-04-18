@@ -70,7 +70,7 @@
    </div>
 
    <div class="form-floating ">
-       <input type="text" class="form-control" name="open_out_fre"  placeholder="Frequency" required="required" autofocus>
+       <input type="text" class="form-control" name="open_out_fre"  placeholder="Frequency"  autofocus>
        <label for="floatingName">Frequency</label>
    </div>
 </div>
@@ -86,7 +86,7 @@
   <input class="form-check-input" type="radio" name="close_out" id="close_out" value="no">
 </div>
 <div class="form-floating">
-       <input type="text" class="form-control" name="close_out_fre"  placeholder="Frequency" required="required" autofocus>
+       <input type="text" class="form-control" name="close_out_fre"  placeholder="Frequency"  autofocus>
        <label for="floatingName">Frequency</label>
    </div>
 </div>
@@ -102,7 +102,7 @@
   <input class="form-check-input" type="radio" name="open_in" id="open_in" value="no">
 </div>
 <div class="form-floating">
-       <input type="text" class="form-control" name="open_in_fre"  placeholder="Frequency" required="required" autofocus>
+       <input type="text" class="form-control" name="open_in_fre"  placeholder="Frequency"  autofocus>
        <label for="floatingName">Frequency</label>
    </div>
  </div>
@@ -118,7 +118,7 @@
   <input class="form-check-input" type="radio" name="close_in" id="close_in" value="no">
 </div>
 <div class="form-floating">
-       <input type="text" class="form-control" name="close_in_fre"  placeholder="Frequency" required="required" autofocus>
+       <input type="text" class="form-control" name="close_in_fre"  placeholder="Frequency" autofocus>
        <label for="floatingName">Frequency</label>
    </div>
 </div>

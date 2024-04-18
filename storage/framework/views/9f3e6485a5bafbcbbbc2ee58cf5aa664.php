@@ -26,7 +26,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
-      Are You Sure you want to delete this permission group? 
+      Are You Sure you want to revoke this permission group? 
       <form id="deleteForm" action="/permissions/groups/destroy" method="POST">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="permission_id" id="unitIdInput">
@@ -34,7 +34,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteForm').submit()">Delete</button>
+        <button type="button" class="btn btn-danger" onclick="document.getElementById('deleteForm').submit()">Revoke</button>
 
       </div>
     </div>
@@ -132,7 +132,7 @@
                                     <div class="m-2 text-center">
                                         <li class="mb-2"><a href="${updateUrl}" class="btn btn-success" role="button">Update</a></li>
                                         <li>
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUnitId(${row_id})">Delete</button>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUnitId(${row_id})">Revoke</button>
                                         </li>
                                     </div>
                                 </ul>

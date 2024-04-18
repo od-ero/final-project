@@ -69,6 +69,7 @@
                                                 </div>
                                             </div>
                                             
+
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0">
@@ -83,10 +84,21 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="mt-4 mb-0 text-center">
-                                            <button type="submit" class="btn btn-primary">Update</button>
-                                            <a href="<?php echo e(URL::previous()); ?>" class="btn btn-secondary">Cancel</a>
+
+                                            
+                                            <div class="row mb-3">
+                                                <div class="col-md-12">
+                                                    <div class="form-check mb-3">
+                                                        <input class="form-check-input" id="currentLocationCheckbox" type="checkbox" onchange="getLocation()" />
+                                                        <label class="form-check-label" for="currentLocationCheckbox">Use current location</label>
+                                                    </div>
+                                                </div>
                                             </div>
+
+                                            <div class="mt-4 mb-0 text-center">
+                                                <a href="<?php echo e(URL::previous()); ?>" class="btn btn-secondary">Back</a>
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                           </div>
                                         </form>
                                     </div>
                                 </div>
@@ -146,6 +158,46 @@
 
   });
 
+</script>
+<script>
+function getLocation() {
+    var checkbox = document.getElementById("currentLocationCheckbox");
+    var latitudeInput = document.getElementById("latitude");
+    var longitudeInput = document.getElementById("longitude");
+
+    if (checkbox.checked) {
+        // Check if Geolocation is supported by the browser
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    // Success callback
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+
+                    // Update the input fields with obtained coordinates
+                    latitudeInput.value = latitude;
+                    longitudeInput.value = longitude;
+                },
+                function(error) {
+                    // Error callback
+                    console.error("Error getting geolocation:", error);
+                    alert(error.message);
+                   // alert("Error getting geolocation. Please try again.");
+                    checkbox.checked = false; // Uncheck the checkbox
+                }
+            );
+        } else {
+            // Geolocation not supported by the browser
+            console.error("Geolocation is not supported by this browser.");
+            alert("Geolocation is not supported by this browser.");
+            checkbox.checked = false; // Uncheck the checkbox
+        }
+    } else {
+        // If checkbox is unchecked, clear the input fields
+        latitudeInput.value = "";
+        longitudeInput.value = "";
+    }
+}
 </script>
 
 <script type="text/javascript">

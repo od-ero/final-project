@@ -27,7 +27,7 @@
       </div>
       <div class="modal-body text-center">
       Are You Sure you want to delete this schedule group? 
-      <form id="deleteForm" action="/permissions/groups/destroy" method="POST">
+      <form id="deleteForm" action="/shedules/permissiongroups/selected/destroy" method="POST">
                     @csrf
                     <input type="hidden" name="permission_id" id="unitIdInput">
                 </form>
@@ -58,10 +58,10 @@
       <tr>
         <th style="width:5%">ID</th>
         <th>Schedule Name</th>
-        <th> Unlock In<br> Frequency</th>
-        <th> Lock In<br> Frequency</th>
         <th> Unlock Out<br> Frequency</th>
         <th> Lock Out<br> Frequency</th>
+        <th> Unlock In<br> Frequency</th>
+        <th> Lock In<br> Frequency</th>
         <th>Actions</th>
     </tr>
  </thead>
@@ -132,7 +132,7 @@
                                     <div class="m-2 text-center">
                                        
                                         <li>
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUnitId(${row_id})">Delete</button>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUnitId(${row_id})">Revoke</button>
                                         </li>
                                     </div>
                                 </ul>

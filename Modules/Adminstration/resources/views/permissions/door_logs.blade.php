@@ -56,7 +56,7 @@
                                             <th>Date and Time</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
+                                    <!-- <tfoot>
                                         <tr>
                                             <th>#</th>
                                             <th>Persons Name</th>
@@ -64,7 +64,7 @@
                                             <th>Action</th>
                                             <th>Date and Time</th>
                                         </tr>
-                                    </tfoot>
+                                    </tfoot> -->
                                     @foreach($door_logs as $door_log)
                                         <tr>
                                             <td>{{$loop->iteration}}</td>
@@ -81,7 +81,7 @@
                         </div>
                     </div>
 
-                    <script>
+                    <!-- <script>
   window.addEventListener('DOMContentLoaded', event => {
     const datatablesSimple = document.getElementById('datatablesSimple');
     if (datatablesSimple) {
@@ -94,10 +94,10 @@
       });
     }
   });
-</script>
+</script> -->
 
-              
-              <!-- <script>
+               
+               <script>
                  new DataTable('#datatablesSimple', {
                          layout: {
                              topStart: {
@@ -105,7 +105,7 @@
                              }
                         }
                     });
-             </script> -->
+             </script> 
             <!-- <script>
         $(document).ready(function () {
     // Setup - add a text input to each footer cell

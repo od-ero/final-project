@@ -91,7 +91,7 @@
         <input class="form-check-input" type="radio" name="schedule" id="schedule_no" value="no"  <?php if($permissionGroup['schedule']=='no'): ?> checked <?php endif; ?>>
       </div>
       <div class="form-floating">
-             <input type="text" class="form-control" name="schedule_fre"<?php if($permissionGroup['schedule']=='yes'): ?>{ value='<?php echo e($permissionGroup['schedule_fre']); ?>'
+             <input type="text" class="form-control" name="schedule_fre" <?php if($permissionGroup['schedule']=='yes'): ?>{ value='<?php echo e($permissionGroup['schedule_fre']); ?>'
  } <?php else: ?> value='0' <?php endif; ?> placeholder="Frequency" required="required" autofocus>
              <label for="schedule_fre">Frequency</label>
        </div>

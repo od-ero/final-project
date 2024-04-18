@@ -23,6 +23,17 @@
     
     <input class="userInput" type="hidden" name="_token" value="{{ csrf_token() }}" />
     <input  class="userInput" id="owner_id" type="hidden"  name="user_id">
+    <label for="door"><i>Select the the doors to be affected by the permissions</i></label>
+      <div class="userCheck userInput">
+          @foreach($doors as $index => $door)
+              <div class="form-check">
+                  <label class="form-check-label" for="flexCheckDefault">
+                      {{ $door->door_name }}
+                  </label>
+                  <input class="form-check-input" type="checkbox" name="door_id_{{ $index + 1 }}" value="{{ $door->id }}" id="flexCheckDefault">
+              </div>
+          @endforeach
+      </div>
     <label for="fname"><b>User</b></label>
     <p><i>
       Kindly enter either of the Users name and and phone number and search to select the user
@@ -146,18 +157,6 @@
  </div>
   </div> 
  
-    
- <label for="door"><i>Select the the doors to be affected by the permissions</i></label>
-      <div class="userCheck userInput">
-          @foreach($doors as $index => $door)
-              <div class="form-check">
-                  <label class="form-check-label" for="flexCheckDefault">
-                      {{ $door->door_name }}
-                  </label>
-                  <input class="form-check-input" type="checkbox" name="door_id_{{ $index + 1 }}" value="{{ $door->id }}" id="flexCheckDefault">
-              </div>
-          @endforeach
-      </div>
       <label for="start_date"><b>Start Date</b></label>
     <input class="userInput" type="datetime-local" placeholder="Please Enter the check in time" name="start_date" id="start_date" required>
 

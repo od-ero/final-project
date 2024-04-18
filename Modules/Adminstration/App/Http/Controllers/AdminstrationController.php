@@ -25,7 +25,7 @@ class AdminstrationController extends Controller
                                 ->count();
         $doorOfflineCount = DoorIp::where('door_ip_status','Offline')
                                     ->count();
-         $onlineTimeSeconds =  $doorOnlineCount * 0.5;
+         $onlineTimeSeconds =  $doorOnlineCount * 5;
          $offlineTimeSeconds = $doorOfflineCount * 5.1;
          $totalTimeSeconds =  $onlineTimeSeconds + $offlineTimeSeconds;
          $interval = CarbonInterval::seconds($totalTimeSeconds)->cascade();

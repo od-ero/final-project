@@ -19,7 +19,7 @@
       </div>
       <div class="modal-body text-center">
       Are You Sure you want to scan for devices health? 
-     <br> It will take around {{$totalTime}}
+     <br> It migth take upto {{$totalTime}}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

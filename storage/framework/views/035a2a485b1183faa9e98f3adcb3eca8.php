@@ -19,7 +19,7 @@
       </div>
       <div class="modal-body text-center">
       Are You Sure you want to scan for devices health? 
-     <br> It will take around <?php echo e($totalTime); ?>
+     <br> It migth take upto <?php echo e($totalTime); ?>
 
       </div>
       <div class="modal-footer">

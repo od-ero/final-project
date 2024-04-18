@@ -87,7 +87,7 @@
     </div>
 <hr>
     <div class="text-center">
-        <button type="submit" class="btn btn-success mb-3 mx-3">Add Schedule Group</button>
+        <button type="submit" class="btn btn-success mb-3 mx-3">Create Schedule Group</button>
         <a href="<?php echo e(URL::previous()); ?>" class="btn btn-secondary">Cancel</a>
     </div>
     </fieldset>

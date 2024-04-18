@@ -28,13 +28,13 @@ Add A Room
                                          </i></p>
                                                 <div class="col-md-5">
                                                     <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" id="name" name="name" value="{{ old('name') }}" type="text" placeholder="Enter first or second name" />
+                                                        <input class="form-control" id="name" name="name" value="{{ old('name') }}" type="text" required placeholder="Enter first or second name" />
                                                         <label for="name">Owner's Name</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-5">
                                                     <div class="form-floating">
-                                                        <input class="form-control" id="phone" type="tel" placeholder="Search by phone number" />
+                                                        <input class="form-control" id="phone" type="tel" placeholder="Search by phone number" required/>
                                                         <label for="phone">Owner's Phone Number</label>
                                                     </div>
                                                 </div>
@@ -68,6 +68,16 @@ Add A Room
                                                 </div>
                                             </div>
                                             
+
+                                            <div class="row mb-3">
+                                                <div class="col-md-12">
+                                                    <div class="form-check mb-3">
+                                                        <input class="form-check-input" id="currentLocationCheckbox" type="checkbox" onchange="getLocation()" />
+                                                        <label class="form-check-label" for="currentLocationCheckbox">Use current location</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0">
@@ -102,8 +112,8 @@ Add A Room
                                                 
                                             </div>
                                             <div class="mt-4 mb-0 text-center">
-                                            <button type="submit" class="btn btn-primary"> Create</button>
-                                            <a href="{{ URL::previous() }}" class="btn btn-secondary">Cancel</a>
+                                                <a href="{{ URL::previous() }}" class="btn btn-secondary">Back</a>
+                                                <button type="submit" class="btn btn-primary"> Create</button>
                                             </div>
                                         </form>
                                     </div>
@@ -120,7 +130,7 @@ Add A Room
       // Get the values from the input fields
       var searchTerm1 = $('#name').val();
       var searchTerm2 = $('#phone').val();
-console.log('button clicked');
+
       // Call the search method in the controller using Ajax
       $.ajax({
         type: 'GET',
@@ -138,7 +148,7 @@ console.log('button clicked');
     $('#searchResults').on('click', '.search-item', function() {
     var selectedValue = $(this).data('id');
     var selectedDisplayName = $(this).text();
-    var displayPhone = $(this).data('phone'); // Correct variable name
+    var displayPhone = $(this).data('phone'); 
 
     // Update input fields with the selected values
     $('#name').val(selectedDisplayName);
@@ -172,14 +182,8 @@ console.log('button clicked');
   });
 
 </script>
-
-<script type="text/javascript">
-
-$.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
-
-</script>
 <script>
-function toggleValidation() {
+    function toggleValidation() {
     var validateCheckbox = document.getElementById("validateCheckbox");
     var doorNamesContainer = document.getElementById("doorNamesContainer");
     var submitButton = document.querySelector('button[type="submit"]');
@@ -190,32 +194,128 @@ function toggleValidation() {
         // Clear previous content
         doorNamesContainer.innerHTML = '';
 
-        for (var i = 0; i < numOfDoors; i++) {
-            var inputLabel = document.createElement("label");
-            inputLabel.textContent = "Door Name " + (i + 1);
+        // Determine the number of rows needed
+        var numRows = Math.ceil(numOfDoors / 2); // For pairs of doors in each row
 
-            var inputField = document.createElement("input");
-            inputField.type = "text";
-            inputField.className = "form-control";
-            inputField.placeholder = "Enter Door Name";
-            inputField.name = "door_name_" + i;
-            inputField.required = true;
+        for (var i = 1; i <= numRows; i++) {
+            var rowDiv = document.createElement("div");
+            rowDiv.className = "row mb-3";
 
-            doorNamesContainer.appendChild(inputLabel);
-            doorNamesContainer.appendChild(inputField);
-            doorNamesContainer.appendChild(document.createElement("br"));
+            // Create first column for odd-numbered door
+            var colDiv1 = document.createElement("div");
+            colDiv1.className = "col-md-6";
+
+            if (2 * i - 1 <= numOfDoors) { // Check if there's an odd-numbered door to add
+                var formFloatingDiv1 = document.createElement("div");
+                formFloatingDiv1.className = "form-floating mb-3 mb-md-0";
+
+                var inputField1 = document.createElement("input");
+                inputField1.type = "text";
+                inputField1.className = "form-control";
+                inputField1.placeholder = "";
+                inputField1.name = "door_name_" + (2 * i - 1);
+                inputField1.id = "door_name_" + (2 * i - 1);
+                inputField1.required = true;
+
+                var label1 = document.createElement("label");
+                label1.htmlFor = "door_name_" + (2 * i - 1);
+                label1.textContent = "Door " + (2 * i - 1) + " Name";
+
+                formFloatingDiv1.appendChild(inputField1);
+                formFloatingDiv1.appendChild(label1);
+                colDiv1.appendChild(formFloatingDiv1);
+            }
+
+            // Create second column for even-numbered door
+            var colDiv2 = document.createElement("div");
+            colDiv2.className = "col-md-6";
+
+            if (2 * i <= numOfDoors) { // Check if there's an even-numbered door to add
+                var formFloatingDiv2 = document.createElement("div");
+                formFloatingDiv2.className = "form-floating";
+
+                var inputField2 = document.createElement("input");
+                inputField2.type = "text";
+                inputField2.className = "form-control";
+                inputField2.placeholder = "";
+                inputField2.name = "door_name_" + (2 * i);
+                inputField2.id = "door_name_" + (2 * i);
+                inputField2.required = true;
+
+                var label2 = document.createElement("label");
+                label2.htmlFor = "door_name_" + (2 * i);
+                label2.textContent = "Door " + (2 * i) + " Name";
+
+                formFloatingDiv2.appendChild(inputField2);
+                formFloatingDiv2.appendChild(label2);
+                colDiv2.appendChild(formFloatingDiv2);
+            }
+
+            // Append columns to row
+            rowDiv.appendChild(colDiv1);
+            rowDiv.appendChild(colDiv2);
+
+            // Append row to container
+            doorNamesContainer.appendChild(rowDiv);
         }
 
         doorNamesContainer.style.display = "block";
         submitButton.removeAttribute('disabled');
-        return true; // Move the return statement here
+        return true;
     } else {
         doorNamesContainer.style.display = "none";
         submitButton.setAttribute('disabled', 'true');
-        return false; // Also return a value in the else branch if needed
+        return false;
     }
 }
- </script>
+
+</script>
+<script>
+    function getLocation() {
+    var checkbox = document.getElementById("currentLocationCheckbox");
+    var latitudeInput = document.getElementById("latitude");
+    var longitudeInput = document.getElementById("longitude");
+
+    if (checkbox.checked) {
+        // Check if Geolocation is supported by the browser
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    // Success callback
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+
+                    // Update the input fields with obtained coordinates
+                    latitudeInput.value = latitude;
+                    longitudeInput.value = longitude;
+                },
+                function(error) {
+                    // Error callback
+                    console.error("Error getting geolocation:", error);
+                    alert(error.message);
+                   // alert("Error getting geolocation. Please try again.");
+                    checkbox.checked = false; // Uncheck the checkbox
+                }
+            );
+        } else {
+            // Geolocation not supported by the browser
+            console.error("Geolocation is not supported by this browser.");
+            alert("Geolocation is not supported by this browser.");
+            checkbox.checked = false; // Uncheck the checkbox
+        }
+    } else {
+        // If checkbox is unchecked, clear the input fields
+        latitudeInput.value = "";
+        longitudeInput.value = "";
+    }
+}
+</script>
+<script type="text/javascript">
+
+$.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+
+</script>
+
  <script type="text/javascript">
 $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 </script>

@@ -205,17 +205,17 @@ async function redirectToAction(row_id, encoded_permission_id, status) {
         });
 
         // Get user's geolocation
-       // if ("geolocation" in navigator) {
-           // const position = await new Promise((resolve, reject) => {
-              //  navigator.geolocation.getCurrentPosition(resolve, reject);
-          //  });
-           // latitude = position.coords.latitude;
-           // longitude = position.coords.longitude;
-          //  console.log("Latitude: " + latitude);
-          //  console.log("Longitude: " + longitude);
-       // } else {
-          //  throw new Error("Geolocation is not supported by your browser");
-       // }
+       if ("geolocation" in navigator) {
+           const position = await new Promise((resolve, reject) => {
+               navigator.geolocation.getCurrentPosition(resolve, reject);
+           });
+           latitude = position.coords.latitude;
+           longitude = position.coords.longitude;
+           console.log("Latitude: " + latitude);
+           console.log("Longitude: " + longitude);
+       } else {
+           throw new Error("Geolocation is not supported by your browser");
+       }
 
         // Construct action URL
         const actionURL = '/home/myunits/action/' + btoa(row_id) + '/' + encoded_permission_id + '/' + btoa(status) + '/' + btoa(latitude) + '/' + btoa(longitude);

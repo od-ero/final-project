@@ -66,35 +66,36 @@ else{
    $end_date= Carbon::parse($permissions['end_date']);
    $permissioner_permission_end_date= Carbon::parse($permissioner_permissions['end_date']);
    $permissioner_permission_start_date= Carbon::parse($permissioner_permissions['start_date']);
+   
+   if($permissions['permission_group']==='create_new'){
+    if($permissions['give_permission']=='yes' && $permissions['give_permission_fre']<1){
+        $notification = array(
+            'alert-type' => 'error',
+            'message' => 'Ooops!!!, Kindly fill in give permission frequency'
+        );  
+    }else if($permissions['open_fre']<1 && $permissions['open']==='yes'){
+        $notification = array(
+            'alert-type' => 'error',
+            'message' => 'Ooops!!!, Kindly fill in unlock frequency'
+        );  
+    }else if($permissions['close']=='yes' && $permissions['close_fre']<1){
+        $notification = array(
+            'alert-type' => 'error',
+            'message' => 'Ooops!!!, Kindly fill in lock frequency'
+        );  
+    }
+    else if($permissions['schedule']=='yes' && $permissions['schedule_fre']<1){
+        $notification = array(
+            'alert-type' => 'error',
+            'message' => 'Ooops!!!, Kindly fill in schedule frequency'
+        );  
+    }
+}
     if( $permissioner_permissions['give_permission']==='no'){
         $notification = array(
             'alert-type' => 'error',
             'message' => 'Ooops!!!, You are not allowed to give permissions'
         );   
-    }
-    else if($permissions['permission_group']==='create_new'){
-        if($permissions['give_permission']=='yes' && $permissions['give_permission_fre'===null]){
-            $notification = array(
-                'alert-type' => 'error',
-                'message' => 'Ooops!!!, Kindly fill in give permission frequency'
-            );  
-        }else if($permissions['open']=='yes' && $permissions['open_fre'===null]){
-            $notification = array(
-                'alert-type' => 'error',
-                'message' => 'Ooops!!!, Kindly fill in unlock frequency'
-            );  
-        }else if($permissions['close']=='yes' && $permissions['close_fre'===null]){
-            $notification = array(
-                'alert-type' => 'error',
-                'message' => 'Ooops!!!, Kindly fill in lock frequency'
-            );  
-        }
-        else if($permissions['schedule']=='yes' && $permissions['schedule_fre'===null]){
-            $notification = array(
-                'alert-type' => 'error',
-                'message' => 'Ooops!!!, Kindly fill in schedule frequency'
-            );  
-        }
     }
     else if($permissioner_permission_start_date->gt($start_date)){
         $notification = array(
@@ -247,7 +248,17 @@ public function create(Request $request){
             $house_owner= myPermission::where('unit_id',$unit_id)
                                         ->where('permissioner_id',1001)
                                         ->value('user_id');
-        //$current_permissions=MyPermission::where('id',)                         
+        //$current_permissions=MyPermission::where('id',) 
+        if($current_permissions['user_id']== $house_owner || $current_permissions['permissioner_id']==$house_owner){
+            $my_permissions= MyPermission::leftJoin('permission_groups','my_permissions.permission_group_id','=','permission_groups.id')
+                                            ->leftJoin('users','users.id','=','my_permissions.user_id')
+                                            ->leftJoin('users as permissioner','permissioner.id','=','my_permissions.permissioner_id')
+                                            ->select('my_permissions.*','permission_groups.name','users.fname','users.lname','permissioner.fname as pfname','permissioner.lname as plname')
+                                           ->where('my_permissions.unit_id',$unit_id)
+                                           ->whereNot('my_permissions.user_id',$house_owner)
+                                            ->where('my_permissions.end_date','>',Carbon::now()->subDay())
+                                            ->get();
+        } else {                   
             $my_permissions= MyPermission::leftJoin('permission_groups','my_permissions.permission_group_id','=','permission_groups.id')
                                     ->leftJoin('users','users.id','=','my_permissions.user_id')
                                     ->leftJoin('users as permissioner','permissioner.id','=','my_permissions.permissioner_id')
@@ -256,7 +267,7 @@ public function create(Request $request){
                                     ->where('my_permissions.unit_id',$unit_id)
                                     ->where('my_permissions.end_date','>',Carbon::now()->subDay())
                                     ->get();
-        }else{
+       } }else{
             $my_permissions=[];
         }
         
@@ -418,7 +429,7 @@ public function PermissionGroupdestroy(Request $request)
 
          $notification =array(
                     'alert-type' => 'success',
-                    'message' => 'Permission revoked successfully'
+                    'message' => 'Permission group revoked successfully'
                             );            
     } 
     catch (\Exception $e) {
@@ -451,23 +462,23 @@ public function addPermissionGroup(Request $request ,$encoded_permission_id)
     }
     else{
         $permissions= $request->all();
-        if($permissions['give_permission']=='yes' && $permissions['give_permission_fre'===null]){
+        if($permissions['give_permission']=='yes' && $permissions['give_permission_fre']<1){
             $notification = array(
                 'alert-type' => 'error',
                 'message' => 'Ooops!!!, Kindly fill in give permission frequency'
             );  
-        }else if($permissions['open']=='yes' && $permissions['open_fre'===null]){
+        }else if($permissions['open']=='yes' && $permissions['open_fre']<1){
             $notification = array(
                 'alert-type' => 'error',
                 'message' => 'Ooops!!!, Kindly fill in unlock frequency'
             );  
-        }else if($permissions['close']=='yes' && $permissions['close_fre'===null]){
+        }else if($permissions['close']=='yes' && $permissions['close_fre']<1){
             $notification = array(
                 'alert-type' => 'error',
                 'message' => 'Ooops!!!, Kindly fill in lock frequency'
             );  
         }
-        else if($permissions['schedule']=='yes' && $permissions['schedule_fre'===null]){
+        else if($permissions['schedule']=='yes' && $permissions['schedule_fre']<1){
             $notification = array(
                 'alert-type' => 'error',
                 'message' => 'Ooops!!!, Kindly fill in schedule frequency'
@@ -528,23 +539,23 @@ public function editPermissionGroup(Request $request ,$encoded_permission_id, $e
                         ]);
     }else{
         $permissions=$request->all();
-        if($permissions['give_permission']=='yes' && $permissions['give_permission_fre'===null]){
+        if($permissions['give_permission']=='yes' && $permissions['give_permission_fre']<1){
             $notification = array(
                 'alert-type' => 'error',
                 'message' => 'Ooops!!!, Kindly fill in give permission frequency'
             );  
-        }else if($permissions['open']=='yes' && $permissions['open_fre'===null]){
+        }else if($permissions['open']=='yes' && $permissions['open_fre']<1){
             $notification = array(
                 'alert-type' => 'error',
                 'message' => 'Ooops!!!, Kindly fill in unlock frequency'
             );  
-        }else if($permissions['close']=='yes' && $permissions['close_fre'===null]){
+        }else if($permissions['close']=='yes' && $permissions['close_fre']<1){
             $notification = array(
                 'alert-type' => 'error',
                 'message' => 'Ooops!!!, Kindly fill in lock frequency'
             );  
         }
-        else if($permissions['schedule']=='yes' && $permissions['schedule_fre'===null]){
+        else if($permissions['schedule']=='yes' && $permissions['schedule_fre']<1){
             $notification = array(
                 'alert-type' => 'error',
                 'message' => 'Ooops!!!, Kindly fill in schedule frequency'
@@ -586,7 +597,7 @@ public function editPermissionGroup(Request $request ,$encoded_permission_id, $e
                 'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
                         );
             } }
-            return redirect()->route('permissons.permissionGroups', ['id' => $encoded_permission_id])->with($notification);                              
+            return redirect()->route('permissions.permissionGroups', ['id' => $encoded_permission_id])->with($notification);                              
     }
 }
 

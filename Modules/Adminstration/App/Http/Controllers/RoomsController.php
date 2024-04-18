@@ -89,8 +89,7 @@ class RoomsController extends Controller
     public function create(Request $request)
     {  
         $unit_details = $request->all();
-       
-       //dd($unit_details);
+       //dd( $unit_details);
         DB::beginTransaction();
         try{
             $url="https://maps.googleapis.com/maps/api/geocode/json?latlng=".$unit_details['latitude'].','.$unit_details['longitude']."&sensor=true&key=".env('GOOGLE_MAPS_API_KEY');
@@ -117,7 +116,7 @@ class RoomsController extends Controller
             //'end_date' =>  Carbon::parse($permissions['end_date'])->toW3cString(),
         ]);
         
-        for ($i = 0; $i < $unit_details['doors']; $i++) {
+        for ($i = 1; $i <= $unit_details['doors']; $i++) {
             $door_name_variable = 'door_name_' . $i;
             $door_names = $unit_details[$door_name_variable];
         //dd($unit_details);
@@ -148,7 +147,7 @@ class RoomsController extends Controller
             DoorStatus::create(
                 [   
                     'door_id' => $door['id'],
-                    'status' => 'Unlocked',
+                    'status' => 'Locked',
                     'status_setter' => '1001',
                 
                 ]);        
@@ -169,7 +168,8 @@ class RoomsController extends Controller
      catch (\Exception $e) {
         DB::rollback();
         $notification =array(
-                            'message'    => 'Ooops!! an error occurred while processing your request.',
+                            'message'    => $e,
+                            // 'Ooops!! an error occurred while processing your request.',
                             'alert-type' => 'error',
                 );
         } 
