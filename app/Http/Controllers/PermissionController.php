@@ -246,7 +246,7 @@ public function create(Request $request){
         if($current_permissions){
             $unit_id= $current_permissions['unit_id'];
             $house_owner= myPermission::where('unit_id',$unit_id)
-                                        ->where('permissioner_id',1001)
+                                        ->where('permissioner_id',1)
                                         ->value('user_id');
         //$current_permissions=MyPermission::where('id',) 
         if($current_permissions['user_id']== $house_owner || $current_permissions['permissioner_id']==$house_owner){

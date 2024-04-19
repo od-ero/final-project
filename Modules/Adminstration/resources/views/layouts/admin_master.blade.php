@@ -66,7 +66,8 @@
                                     <a class="nav-link" href="/rooms/show">Add A Room</a>
                                 </nav>
                             </div>
-                            @isset($nav_unit_id)
+                            @if(isset($nav_unit_id) && !empty($nav_unit_id))
+                           
                                 @php
                                 $nav_unit_doors = App\Models\Door::where('unit_id', $nav_unit_id)
                                                             ->select('*')
@@ -85,7 +86,7 @@
                                  @endforeach 
                                 </nav>
                             </div>
-                            @endisset
+                            @endif
 
                             <!-- <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>

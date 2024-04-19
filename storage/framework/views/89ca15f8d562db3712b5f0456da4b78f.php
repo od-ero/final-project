@@ -66,7 +66,8 @@
                                     <a class="nav-link" href="/rooms/show">Add A Room</a>
                                 </nav>
                             </div>
-                            <?php if(isset($nav_unit_id)): ?>
+                            <?php if(isset($nav_unit_id) && !empty($nav_unit_id)): ?>
+                           
                                 <?php
                                 $nav_unit_doors = App\Models\Door::where('unit_id', $nav_unit_id)
                                                             ->select('*')

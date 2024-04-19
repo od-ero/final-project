@@ -24,11 +24,12 @@ class UsersController extends Controller
   
       // Perform your search logic
       $results = User::query()
-                ->where('fname', 'LIKE', "%{$name}%")
-                ->orWhere('lname', 'LIKE', "%{$name}%")
-                ->where('phone', 'LIKE', "%{$phone}%")
-                ->get();
-               // dd($results);
+                        ->where(function ($query) use ($name) {
+                            $query->whereRaw("CONCAT(fname, ' ', lname) LIKE ?", ["%{$name}%"]);
+                        })
+                        ->where('phone', 'LIKE', "%{$phone}%")
+                        ->get();
+               dd($results);
       // Process the results
       $formattedResults = $results->map(function ($result) {
           $displayName = $result->fname . ' ' . $result->lname;

@@ -39,7 +39,7 @@ Add A Room
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
-                                                <button class="btn btn-outline-secondary" type="button" id="searchButton">search</button>
+                                                <button class="btn btn-outline-secondary" type="button" id="userSearchButton">search</button>
                                                 </div>
                                             </div> 
                                             <div class="row mb-3">
@@ -102,7 +102,7 @@ Add A Room
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-check mb-3">
-                                                        <input class="form-check-input" id="validateCheckbox" type="checkbox" onclick="loadToast()" onchange="toggleValidation()" required/>
+                                                        <input class="form-check-input" id="validateCheckbox" type="checkbox"  onchange="toggleValidation()" required/>
                                                         <label class="form-check-label" for="validateCheckbox">Kindly Check The Box To Enter the Doors Names</label>
                                                     </div>
                                                 </div>
@@ -124,64 +124,7 @@ Add A Room
                 </main>
             </div>
         </div>
-    <script type="text/javascript">
-  $(document).ready(function() {
-    $('#searchButton').click(function() {
-      // Get the values from the input fields
-      var searchTerm1 = $('#name').val();
-      var searchTerm2 = $('#phone').val();
-
-      // Call the search method in the controller using Ajax
-      $.ajax({
-        type: 'GET',
-        url: '/admin/user/search', // Replace with your actual search endpoint
-        data: { term1: searchTerm1, term2: searchTerm2 },
-        success: function(data) {
-         
-          // Update the search results in the dropdown menu
-          displaySearchResults(data);
-        }
-      });
-    });
-
-    // Handle item selection in the search results
-    $('#searchResults').on('click', '.search-item', function() {
-    var selectedValue = $(this).data('id');
-    var selectedDisplayName = $(this).text();
-    var displayPhone = $(this).data('phone'); 
-
-    // Update input fields with the selected values
-    $('#name').val(selectedDisplayName);
-    $('#owner_id').val(selectedValue);
-
-    // Use the correct variable name here
-    $('#phone').val(displayPhone);
-
-    // Clear the search results dropdown
-    $('#searchResults').empty();
-});
-    function displaySearchResults(results) {
-   // console.log(results); // Log the results to the console
-
-    var $searchResults = $('#searchResults');
-    $searchResults.empty();
-
-    if (results.length > 0) {
-      console.log(results);
-        results.forEach(function(result) {
-            // Append list item directly without creating a jQuery object
-            $searchResults.append('<li class="dropdown-item search-item" data-id="' + result.id + '" data-phone="' + result.displayPhone + '">' + result.displayName + '</li>');
-
-        });
-        $searchResults.show();  // Show the dropdown if there are results
-    } else {
-      $searchResults.append('<li class="dropdown-item">Ooopss!! Dis not match any user</li>');  // Hide the dropdown if there are no results
-    }
-}
-
-  });
-
-</script>
+    
 <script>
     function toggleValidation() {
     var validateCheckbox = document.getElementById("validateCheckbox");
@@ -190,7 +133,8 @@ Add A Room
 
     if (validateCheckbox.checked) {
         var numOfDoors = parseInt(document.getElementById("doors").value);
-
+       if(numOfDoors > 0){
+        
         // Clear previous content
         doorNamesContainer.innerHTML = '';
 
@@ -262,54 +206,23 @@ Add A Room
         doorNamesContainer.style.display = "block";
         submitButton.removeAttribute('disabled');
         return true;
+
+        }
+            else{
+                toastr['error']('Ooops kindly enter valid numbers of doors');
+            }
     } else {
         doorNamesContainer.style.display = "none";
         submitButton.setAttribute('disabled', 'true');
         return false;
+
+
     }
+
 }
 
 </script>
-<script>
-    function getLocation() {
-    var checkbox = document.getElementById("currentLocationCheckbox");
-    var latitudeInput = document.getElementById("latitude");
-    var longitudeInput = document.getElementById("longitude");
 
-    if (checkbox.checked) {
-        // Check if Geolocation is supported by the browser
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                function(position) {
-                    // Success callback
-                    var latitude = position.coords.latitude;
-                    var longitude = position.coords.longitude;
-
-                    // Update the input fields with obtained coordinates
-                    latitudeInput.value = latitude;
-                    longitudeInput.value = longitude;
-                },
-                function(error) {
-                    // Error callback
-                    console.error("Error getting geolocation:", error);
-                    alert(error.message);
-                   // alert("Error getting geolocation. Please try again.");
-                    checkbox.checked = false; // Uncheck the checkbox
-                }
-            );
-        } else {
-            // Geolocation not supported by the browser
-            console.error("Geolocation is not supported by this browser.");
-            alert("Geolocation is not supported by this browser.");
-            checkbox.checked = false; // Uncheck the checkbox
-        }
-    } else {
-        // If checkbox is unchecked, clear the input fields
-        latitudeInput.value = "";
-        longitudeInput.value = "";
-    }
-}
-</script>
 <script type="text/javascript">
 
 $.ajaxSetup({ headers: { 'csrftoken' : '<?php echo e(csrf_token()); ?>' } });

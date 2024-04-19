@@ -84,12 +84,14 @@
    
     <nav class="navbar navbar-expand-lg bg-dark text-white">
       <div class="container">
-      
+      <a  href="{{ URL::previous() }}" class="btn btn-outline-secondary text-secondary me-2">
+          <i class="fa fa-long-arrow-left"></i> 
+        </a>
       <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
         <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use href="{{ asset('images/unikey.png') }}"/></svg>
       </a>
-
-   
+     
+      
       <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 d-none d-sm-block">
         <input type="text" class="form-control form-control-ligth  text-center" value="Unikey" readonly>
       </form>

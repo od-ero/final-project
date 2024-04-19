@@ -293,12 +293,12 @@ return redirect()->back()->with($notification);
                                         ->update(['open_out'=>$button_request_counters['open_out']+1,]);
               DoorStatus::where('door_id', $ip_details['door_id'])
                             ->update(['status'=>'Unlocked',
-                            'status_setter'=>1000,
+                            'status_setter'=>3,
                  ]);
               DoorStatusSetter::create([
                 'door_id'=> $ip_details['door_id'],
                 'status' => 'Unlocked',
-                'user_id'=> 1000,
+                'user_id'=> 3,
                 'door_schedule_id'=>$button_requests['door_schedule_id'],
                 ]) ;
                 DB::commit();
@@ -324,12 +324,12 @@ return redirect()->back()->with($notification);
                                         ->update(['open_in'=>$button_request_counters['open_in']+1,]);
               DoorStatus::where('door_id', $ip_details['door_id'])
                             ->update(['status'=>'Unlocked',
-                            'status_setter'=>1000,
+                            'status_setter'=>2,
                  ]);
               DoorStatusSetter::create([
                 'door_id'=> $ip_details['door_id'],
                 'status' => 'Unlocked',
-                'user_id'=> 1000,
+                'user_id'=> 2,
                 'door_schedule_id'=>$button_requests['door_schedule_id']
                 ]) ;
                 
@@ -359,12 +359,12 @@ return redirect()->back()->with($notification);
                                         ->update(['close_out'=>$button_request_counters['close_out']+1,]);
                   DoorStatus::where('door_id', $ip_details['door_id'])
                                 ->update(['status'=>'Locked',
-                                'status_setter'=>1000,
+                                'status_setter'=>3,
                      ]);
                   DoorStatusSetter::create([
                     'door_id'=> $ip_details['door_id'],
                     'status' => 'Locked',
-                    'user_id'=> 1000,
+                    'user_id'=> 3,
                     'door_schedule_id'=>$button_requests['door_schedule_id']
                     ]) ;
                    
@@ -393,12 +393,12 @@ return redirect()->back()->with($notification);
                                         ->update(['close_in'=>$button_request_counters['close_in']+1,]);
                   DoorStatus::where('door_id', $ip_details['door_id'])
                                 ->update(['status'=>'Locked',
-                                'status_setter'=>1000,
+                                'status_setter'=>2,
                      ]);
                   DoorStatusSetter::create([
                     'door_id'=> $ip_details['door_id'],
                     'status' => 'Locked',
-                    'user_id'=> 1000,
+                    'user_id'=> 2,
                     'door_schedule_id'=>$button_requests['door_schedule_id'],
                     ]) ;
 

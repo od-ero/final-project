@@ -11,7 +11,7 @@ use App\Models\Door;
 use App\Models\DoorIp;
 use App\Models\User;
 use Carbon\CarbonInterval;
-
+use Illuminate\Support\Facades\Auth;
 class AdminstrationController extends Controller
 {
     /**
@@ -20,7 +20,10 @@ class AdminstrationController extends Controller
     public function index()
     {
         $unitsCount = Unit::count();
-        $usersCount = User::count();
+        $current_role_id= User::where('id',Auth::id())
+                                ->value('role_id');
+        $usersCount = User::where('role_id','<', $current_role_id)
+                            ->count();
         $doorOnlineCount = DoorIp::where('door_ip_status','Online')
                                 ->count();
         $doorOfflineCount = DoorIp::where('door_ip_status','Offline')
@@ -138,10 +141,6 @@ class AdminstrationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
-    {
-        //
-    }
    
     
     /**
@@ -163,10 +162,7 @@ class AdminstrationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id): RedirectResponse
-    {
-        //
-    }
+    
 
     /**
      * Remove the specified resource from storage.

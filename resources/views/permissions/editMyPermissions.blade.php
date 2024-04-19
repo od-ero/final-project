@@ -44,7 +44,7 @@
         </div>
 
         <div class="col-2 mt-4 mb-3">
-            <button class="btn btn-outline-secondary" type="button" id="searchButton">search</button>
+            <button class="btn btn-outline-secondary" type="button" id="userSearchButton">search</button>
         </div>
         
         </div>

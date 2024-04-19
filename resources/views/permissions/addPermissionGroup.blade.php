@@ -95,8 +95,9 @@
       <hr>
 
 <div class="text-center">
-<button type="submit" class="btn btn-success mx-3">Create Permission Group</button>
-<a href="{{ URL::previous() }}" class="btn btn-secondary">Cancel</a>
+    <a href="{{ URL::previous() }}" class="btn btn-secondary">Back</a>
+    <button type="submit" class="btn btn-success mx-3">Create Permission Group</button>
+
 </div>
 
 

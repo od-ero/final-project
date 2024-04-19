@@ -64,3 +64,72 @@
                     break;
             }}
     </script>
+    <script type="text/javascript">
+  $(document).ready(function() {
+    $('#userSearchButton').click(function() {
+      // Get the values from the input fields
+      var searchTerm1 = $('#name').val();
+      var searchTerm2 = $('#phone').val();
+    
+      if(searchTerm1 || searchTerm2){
+        $.ajax({
+        type: 'GET',
+        url: '/admin/user/search', // Replace with your actual search endpoint
+        data: { term1: searchTerm1, term2: searchTerm2 },
+        success: function(data) {
+        //     if(data){
+        //  alert(data);}
+        //  else{
+        //     alert('no data'); 
+        //  }
+          // Update the search results in the dropdown menu
+          displaySearchResults(data);
+        }
+      });
+    }else{
+        toastr['error']('Ooops!! Kindly enter either a name or a phone number');
+      
+      }
+    });
+      
+      // Call the search method in the controller using Ajax
+     
+
+    // Handle item selection in the search results
+    $('#searchResults').on('click', '.search-item', function() {
+    var selectedValue = $(this).data('id');
+    var selectedDisplayName = $(this).text();
+    var displayPhone = $(this).data('phone'); 
+
+    // Update input fields with the selected values
+    $('#name').val(selectedDisplayName);
+    $('#owner_id').val(selectedValue);
+
+    // Use the correct variable name here
+    $('#phone').val(displayPhone);
+
+    // Clear the search results dropdown
+    $('#searchResults').empty();
+});
+    function displaySearchResults(results) {
+   // console.log(results); // Log the results to the console
+
+    var $searchResults = $('#searchResults');
+    $searchResults.empty();
+
+    if (results.length > 0) {
+      console.log(results);
+        results.forEach(function(result) {
+            // Append list item directly without creating a jQuery object
+            $searchResults.append('<li class="dropdown-item search-item bg-success text-white" data-id="' + result.id + '" data-phone="' + result.displayPhone + '">' + result.displayName + '</li>');
+
+        });
+        $searchResults.show();  // Show the dropdown if there are results
+    } else {
+        toastr['error']('Ooops!! The user with the given details does not exist');
+    }
+}
+
+  });
+
+</script>

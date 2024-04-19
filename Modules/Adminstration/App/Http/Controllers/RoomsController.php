@@ -108,8 +108,8 @@ class RoomsController extends Controller
         $my_permissions =MyPermission::create([
             'user_id' => $unit_details['owner_id'],
            // 'door_id' => $permission['door_id'],
-            'permission_group_id' => 1000,
-            'permissioner_id' => 1001 ,
+            'permission_group_id' => 1,
+            'permissioner_id' => 1,
              'unit_id'       =>  $units['id'],
             'start_date' => Carbon::now() ,
             'end_date' =>  Carbon::now()->copy()->endOfYear(),
@@ -148,7 +148,7 @@ class RoomsController extends Controller
                 [   
                     'door_id' => $door['id'],
                     'status' => 'Locked',
-                    'status_setter' => '1001',
+                    'status_setter' => '1',
                 
                 ]);        
                 
