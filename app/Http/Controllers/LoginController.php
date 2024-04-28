@@ -26,7 +26,7 @@ class LoginController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function login(LoginRequest $request)
-    {    
+    {   try{
         $credentials = $request->getCredentials();
 ///dd($credentials);
         if(!Auth::validate($credentials)):
@@ -45,6 +45,16 @@ class LoginController extends Controller
         Auth::login($user);
 
         return $this->authenticated($request, $user);
+    }
+       
+    catch (\Exception $e) {
+            $notification = array(
+            'alert-type' => 'error',
+            'message' => 'Oooops!! an error occurred please try again later'
+            );
+            return redirect()->to('login')
+                 ->with($notification);
+        } 
     }
    
     /**

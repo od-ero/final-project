@@ -74,7 +74,7 @@
       if(searchTerm1 || searchTerm2){
         $.ajax({
         type: 'GET',
-        url: '/admin/user/search', // Replace with your actual search endpoint
+        url: '/user/search', // Replace with your actual search endpoint
         data: { term1: searchTerm1, term2: searchTerm2 },
         success: function(data) {
         //     if(data){

@@ -95,6 +95,7 @@ class ScheduleController extends Controller
         $permissioner_permission_end_date= Carbon::parse($permissioner_permissions['end_date']);
         $permissioner_permission_start_date= Carbon::parse($permissioner_permissions['start_date']);
         if($schedules['permission_group']==='create_new'){
+            $notification = [];
         if ($schedules['open_in_fre'] <1 && $schedules['open_in'] == 'yes') {
             $notification = [
                 'alert-type' => 'error',
@@ -115,8 +116,10 @@ class ScheduleController extends Controller
                 'alert-type' => 'error',
                 'message' => 'Oops!!! Kindly fill in lock out frequency.'
             ];
-        }}
-    else if( $permissioner_permissions['schedule']==='no'){
+        }
+        
+    }
+    if( $permissioner_permissions['schedule']==='no'){
         $notification = array(
             'alert-type' => 'error',
             'message' => 'Ooops!!!, You are not allowed to active the door access button'
@@ -247,13 +250,18 @@ return redirect()->back()->with($notification);
         $ip_details = DoorIp::select('*')
         ->where('device_serial_number', $device_serial_number)
         ->first();
-        $ip_address = $ip_details['ip_address'];
+       
+        if($ip_details==null ||empty($ip_details)){
+            
+            $response_status = 3;
+        }else{
+       
         if($ip_details['door_ip_status']==='Offline'){
             DoorIp::where('id', $ip_details['id'])
                     ->update([
                         'door_ip_status' => 'Online']);
         }
-        if($ip_address != $clientIp){
+        if($ip_details['ip_address'] != $clientIp){
             DoorIp::where('id',$ip_details['id'])
             ->update(['ip_address'=>$clientIp]);
         }
@@ -261,6 +269,7 @@ return redirect()->back()->with($notification);
                                         ->leftJoin('door_schedule_doors', 'door_schedules.id', '=', 'door_schedule_doors.door_schedule_id')
                                         ->select('door_schedule_permissions.*', 'door_schedule_doors.id as door_schedule_door_id', 'door_schedules.id as door_schedule_id')
                                         ->where('door_schedule_doors.door_id', $ip_details['door_id'])
+                                        ->where('door_schedules.start_date', '<', Carbon::now())
                                         ->where('door_schedules.end_date', '>', Carbon::now())
                                         ->orderBy('door_schedules.created_at', 'desc')
                                         ->first();
@@ -306,7 +315,7 @@ return redirect()->back()->with($notification);
                 }
                 catch (\Exception $e) {
                 DB::rollback();
-                $response_status = 2;
+                $response_status = 3;
                             }
                         }
          }
@@ -339,7 +348,7 @@ return redirect()->back()->with($notification);
                 }
                 catch (\Exception $e) {
                 DB::rollback();
-                $response_status = 2;
+                $response_status = 3;
                             }
                         } 
             }
@@ -373,7 +382,7 @@ return redirect()->back()->with($notification);
                     }
                     catch (\Exception $e) {
                     DB::rollback();
-                    $response_status = 2;
+                    $response_status = 3;
                                 }
                             }
             }
@@ -409,11 +418,11 @@ return redirect()->back()->with($notification);
                     }
                     catch (\Exception $e) {
                     DB::rollback();
-                    $response_status = 2;
+                    $response_status = 3;
                                 }
                             }
             }
-        }
+        }}
         return response()->json($response_status);
     }
 

@@ -165,7 +165,7 @@ class UnitController extends Controller
          
       
      // dd($distanceMeters, $unitLat,'user latitude:', $userLatitude,  $unitLon,'user long:', $userLongitude);
-     if($distanceMeters >500){
+     if($distanceMeters >1000){
         $notification = array(
             'alertType' => 'error',
             'message' => 'Oooops!! You are too far to perfrm this action kindly enable door access via button'
@@ -189,14 +189,18 @@ class UnitController extends Controller
                     'message' => 'Ooops!!!, The door lock is not fully configured!'
                     );   
             }else{
+                $expectedCookies = ['your_cookie_name_1'];
                 $ch = curl_init($ip_address);
                 curl_setopt($ch, CURLOPT_TIMEOUT, 5);
                 curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $data = curl_exec($ch);
                 $health = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $responseHeaders = curl_getinfo($ch, CURLINFO_HEADER_OUT);
                 curl_close($ch);
+                //dd($health);
                 if (!$health) {
+                    
                     if($door_ip['door_ip_status']==='Online'){
 
                         DoorIp::where('id',$door_ip['id'])
@@ -209,6 +213,28 @@ class UnitController extends Controller
                             ); 
                 }
                 else {
+                    $cookiesFound = false;
+                    foreach ($expectedCookies as $cookieName) {
+                        
+                        if (strpos($responseHeaders, "Set-Cookie: $cookieName") !== false) {
+                            $cookiesFound = true;
+                            break;
+                        }
+                    }
+                // if($cookiesFound === false){
+                //     if($door_ip['door_ip_status']==='Online'){
+
+                //         DoorIp::where('id',$door_ip['id'])
+                //         ->update([
+                //             'door_ip_status' => 'Offline']);
+                //         }
+                //         $notification = array(
+                //             'alertType' => 'error',
+                //             'message' => 'Ooops!!!, The door lock is offline kindly conduct your adminstrator for assistance'
+                //             ); 
+                // }
+               // else{
+
                     if($door_ip['door_ip_status']==='Offline'){
                         DoorIp::where('id',$door_ip['id'])
                                 ->update([
@@ -270,20 +296,73 @@ class UnitController extends Controller
                                 $url = 'http://'.$ip_address.'/?led_2_on';
                                 
                             $response = Http::get($url);
-                        
-                                DB::commit();
-                            
-                                $notification = array(
-                                    'alertType' => 'success',
-                                    'message' => 'Door unlocked successfully'
-                                );
+                            $guzzleResponse = $response->toPsrResponse();
+
+                            // Retrieve the headers from the Guzzle HTTP response
+                            $headers = $guzzleResponse->getHeaders();
+
+                            // Check if the 'Set-Cookie' header exists in the response headers
+                            if (isset($headers['Set-Cookie'])) {
+                                
+                                // Extract and parse the 'Set-Cookie' header values
+                                $cookies = $headers['Set-Cookie'];
+
+                  foreach ($cookies as $cookie) {
+                                    $cookieAttributes = explode('; ', $cookie);
+
+                                    if ($cookieAttributes[0]=="session_id=abcdef-unikey-1234567890"){
+                                       
+                                            DB::commit();
+                                                $notification = array(
+                                                    'alertType' => 'success',
+                                                    'message' => 'Door unlocked successfully'
+                                                );
+                                        }
+                                        else{
+                                           
+                                            DB::rollback();
+                                            if($door_ip['door_ip_status']==='Online'){
+
+                                                DoorIp::where('id',$door_ip['id'])
+                                                ->update([
+                                                    'door_ip_status' => 'Offline']);}
+                                            $notification =array(
+                                                'alertType' => 'error',
+                                                'message' => 'Oooops!! Your device is offline'
+                                        );
+                                        }
+
+                                    // if (isset($parsedCookie['user_id'])) {
+                                    //     $userId = $parsedCookie['user_id'];
+                                    //     // Perform validation or use the user ID
+                                    //     // Example:
+                                    //     // validateUser($userId);
+                                    // }
+
+                                    // You can handle other cookie attributes as needed
+                                }
+                            }else{
+                                DB::rollback();
+                                if($door_ip['door_ip_status']==='Online'){
+
+                                    DoorIp::where('id',$door_ip['id'])
+                                    ->update([
+                                        'door_ip_status' => 'Offline']);}
+                                $notification =
+                                array(
+                                'alertType' => 'error',
+                                'message' => 'Oooops!! Your device is offline' 
+                             );
+
+                            }
                             }
                             catch (\Exception $e) {
                             DB::rollback();
                             $notification =
                             array(
                             'alertType' => 'error',
-                            'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'  );
+                            'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance' 
+                         );
                     } 
                 }
                         }
@@ -338,18 +417,75 @@ class UnitController extends Controller
                             $url = 'http://'.$ip_address.'/?led_2_off';
                             
                             $response = Http::get($url);
-                        DB::commit();
-                            $notification = array(
-                                'alertType' => 'success',
-                                'message' => 'Door locked successfully'
-                            );
+                            $guzzleResponse = $response->toPsrResponse();
+
+                            // Retrieve the headers from the Guzzle HTTP response
+                            $headers = $guzzleResponse->getHeaders();
+
+                            // Check if the 'Set-Cookie' header exists in the response headers
+                            if (isset($headers['Set-Cookie'])) {
+                                
+                                // Extract and parse the 'Set-Cookie' header values
+                                $cookies = $headers['Set-Cookie'];
+
+                                // Loop through each cookie string and parse its attributes
+                               
+                                foreach ($cookies as $cookie) {
+                                    $cookieAttributes = explode('; ', $cookie);
+                                   // dd($cookieAttributes);
+                                    
+                                    if ($cookieAttributes[0]=="session_id=abcdef-unikey-1234567890"){
+                                     //  dd('yyy mkenya');
+                                            DB::commit();
+                                                $notification = array(
+                                                    'alertType' => 'success',
+                                                    'message' => 'Door Locked successfully'
+                                                );
+                                        }
+                                        else{
+                                            DB::rollback();
+                                            if($door_ip['door_ip_status']==='Online'){
+
+                                                DoorIp::where('id',$door_ip['id'])
+                                                ->update([
+                                                    'door_ip_status' => 'Offline']);}
+                                            $notification =array(
+                                                'alertType' => 'error',
+                                                'message' => 'Oooops!! Your device is offline'
+                                        );
+                                        }
+
+                                    // if (isset($parsedCookie['user_id'])) {
+                                    //     $userId = $parsedCookie['user_id'];
+                                    //     // Perform validation or use the user ID
+                                    //     // Example:
+                                    //     // validateUser($userId);
+                                    // }
+
+                                    // You can handle other cookie attributes as needed
+                                }
+                            }else{
+                                DB::rollback();
+                                if($door_ip['door_ip_status']==='Online'){
+
+                                    DoorIp::where('id',$door_ip['id'])
+                                    ->update([
+                                        'door_ip_status' => 'Offline']);}
+                                $notification =
+                                array(
+                                'alertType' => 'error',
+                                'message' => 'Oooops!! Your device is offline' 
+                             );
+
+                            }
                         }
                         catch (\Exception $e) {
                         DB::rollback();
-                        $notification = array(
+                        $notification =
+                        array(
                         'alertType' => 'error',
-                        'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
-                                );
+                         'message' => 'Oooops!! an error occurred please contact your adminstrator for assistance'
+                               );
                     } 
             }
                         }

@@ -34,9 +34,12 @@ class UsersController extends Controller
         $phone = $request->input('term2');
         $results = User::query()
                         ->where(function ($query) use ($name) {
-                            $query->whereRaw("CONCAT(fname, ' ', lname) LIKE ?", ["%{$name}%"]);
+                            $query->whereRaw("CONCAT(fname, ' ', lname) LIKE ?", ["%{$name}%"])
+                           ->orWhereRaw("CONCAT(lname, ' ', fname) LIKE ?", ["%{$name}%"]) ;
                         })
                         ->where('phone', 'LIKE', "%{$phone}%")
+                        ->where('id', '>', 4)
+                        ->whereNot('id', Auth::id())
                         ->get();
 
         $formattedResults = $results->map(function ($result) {
