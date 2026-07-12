@@ -34,7 +34,6 @@ class ScheduleController extends Controller
         'method' => request()->method(),
         'url' => request()->fullUrl(),
     ]);
-        return response()->json(1);
         try{
         $clientIp= $request->ip();
         $ip_details = DoorIp::select('*')
