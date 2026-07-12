@@ -37,9 +37,9 @@ class UsersController extends Controller
                             $query->whereRaw("CONCAT(fname, ' ', lname) LIKE ?", ["%{$name}%"])
                            ->orWhereRaw("CONCAT(lname, ' ', fname) LIKE ?", ["%{$name}%"]) ;
                         })
-                        ->where('phone', 'LIKE', "%{$phone}%")
-                        ->where('id', '>', 4)
-                        ->whereNot('id', Auth::id())
+                        ->orWhere('phone', 'LIKE', "%{$phone}%")
+                        //->where('id', '>', 4)
+                        //->whereNot('id', Auth::id())
                         ->get();
 
         $formattedResults = $results->map(function ($result) {

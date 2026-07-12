@@ -72,9 +72,9 @@ return [
             'password' =>  'ge1Dq3e52mT[&Y3<',*/
              'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' =>  'unikey',
-            'username' =>  'root',
-            'password' =>  '', 
+            'database' => env( 'DB_DATABASE','unikey'),
+            'username' =>   env('DB_USERNAME', 'root'),
+            'password' =>  env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
