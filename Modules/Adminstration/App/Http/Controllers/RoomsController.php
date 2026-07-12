@@ -21,8 +21,16 @@ use Carbon\Carbon;
 use DB;
 use DataTables;
 use Illuminate\Support\Facades\Http;
+use App\Services\GeocodingService;
+
 class RoomsController extends Controller
 {
+    protected GeocodingService $geocodingService;
+
+    public function __construct(GeocodingService $geocodingService)
+    {
+        $this->geocodingService = $geocodingService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -89,20 +97,19 @@ class RoomsController extends Controller
     public function create(Request $request)
     {  
         $unit_details = $request->all();
-       //dd( $unit_details);
+        $location = $this->geocodingService->reverseGeocode(
+            $unit_details['latitude'],
+            $unit_details['longitude']
+        );
         DB::beginTransaction();
         try{
-            $url="https://maps.googleapis.com/maps/api/geocode/json?latlng=".$unit_details['latitude'].','.$unit_details['longitude']."&sensor=true&key=".env('GOOGLE_MAPS_API_KEY');
-            $dd=file_get_contents($url);
-            $dd=json_decode($dd);
-            $google_pin_location= $dd->results[0]->formatted_address;
         $units =Unit::create([
             'unit_name' => $unit_details['unit_name'],
             'owner_id' =>   $unit_details['owner_id'],
             'premises_name' => $unit_details['premises_name'],
             'longitude'    =>  $unit_details['longitude'],
             'latitude'  =>$unit_details['latitude'],
-            'google_location'  =>$google_pin_location,
+            'google_location'  =>$location ?? 'not found',
             'doors' => $unit_details['doors']
         ]);
         $my_permissions =MyPermission::create([
@@ -168,7 +175,7 @@ class RoomsController extends Controller
      catch (\Exception $e) {
         DB::rollback();
         $notification =array(
-                            'message'    => $e,
+                            'message'    => $e->getMessage(),
                             // 'Ooops!! an error occurred while processing your request.',
                             'alert-type' => 'error',
                 );

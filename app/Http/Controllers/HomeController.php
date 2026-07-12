@@ -19,34 +19,34 @@ use DataTables;
 
 class HomeController extends Controller
 {
-    public function index() 
+    public function index()
      {
         // $my_units = MyUnit::leftjoin("units","my_units.unit_id","=","units.id")
     //     ->leftjoin("roles","my_units.role_id","=","roles.id")
     //     ->where('user_id',Auth::id())
     //     ->get();
        // $my_units= DataTables::of($my_units)->make(true);
-      
+
         return view('home.index');
-        
+
     }
-    public function index_data() 
+    public function index_data()
     {
-   
+
         $my_units = MyPermission::leftjoin("units","units.id","=","My_Permissions.unit_id")
                                ->where('My_Permissions.user_id',Auth::id())
                                ->where('My_Permissions.end_date','>',Carbon::now()->addHour())
                                ->select('My_Permissions.*','units.premises_name' ,'units.unit_name')
                                 ->get();
-    
-                              
+
+
         return DataTables::of($my_units )
         ->make(true);
-       
-        
+
+
     }
     public function chart(){
-        return view('charts');  
+        return view('charts');
     }
     public function chartData(){
         $data = [
@@ -75,7 +75,7 @@ class HomeController extends Controller
         ];
 
         // Return data as JSON response
-        return response()->json($data);  
+        return response()->json($data);
     }
 
    public function testServer(){
@@ -116,5 +116,5 @@ class HomeController extends Controller
     }
     return 'done';
     }
-   
+
 }

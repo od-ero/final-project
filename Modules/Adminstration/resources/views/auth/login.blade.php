@@ -18,7 +18,7 @@
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Unikey Admin Login</h3></div>
                                     <div class="card-body">
                                         <form method="post" action="{{ route('adminLogin.perform') }}">
-                                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                            @csrf()
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" name="login_identifier" value="{{ old('login_identifier') }}" required/>
                                                 <label for="inputEmail">Email address</label>

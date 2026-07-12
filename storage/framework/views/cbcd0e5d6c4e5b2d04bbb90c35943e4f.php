@@ -1,1 +1,0 @@
-<p class="mt-5 mb-3 text-success">&copy; Unikey <?php echo e(date('Y')); ?></p><?php /**PATH C:\xampp\htdocs\LaravelAPI\resources\views/auth/partials/copy.blade.php ENDPATH**/ ?>
