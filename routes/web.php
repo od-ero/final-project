@@ -15,6 +15,12 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
     Route::get('/chat', 'HomeController@chart')->name('chat.index');
     Route::get('/chat/data', 'HomeController@chartData')->name('chat.data');
     Route::get('/test/server', 'HomeController@testServer')->name('testserver');
+    Route::get('/', function () {
+        if (auth()->check()) {
+            return redirect()->route('home.index');
+        }
+        return view('welcome');
+    });
     Route::group(['middleware' => ['guest']], function() {
         /**
          * Register Routes
@@ -31,9 +37,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
     });
 
     Route::group(['middleware' => ['auth']], function() {
-    /**
-         * Logout Routes
-         */
+        
         // HomeController Routes
         Route::get('/home', 'HomeController@index')->name('home.index');
         Route::get('/home/data', 'HomeController@index_data')->name('home.index.data');

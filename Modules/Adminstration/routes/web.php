@@ -24,7 +24,12 @@ use Modules\Adminstration\App\Http\Controllers\AdminstrationController;
 
     $route->group(function () {
 
-       
+        Route::get('/', function () {
+            if (auth()->check()) {
+                return redirect()->route('adminstration.index');
+            }
+             return view('welcome');
+        });
         Route::group(['middleware' => ['guest']], function() {
             Route::get('/login', 'AuthController@show')->name('adminLogin.show');
             Route::post('/auth/login', 'AuthController@login')->name('adminLogin.perform');
