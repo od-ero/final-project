@@ -47,15 +47,15 @@ Update Roles
                         <div class="row justify-content-center">
                             <div class="col-lg-7">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Update Door Details</h3></div>
+                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Update User Role</h3></div>
                                     <div class="card-body">
-                                        <form name="edit_ip" id="edit_ip"  method="post" action="{{url('/users/admins/show/'.base64_encode($user['id']))}}">
+                                        <form name="edit_ip" id="edit_ip"  method="post" action="{{ route('users.show', ['id' => base64_encode($user['id'])]) }}" >
                                         <input class="form-control" type="hidden" name="_token" value="{{ csrf_token() }}" />
                                         <input class="form-control" type="hidden" name="user_id" value="{{$user['id'] }}" />
                                             <div class="row mb-3">
                                                 
                                                     <div class="form-floating mb-3">
-                                                <input class="form-control" name="door_name" id="door_name" type="text" value="{{$user['fname'] .' '. $user['lname']}}" />
+                                                <input class="form-control" name="door_name" id="door_name" type="text" value="{{$user['fname'] .' '. $user['lname']}}" disabled />
                                                         <label for="inputFirstName" >Name</label>
                                                     </div>
                                                 

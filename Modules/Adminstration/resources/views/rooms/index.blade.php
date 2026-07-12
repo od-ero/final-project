@@ -18,9 +18,9 @@
       </div>
       <div class="modal-body text-center">
       Are You Sure you want to delete this Room? 
-      <form id="deleteForm" action="/rooms/destroy" method="POST">
+      <form id="deleteForm" action="{{route('rooms.destroy')}}" method="POST">
                     @csrf
-                    <input type="hidden" name="unit_id" id="unitIdInput">
+                    <input type="hidden" name="unit_id" id="unitIdInput" required>
                 </form>
       </div>
       <div class="modal-footer">
@@ -89,13 +89,13 @@
                                             <td>{{$room['longitude']}}</td>
                                             <td class="float-end">  
                                                 <div class="btn-group dropend">
-                                                    <a href="/rooms/doors/{{base64_encode($room['id'])}}" class="btn btn-primary btn-lg" tabindex="-1" role="button">View</a>
+                                                    <a href="{{ route('rooms.doors', ['id' => base64_encode($room['id'])]) }}"  class="btn btn-primary btn-lg" tabindex="-1" role="button">View</a>
                                                     <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                                         <span class="visually-hidden">Toggle Dropright</span> More
                                                     </button>
                                                     <ul class="dropdown-menu"><div class="m-2 text-center">
                                             
-                                                       <li class="mb-2"><a href="/rooms/details/update/{{base64_encode($room['id'])}}" class="btn btn-primary" role="button">Update</a></li>
+                                                       <li class="mb-2"><a href="{{ route('rooms.roomUpdate', ['id' => base64_encode($room['id'])]) }}" class="btn btn-primary" role="button">Update</a></li>
                                                        <li>
                                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUnitId('{{ $room->id}}')">Delete</button>
 

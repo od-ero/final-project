@@ -9,7 +9,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
         /**
          * Home Routes
          */
-    Route::get('/', 'HomeController@index')->name('home.index');
+    
     Route::get('/{id}/schedule/permissions/check/{action}','ScheduleController@update')->name('schedule.update');
     Route::get('/{id}/door/state/check','ScheduleController@index')->name('schedule.index');
     Route::get('/chat', 'HomeController@chart')->name('chat.index');
@@ -35,6 +35,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
          * Logout Routes
          */
         // HomeController Routes
+        Route::get('/home', 'HomeController@index')->name('home.index');
         Route::get('/home/data', 'HomeController@index_data')->name('home.index.data');
 
         // LogoutController Route

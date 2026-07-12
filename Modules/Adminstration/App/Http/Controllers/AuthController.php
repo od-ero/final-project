@@ -19,15 +19,8 @@ class AuthController extends Controller
      */
     public function show()
     {
-        if (!Auth::check()) {
-            return view('adminstration::auth.login');
-        } else {
-            $notification = array(
-                'message'    => 'Login succesful',
-                'alert-type' => 'success',
-            );
-            return redirect()->route('adminstration.index')->with($notification);
-           }
+        return view('adminstration::auth.login');
+       
     }
 
     /**
@@ -40,32 +33,21 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {    
         $credentials = $request->getCredentials();
-//dd($credentials);
 
         if(!Auth::validate($credentials)):
             $notification= array(
                 'alert-type' => 'error',
                 'message' => 'Oooops!! These credentials do not match our records.'
                         );
-            return redirect()->to('/admin/login')
+            return redirect()->back()
                  ->with($notification);
             
         endif;
 
         $user = Auth::getProvider()->retrieveByCredentials($credentials);
-//dd($user->admin);
-        if($user->role_id!=1){
-            Auth::login($user);
-
-            return $this->authenticated($request, $user);}
-            else{
-                $notification= array(
-                    'alert-type' => 'error',
-                    'message' => 'Oooops!! Kindly login via the general page at '. env('USERS_DOMAIN')
-                            );
-                return redirect()->to('/admin/login')
-                     ->with($notification);
-            }
+        Auth::login($user);
+        return $this->authenticated($request, $user);
+        
     }
    
     /**
@@ -77,8 +59,19 @@ class AuthController extends Controller
      * @return \Illuminate\Http\Response
      */
     protected function authenticated(Request $request, $user) 
-    {//dd('auth');
-        return redirect()->intended();
+    {
+        $notification = array(
+            'message'    => 'Login succesful',
+            'alert-type' => 'success',
+        );
+
+        if($user->role_id == 1){
+            $home_url = route('home.index');
+        }
+        else{
+            $home_url = route('adminstration.index');
+        }
+        return redirect()->intended($home_url)->with($notification);
     }
 
     /**
@@ -94,8 +87,9 @@ class AuthController extends Controller
             'message'    => 'You Have Logged Out Succesful',
             'alert-type' => 'success',
         );
-         return redirect()->to('/admin/login')->with($notification);
+         return redirect()->to(route('adminLogin.show'))->with($notification);
      }
+
      public function store(Request $request): RedirectResponse
     {
         //

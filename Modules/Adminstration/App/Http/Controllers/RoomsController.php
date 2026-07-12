@@ -58,10 +58,11 @@ class RoomsController extends Controller
             $unit_details = $request->all();
             DB::beginTransaction();
             try{
-                $url="https://maps.googleapis.com/maps/api/geocode/json?latlng=".$unit_details['latitude'].','.$unit_details['longitude']."&sensor=true&key=".env('GOOGLE_MAPS_API_KEY');
-                $dd=file_get_contents($url);
-                $dd=json_decode($dd);
-                $google_pin_location= $dd->results[0]->formatted_address;
+                
+            $location = $this->geocodingService->reverseGeocode(
+                $unit_details['latitude'],
+                $unit_details['longitude']
+            );
             $units =Unit::where('id',$unit_details['unit_id'])
                           ->update([
                             'unit_name' => $unit_details['unit_name'],
@@ -69,7 +70,7 @@ class RoomsController extends Controller
                             'premises_name' => $unit_details['premises_name'],
                             'longitude'    =>  $unit_details['longitude'],
                             'latitude'  =>$unit_details['latitude'],
-                            'google_location'  =>$google_pin_location,
+                            'google_location'  =>$location,
                                             ]); 
                 
                     DB::commit();
@@ -86,7 +87,7 @@ class RoomsController extends Controller
                     catch (\Exception $e) {
                         DB::rollback();
                         $notification = array(
-                            'message'    => $e,
+                            'message'    => $e->getMessage(),
                             //'Ooops!! an error occurred while processing your request.',
                             'alert-type' => 'error',
                 );
