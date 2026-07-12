@@ -22,6 +22,6 @@ class LogoutController extends Controller
             'message'    => 'You Have Logged Out Succesful',
             'alert-type' => 'success',
         );
-        return redirect('/')->with($notification);
+        return redirect(route('login.show'))->with($notification);
     }
 }

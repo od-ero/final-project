@@ -19,7 +19,7 @@
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Update A Room Detail</h3></div>
                                     <div class="card-body">
                                     <!-- id="add_unit" onsubmit="return validateForm()"  method="post" action="{{url('/rooms/create')}}" -->
-                                        <form name="add_unit" id="add_unit" onsubmit="return validateForm()"  method="post" action="{{url('/rooms/details/actions/update')}}" >
+                                        <form name="add_unit" id="add_unit" onsubmit="return validateForm()"  method="post" action="{{route('rooms.roomUpdateAction')}}" >
                                         <input class="form-control" type="hidden" name="_token" value="{{ csrf_token() }}" />
                                         <input  class="form-controlt" value="{{$room_detail["owner_id"]}}" id="owner_id" type="hidden"  name="owner_id">
                                         <input  class="form-controlt" value="{{$room_detail["id"]}}" id="unit_id" type="hidden"  name="unit_id">

@@ -19,7 +19,7 @@
         @auth
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="/welcome">Admin {{ENV('APP_NAME')}}</a>
+            <a class="navbar-brand ps-3" href="{{route('adminstration.index')}}">Admin {{ENV('APP_NAME')}}</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -37,7 +37,7 @@
                         <!-- <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li> -->
-                        <li><a class="dropdown-item" href="/admin/flush">Logout</a></li>
+                        <li><a class="dropdown-item" href="{{route('adminLogin.Logout')}}">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -50,7 +50,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="/welcome">
+                            <a class="nav-link" href="{{route('adminstration.index')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
@@ -62,8 +62,8 @@
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="/rooms/index">View rooms</a>
-                                    <a class="nav-link" href="/rooms/show">Add A Room</a>
+                                    <a class="nav-link" href="{{route('rooms.index')}}">View rooms</a>
+                                    <a class="nav-link" href="{{route('room.show')}}">Add A Room</a>
                                 </nav>
                             </div>
                             @if(isset($nav_unit_id) && !empty($nav_unit_id))
@@ -82,7 +82,7 @@
                             <div class="collapse" id="collapseDoors" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                  @foreach($nav_unit_doors as $nav_unit_door)
-                                    <a class="nav-link" href="/permissions/show/{{base64_encode($nav_unit_door['id'])}}">{{$nav_unit_door['door_name']}}</a>   
+                                    <a class="nav-link" href="{{ route('permissions.show', ['id' => base64_encode($nav_unit_door['id'])]) }}">{{$nav_unit_door['door_name']}}</a>   
                                  @endforeach 
                                 </nav>
                             </div>
@@ -120,8 +120,8 @@
                                 </nav>
                             </div> -->
                             <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="/users/index">
-                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i>"></i></div>
+                            <a class="nav-link" href="{{route('users.index')}}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                                Users
                             </a>
                            

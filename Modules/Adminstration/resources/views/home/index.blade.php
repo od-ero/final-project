@@ -36,7 +36,7 @@
         <div class="card-body">
           <h5 class="card-title">Total Rooms</h5>
           <h1 class="card-text">{{$total_units}}</h1>
-          <a href="/rooms/index" class="block-anchor panel-footer text-center ">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
+          <a href="{{route('rooms.index')}}" class="block-anchor panel-footer text-center ">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
         </div>
       </div>
     <!-- </div>
@@ -46,7 +46,7 @@
         <div class="card-body">
           <h5 class="card-title ">Total Registered Users</h5>
           <h1 class="card-text ">{{$total_users}}</h1>
-          <a href="/users/index" class="block-anchor panel-footer text-center">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
+          <a href="{{route('users.index')}}" class="block-anchor panel-footer text-center">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
         </div>
       </div>
 
@@ -65,7 +65,7 @@ window.onload = function () {
     // Function to fetch data from Laravel backend
     function fetchData() {
         $.ajax({
-            url: '/welcome/data', // Replace 'your-backend-url' with your Laravel backend endpoint
+            url: "{{route('adminstration.index_data')}}", // Replace 'your-backend-url' with your Laravel backend endpoint
             type: 'GET',
             success: function(response) {
                 // Parse response and populate dataPoints arrays
@@ -127,6 +127,7 @@ window.onload = function () {
                 $("#chartContainer").CanvasJSChart(options);
             },
             error: function(xhr, status, error) {
+
                 console.error("Error fetching data:", error);
             }
         });
@@ -169,7 +170,7 @@ window.onload = function () {
 
 </script> -->
 <script>
-            async function redirectToAction() {
+  async function redirectToAction() {
   let loadingToast;
     try {
         // Display loading message
@@ -181,7 +182,7 @@ window.onload = function () {
             extendedTimeOut: 50000 // Set extendedTimeOut to 0 so that the toastr stays until removed manually
         });
         
-        const actionURL = '/welcome/devices/health' ;
+        const actionURL = "{{ route('adminstration.devices_health') }}" ;
 
         // Fetch data
         const res = await fetch(actionURL);
@@ -200,7 +201,7 @@ window.onload = function () {
     } catch (error) {
         // Display error toast
         toastr.clear(loadingToast);
-        toastr.error(error.message, {
+        toastr.error(error.message ?? 'Fail to load chart data', {
             closeButton: true,
             positionClass: 'toast-top-full-width'
         });

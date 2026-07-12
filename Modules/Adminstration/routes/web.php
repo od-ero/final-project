@@ -14,44 +14,48 @@ use Modules\Adminstration\App\Http\Controllers\AdminstrationController;
 |
 */
 
-Route::prefix('admin1')->group(function () {
-   // Route::get('adminstration/index','AdminstrationController@index')->name('adminstration.index');
-});
-//,'namespace' => 'Modules\Adminstration\Http\Controllers'
-Route::group(['middleware' => 'web','domain' => config('app.adminDomain')], function () {
-    //Route::resource('adminstration', AdminstrationController::class)->names('adminstration');
-   
-    
-    
-    Route::get('/admin/login', 'AuthController@show')->name('login.show');
-    Route::post('/admin/auth/login', 'AuthController@login')->name('adminLogin.perform');
+    $route = Route::middleware('web');
 
-    Route::group(['middleware' => ['auth']], function() {
-    Route::get('/admin/flush', 'AuthController@logout')->name('adminLogin.Logout');
+    if (app()->isLocal()) {
+        $route->prefix('admin');
+    } else {
+        $route->domain(config('app.adminDomain'));
+    }
 
-    //adminstration
-    Route::get('/welcome', 'AdminstrationController@index')->name('adminstration.index'); 
-    Route::get('/welcome/data', 'AdminstrationController@indexData')->name('adminstration.index_data'); 
-    Route::get('/welcome/devices/health', 'AdminstrationController@devicesHealth')->name('adminstration.devices_health');
-    
-    //rooms
-    Route::get('/rooms/index', 'RoomsController@index')->name('rooms.index');
-    Route::post('/rooms/create','RoomsController@create')->name('room.create');
-    Route::get('/rooms/show','RoomsController@show')->name('room.show');
-    Route::match(['GET','POST'],'/rooms/doors/edit/blade/{id}','RoomsController@doors_edit_blade')->name('room.door_edit_blade');
-    Route::match(['GET','POST'],'/rooms/doors/edit','RoomsController@doors_edit')->name('room.door_edit');
-    Route::get('/rooms/doors/{id}', 'RoomsController@doors')->name('rooms.doors');
-    Route::get('/rooms/details/update/{id}', 'RoomsController@roomUpdate')->name('rooms.roomUpdate');
-    Route::post('/rooms/details/actions/update', 'RoomsController@roomUpdateAction')->name('rooms.roomUpdateAction'); 
-    Route::post('/rooms/destroy', 'RoomsController@destroy')->name('rooms.destroy');
+    $route->group(function () {
 
-    //users
-    Route::get('/users/index', 'UsersController@index')->name('users.index');
-    Route::match(['GET','POST'],'/users/admins/show/{id}','UsersController@show')->name('users.show');
-    Route::get('/admin/user/search', 'UsersController@search')->name('users.search');
+       
+        Route::group(['middleware' => ['guest']], function() {
+            Route::get('/login', 'AuthController@show')->name('adminLogin.show');
+            Route::post('/auth/login', 'AuthController@login')->name('adminLogin.perform');
+        });
 
-    //permissions
-    Route::get('/permissions/show/{id}', 'PermissionsController@show')->name('permissions.show');
+        Route::group(['middleware' => ['auth']], function() {
+            Route::get('/flush', 'AuthController@logout')->name('adminLogin.Logout');
 
-});
+            //adminstration
+            Route::get('/dashboard', 'AdminstrationController@index')->name('adminstration.index');
+            Route::get('/dashboard/data', 'AdminstrationController@indexData')->name('adminstration.index_data');
+            Route::get('/dashboard/devices/health', 'AdminstrationController@devicesHealth')->name('adminstration.devices_health');
+
+            //rooms
+            Route::get('/rooms/index', 'RoomsController@index')->name('rooms.index');
+            Route::post('/rooms/create','RoomsController@create')->name('room.create');
+            Route::get('/rooms/show','RoomsController@show')->name('room.show');
+            Route::match(['GET','POST'],'/rooms/doors/edit/blade/{id}','RoomsController@doors_edit_blade')->name('room.door_edit_blade');
+            Route::match(['GET','POST'],'/rooms/doors/edit','RoomsController@doors_edit')->name('room.door_edit');
+            Route::get('/rooms/doors/{id}', 'RoomsController@doors')->name('rooms.doors');
+            Route::get('/rooms/details/update/{id}', 'RoomsController@roomUpdate')->name('rooms.roomUpdate');
+            Route::post('/rooms/details/actions/update', 'RoomsController@roomUpdateAction')->name('rooms.roomUpdateAction');
+            Route::post('/rooms/destroy', 'RoomsController@destroy')->name('rooms.destroy');
+
+            //users
+            Route::get('/users/index', 'UsersController@index')->name('users.index');
+            Route::match(['GET','POST'],'/users/show/{id}','UsersController@show')->name('users.show');
+            Route::get('/user/search', 'UsersController@search')->name('users.search');
+
+            //permissions
+            Route::get('/permissions/show/{id}', 'PermissionsController@show')->name('permissions.show');
+
+    });
 });

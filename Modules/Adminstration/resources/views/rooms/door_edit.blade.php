@@ -18,7 +18,7 @@ Update Door
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Update Door Details</h3></div>
                                     <div class="card-body">
-                                        <form name="edit_ip" id="edit_ip"  method="post" action="{{url('/rooms/doors/edit')}}">
+                                        <form name="edit_ip" id="edit_ip"  method="post" action="{{route('room.door_edit')}}">
                                         <input class="form-control" type="hidden" name="_token" value="{{ csrf_token() }}" />
                                         <input class="form-control" type="hidden" name="door_id" value="{{$door_details['door_id'] }}" />
                                             <div class="row mb-3">

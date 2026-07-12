@@ -74,7 +74,7 @@
                                             @endif
                                             <td >{{$user['created_at']}}</td>
                                             @if($user_role_id > 2)
-                                            <td> <a href="/users/admins/show/{{base64_encode($user['id'])}}" class="btn btn-primary btn-lg" tabindex="-1" role="button">Update Role</a></td>
+                                            <td> <a href="{{ route('users.show', ['id' => base64_encode($user['id'])]) }}"  class="btn btn-primary btn-lg" tabindex="-1" role="button">Update Role</a></td>
                                             @endif
                                         </tr>
                                         

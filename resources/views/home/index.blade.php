@@ -1,5 +1,4 @@
 @extends('layouts.app-master')
-@auth
 @section('subtitle')
    Dashboard
 @endsection
@@ -85,27 +84,7 @@
         });
     });
 </script>
-
-
-
 @endsection
-        @endauth
-
-        @guest
-        @section('subtitle')
-            Welcome
-            @endsection
-
-            @section('contentheader_title')
-            Welcome
-            @endsection
-            @section('content')
-    
-        <h1>Unikey</h1>
-        <p class="lead">Your Premise at your pocket.</p>
-        @endsection
-        @endguest
-    </div>
     
    
 

@@ -30,16 +30,13 @@ class LoginController extends Controller
     public function login(LoginRequest $request)
     {   try{
         $credentials = $request->getCredentials();
-///dd($credentials);
         if(!Auth::validate($credentials)):
             $notification= array(
                 'alert-type' => 'error',
                 'message' => 'Oooops!! These credentials do not match our records.'
                         );
-            return redirect()->to('login')
+            return redirect()->back()
                  ->with($notification);
-           // return back()->response()->json($notification);
-               // return redirect()->route('login.show')->with($notification);
         endif;
 
         $user = Auth::getProvider()->retrieveByCredentials($credentials);
@@ -54,7 +51,7 @@ class LoginController extends Controller
             'alert-type' => 'error',
             'message' => 'Oooops!! an error occurred please try again later'
             );
-            return redirect()->to('login')
+            return redirect()->back()
                  ->with($notification);
         }
     }
@@ -69,6 +66,6 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        return redirect()->intended();
+        return redirect()->intended(route('home.index'));
     }
 }
